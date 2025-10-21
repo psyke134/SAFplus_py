@@ -10,5 +10,6 @@ gcc clCompCfg.o obj/* --shared -o wrapper/libmw_py.so
 
 copy "wrapper" dir to "bin" dir of an image
 change "instantiateCommand" of a comp in "etc/clAmfDefinitions.xml" to "wrapper/clCompAppMain.py"
+chmod +x wrapper/clCompAppMain.py
 run the image
 
