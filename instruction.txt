@@ -1,0 +1,14 @@
+copy libmw.a here
+
+gcc -fpic -c -I /opt/clovis/sdk-6.0/src/SAFplus/components/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/eo/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/osal/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/timer/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/buffer/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/utils/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/include/ipi/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/ioc/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/cnt/include/ -I /opt/clovis/sdk-6.0/src/SAFplus/components/rmd/include/  clCompCfg.c -o clCompCfg.o
+
+cd obj
+ar x ../libmw.a
+cd ..
+
+gcc clCompCfg.o obj/* --shared -o wrapper/libmw_py.so
+
+copy "wrapper" dir to "bin" dir of an image
+change "instantiateCommand" of a comp in "etc/clAmfDefinitions.xml" to "wrapper/clCompAppMain.py"
+run the image
+
