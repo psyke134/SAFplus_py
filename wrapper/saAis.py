@@ -48,7 +48,7 @@ class eSaBoolT(clUtils.CEnum):
 
 SaDispatchFlagsT = SaInt32T
 class eSaDispatchFlagsT(clUtils.CEnum):
-    A_DISPATCH_ONE = 1
+    SA_DISPATCH_ONE = 1
     SA_DISPATCH_ALL = 2
     SA_DISPATCH_BLOCKING = 3
 
