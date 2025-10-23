@@ -18,6 +18,8 @@ def handleVarArgs(*va_args):
         elif isinstance(arg, str):
             argTypes.append(ctypes.c_char_p)
             arg = arg.encode("utf-8")
+        else:
+            argTypes.append(type(arg))
         cVaArgs.append(arg)
 
     return (cVaArgs, argTypes)

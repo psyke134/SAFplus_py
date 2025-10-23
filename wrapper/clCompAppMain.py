@@ -8,10 +8,10 @@ import libc
 CL_LOG_HANDLE_APP = clCommon.ClHandleT.in_dll(clLib.libmw_so, "CL_LOG_HANDLE_APP")
 
 def STRING_HA_STATE(S):
-    if S == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE: return "Active"
-    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY: return "Standby"
-    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCED: return "Quiesced"
-    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCING: return "Quiescing"
+    if S == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE.value: return "Active"
+    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY.value: return "Standby"
+    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCED.value: return "Quiesced"
+    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCING.value: return "Quiescing"
     else: return "Uknown"
 
 def STRING_CSI_FLAGS(S):
@@ -80,52 +80,52 @@ COMP_EO_CLIENTLIB_GMS   = clCommon.CL_FALSE
 COMP_EO_CLIENTLIB_PM    = clCommon.CL_FALSE
 
 # EO config variables
-clEoConfig      = clEoConfigApi.ClEoConfigT.in_dll(clLib.libmw_so, "clEoConfig")
-clEoBasicLibs   = clEoConfigApi._clEoBasicLibArray.in_dll(clLib.libmw_so, "clEoBasicLibs")
-clEoClientLibs  = clEoConfigApi._clEoClientLibArray.in_dll(clLib.libmw_so, "clEoClientLibs")
+#clEoConfig      = clEoConfigApi.ClEoConfigT.in_dll(clLib.libmw_so, "clEoConfig")
+#clEoBasicLibs   = clEoConfigApi._clEoBasicLibArray.in_dll(clLib.libmw_so, "clEoBasicLibs")
+#clEoClientLibs  = clEoConfigApi._clEoClientLibArray.in_dll(clLib.libmw_so, "clEoClientLibs")
 
 # Description of this EO
-clEoConfig.EOname                   = COMP_EO_NAME.encode("utf-8")  # EO Name
-clEoConfig.pri                      = COMP_EO_THREAD_PRIORITY       # EO Thread Priority
-clEoConfig.noOfThreads              = COMP_EO_NUM_THREAD            # No of EO thread needed
-clEoConfig.reqIocPort               = COMP_IOC_PORT                 # Required Ioc Port
-clEoConfig.maxNoClients             = COMP_EO_USER_CLIENT_ID
-clEoConfig.appType                  = COMP_EO_USE_THREAD_MODEL      # Thread Model
-clEoConfig.clEoCreateCallout        = NULL_EO_CREATE_CALLOUT        # Application Initialize Callback
-clEoConfig.clEoDeleteCallout        = NULL_EO_DELETE_CALLOUT        # Application Terminate Callback
-clEoConfig.clEoStateChgCallout      = NULL_EO_ST_CHG_CALLOUT        # Application State Change Callback
-clEoConfig.clEoHealthCheckCallout   = NULL_EO_HP_CHK_CALLOUT        # Application Health Check Callback
-clEoConfig.clEoCustomAction         = NULL_EO_CTM_ACT
-clEoConfig.needSerialization        = clCommon.CL_FALSE
+#clEoConfig.EOname                   = COMP_EO_NAME.encode("utf-8")  # EO Name
+#clEoConfig.pri                      = COMP_EO_THREAD_PRIORITY       # EO Thread Priority
+#clEoConfig.noOfThreads              = COMP_EO_NUM_THREAD            # No of EO thread needed
+#clEoConfig.reqIocPort               = COMP_IOC_PORT                 # Required Ioc Port
+#clEoConfig.maxNoClients             = COMP_EO_USER_CLIENT_ID
+#clEoConfig.appType                  = COMP_EO_USE_THREAD_MODEL      # Thread Model
+#clEoConfig.clEoCreateCallout        = NULL_EO_CREATE_CALLOUT        # Application Initialize Callback
+#clEoConfig.clEoDeleteCallout        = NULL_EO_DELETE_CALLOUT        # Application Terminate Callback
+#clEoConfig.clEoStateChgCallout      = NULL_EO_ST_CHG_CALLOUT        # Application State Change Callback
+#clEoConfig.clEoHealthCheckCallout   = NULL_EO_HP_CHK_CALLOUT        # Application Health Check Callback
+#clEoConfig.clEoCustomAction         = NULL_EO_CTM_ACT
+#clEoConfig.needSerialization        = clCommon.CL_FALSE
 
 # Basic libraries used by this EO. The first 6 libraries are
 # mandatory, the others can be enabled or disabled by setting to
 # CL_TRUE or CL_FALSE.
-clEoBasicLibs[0] = COMP_EO_BASICLIB_OSAL    #Lib: Operating System Adaptation Layer
-clEoBasicLibs[1] = COMP_EO_BASICLIB_TIMER   #Lib: Timer
-clEoBasicLibs[2] = COMP_EO_BASICLIB_BUFFER  #Lib: Buffer Management
-clEoBasicLibs[3] = COMP_EO_BASICLIB_IOC     #Lib: Intelligent Object Communication
-clEoBasicLibs[4] = COMP_EO_BASICLIB_RMD     #Lib: Remote Method Dispatch
-clEoBasicLibs[5] = COMP_EO_BASICLIB_EO      #Lib: Execution Object
-clEoBasicLibs[6] = COMP_EO_BASICLIB_OM      #Lib: Object Management
-clEoBasicLibs[7] = COMP_EO_BASICLIB_HAL     #Lib: Hardware Adaptation Layer
-clEoBasicLibs[8] = COMP_EO_BASICLIB_DBAL    #Lib: Database Adaptation Layer
+#clEoBasicLibs[0] = COMP_EO_BASICLIB_OSAL    #Lib: Operating System Adaptation Layer
+#clEoBasicLibs[1] = COMP_EO_BASICLIB_TIMER   #Lib: Timer
+#clEoBasicLibs[2] = COMP_EO_BASICLIB_BUFFER  #Lib: Buffer Management
+#clEoBasicLibs[3] = COMP_EO_BASICLIB_IOC     #Lib: Intelligent Object Communication
+#clEoBasicLibs[4] = COMP_EO_BASICLIB_RMD     #Lib: Remote Method Dispatch
+#clEoBasicLibs[5] = COMP_EO_BASICLIB_EO      #Lib: Execution Object
+#clEoBasicLibs[6] = COMP_EO_BASICLIB_OM      #Lib: Object Management
+#clEoBasicLibs[7] = COMP_EO_BASICLIB_HAL     #Lib: Hardware Adaptation Layer
+#clEoBasicLibs[8] = COMP_EO_BASICLIB_DBAL    #Lib: Database Adaptation Layer
 
 # Client libraries used by this EO. All are optional and can be
 # enabled or disabled by setting to CL_TRUE or CL_FALSE.
-clEoClientLibs[0] = COMP_EO_CLIENTLIB_COR       #Lib: Common Object Repository
-clEoClientLibs[1] = COMP_EO_CLIENTLIB_CM        #Lib: Chassis Management
-clEoClientLibs[2] = COMP_EO_CLIENTLIB_NAME      #Lib: Name Service
-clEoClientLibs[3] = COMP_EO_CLIENTLIB_LOG       #Lib: Log Service
-clEoClientLibs[4] = COMP_EO_CLIENTLIB_TRACE     #Lib: Trace Service
-clEoClientLibs[5] = COMP_EO_CLIENTLIB_DIAG      #Lib: Diagnostics
-clEoClientLibs[6] = COMP_EO_CLIENTLIB_TXN       #Lib: Transaction Management
-clEoClientLibs[7] = COMP_EO_CLIENTLIB_MSO       #Lib: MSO Management
-clEoClientLibs[8] = COMP_EO_CLIENTLIB_PROV      #Lib: Provisioning Management
-clEoClientLibs[9] = COMP_EO_CLIENTLIB_ALARM     #Lib: Alarm Management
-clEoClientLibs[10] = COMP_EO_CLIENTLIB_DEBUG    #Lib: Debug Service
-clEoClientLibs[11] = COMP_EO_CLIENTLIB_GMS      #Lib: Cluster/Group Membership Service
-clEoClientLibs[12] = COMP_EO_CLIENTLIB_PM       #Lib: PM Management
+#clEoClientLibs[0] = COMP_EO_CLIENTLIB_COR       #Lib: Common Object Repository
+#clEoClientLibs[1] = COMP_EO_CLIENTLIB_CM        #Lib: Chassis Management
+#clEoClientLibs[2] = COMP_EO_CLIENTLIB_NAME      #Lib: Name Service
+#clEoClientLibs[3] = COMP_EO_CLIENTLIB_LOG       #Lib: Log Service
+#clEoClientLibs[4] = COMP_EO_CLIENTLIB_TRACE     #Lib: Trace Service
+#clEoClientLibs[5] = COMP_EO_CLIENTLIB_DIAG      #Lib: Diagnostics
+#clEoClientLibs[6] = COMP_EO_CLIENTLIB_TXN       #Lib: Transaction Management
+#clEoClientLibs[7] = COMP_EO_CLIENTLIB_MSO       #Lib: MSO Management
+#clEoClientLibs[8] = COMP_EO_CLIENTLIB_PROV      #Lib: Provisioning Management
+#clEoClientLibs[9] = COMP_EO_CLIENTLIB_ALARM     #Lib: Alarm Management
+#clEoClientLibs[10] = COMP_EO_CLIENTLIB_DEBUG    #Lib: Debug Service
+#clEoClientLibs[11] = COMP_EO_CLIENTLIB_GMS      #Lib: Cluster/Group Membership Service
+#clEoClientLibs[12] = COMP_EO_CLIENTLIB_PM       #Lib: PM Management
 
 ############################################################################
 #   Global Variables.
@@ -202,7 +202,7 @@ def main():
         ctypes.byref(version)
     )
 
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK:
+    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
         errorexit(rc)
 
     libc.FD_ZERO(read_fds)
@@ -212,10 +212,10 @@ def main():
         ctypes.byref(dispatch_fd)
     )
 
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK:
+    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
         errorexit(rc)
 
-    libc.FD_SET(dispatch_fd, read_fds)
+    libc.FD_SET(dispatch_fd.value, read_fds)
 
     #
     # Do the application specific initialization here.
@@ -228,11 +228,11 @@ def main():
     #
 
     rc = saAmf.saAmfComponentNameGet(amfHandle, ctypes.byref(appName))
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK:
+    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
         errorexit(rc)
 
     rc = saAmf.saAmfComponentRegister(amfHandle, ctypes.byref(appName), None)
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK:
+    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
         errorexit(rc)
 
     #
@@ -250,7 +250,7 @@ def main():
     #
     EINTR = 4   # Interrupted system call
     while(not unblockNow):
-        if libc.select(dispatch_fd + 1, ctypes.byref(read_fds), None, None, None) < 0:
+        if libc.select(dispatch_fd.value + 1, ctypes.byref(read_fds), None, None, None) < 0:
             if libc.errno() == EINTR:
                 continue
             clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_ERROR, "Error in select()")
@@ -262,7 +262,7 @@ def main():
     #
 
     rc = saAmf.saAmfFinalize(amfHandle)
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK:
+    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
         clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_ERROR, "AMF finalization error[0x%X]", rc)
     clprintf (clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO, "AMF Finalized")
 
@@ -291,7 +291,7 @@ def clCompAppTerminate(invocation, compName):
     #
 
     rc = saAmf.saAmfComponentUnregister(amfHandle, compName, None)
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK:
+    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
         clprintf(
             clLogApi.eClLogSeverityT.CL_LOG_SEV_ERROR,
             "Component [%.*s] : PID [%d]. Termination error [0x%x]\n",
@@ -338,26 +338,26 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
     # Take appropriate action based on state
     #
 
-    if haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE:
+    if haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE.value:
         #
         # AMF has requested application to take the active HA state 
         # for the CSI.
         #
         saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY:
+    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY.value:
         #
         # AMF has requested application to take the standby HA state 
         # for this CSI.
         #
         saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCED:
+    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCED.value:
         #
         # AMF has requested application to quiesce the CSI currently
         # assigned the active or quiescing HA state. The application 
         # must stop work associated with the CSI immediately.
         #
         saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCING:
+    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCING.value:
         #
         # AMF has requested application to quiesce the CSI currently
         # assigned the active HA state. The application must stop work
@@ -426,7 +426,7 @@ def clCompAppAMFPrintCSI(csiDescriptor, haState):
             clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
             "Name value pairs :"
         )
-        for i in range(0, csiDescriptor.csiAttr.number.value):
+        for i in range(0, csiDescriptor.csiAttr.number):
             clprintf(
                 clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
                 "Name : [%s]",
@@ -444,7 +444,7 @@ def clCompAppAMFPrintCSI(csiDescriptor, haState):
         STRING_HA_STATE(haState)
     )
 
-    if haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE:
+    if haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE.value:
         clprintf(
             clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
             "Active Descriptor :"
@@ -459,7 +459,7 @@ def clCompAppAMFPrintCSI(csiDescriptor, haState):
             "Active Component : [%s]",
             csiDescriptor.csiStateDescriptor.activeDescriptor.activeCompName.__str__()
         )
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY:
+    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY.value:
         clprintf(
             clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
             "Standby Descriptor :"
