@@ -277,6 +277,7 @@ def errorexit(rc):
 #
 
 def clCompAppTerminate(invocation, compName):
+    invocation = ctypes.c_ulonglong(invocation)
     rc = saAis.eSaAisErrorT.SA_AIS_OK
 
     clprintf(
@@ -325,6 +326,7 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
     #
     # Print information about the CSI Set
     #
+    invocation = ctypes.c_ulonglong(invocation)
 
     clprintf(
         clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
@@ -375,6 +377,7 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
 #
 
 def clCompAppAMFCSIRemove(invocation, compName, csiName, csiFlags):
+    invocation = ctypes.c_ulonglong(invocation)
     clprintf(
         clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
         "Component [%.*s] : PID [%d]. CSI Remove Received\n",
