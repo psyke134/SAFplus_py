@@ -17,7 +17,7 @@ def FD_ZERO(fdset):
         fdset.fds_bits[i] = 0
 
 def FD_SET(fd, fdset):
-    fdset.fds_bits[fd // NFDBITS] |= (1  << (fd // NFDBITS))
+    fdset.fds_bits[fd // NFDBITS] |= (1  << (fd % NFDBITS))
 
 def errno():
     return ctypes.get_errno()
