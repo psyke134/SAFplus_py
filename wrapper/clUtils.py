@@ -27,6 +27,13 @@ def handleVarArgs(*va_args):
 def toCharP(pythonStr):
     return ctypes.c_char_p(pythonStr.encode("utf-8"))
 
+def toUint8P(pythonStr):
+    """
+    Python string represent as unsigned 8bit integer buffer
+    """
+    char_p = toCharP(pythonStr)
+    return ctypes.cast(char_p, ctypes.POINTER(ctypes.c_ubyte))
+
 def getCallerInfo():
     """Get filename, line of the caller of this function's caller"""
     previous_frame = inspect.currentframe().f_back.f_back
