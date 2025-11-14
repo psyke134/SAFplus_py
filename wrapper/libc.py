@@ -1,5 +1,6 @@
 # Mostly to handle libc file descriptors
 import ctypes
+import clUtils
 
 libc = ctypes.CDLL("libc.so.6", use_errno = True) #GNU C library
 
@@ -21,6 +22,18 @@ def FD_SET(fd, fdset):
 
 def errno():
     return ctypes.get_errno()
+
+def snprintf(des, maxLen, fmt, *va_args):
+    pDes = ctypes.cast(des, ctypes.c_char_p)
+    pFmt = clUtils.toCharP(fmt)
+    cVaArgs, argTypes = clUtils.handleVarArgs(*va_args)
+
+    libc.snprintf.argtypes = [ctypes.c_char_p, ctypes.c_uint, ctypes.c_char_p] + argTypes
+    libc.snprintf(pDes, maxLen, pFmt, *cVaArgs)
+
+def strlen(cArray):
+    pTemp = ctypes.cast(cArray, ctypes.c_char_p)
+    return libc.strlen(pTemp)
 
 select = libc.select
 getpid = libc.getpid
