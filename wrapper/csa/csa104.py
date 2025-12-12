@@ -21,7 +21,7 @@ def STRING_CSI_FLAGS(S):
     else: return "Uknown"
 
 def clprintf(severity, fmtString, *va_args):
-    fileName, loc = clUtils.getCallerInfo()
+    _, fileName, loc = clUtils.getCallerInfo()
 
     clLogApi.clLogMsgWrite(
         CL_LOG_HANDLE_APP,

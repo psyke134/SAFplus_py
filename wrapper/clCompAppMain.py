@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-import saAmf, saAis
-import clCommon, clLogApi, clCpmApi, clUtils
-import clLib, clIocApi, clEoApi, clEoConfigApi, clOsalApi
+from amf import saAmf, clCpmApi
+from common import saAis, clCommon
+from log import clLogApi
+from utils import clUtils, clLib, libc
+from ioc import clIocApi
+from eo import clEoApi, clEoConfigApi
+from osal import clOsalApi
 import ctypes
-import libc
 
 CL_LOG_HANDLE_APP = clCommon.ClHandleT.in_dll(clLib.libmw_so, "CL_LOG_HANDLE_APP")
 
@@ -21,7 +24,7 @@ def STRING_CSI_FLAGS(S):
     else: return "Uknown"
 
 def clprintf(severity, fmtString, *va_args):
-    fileName, loc = clUtils.getCallerInfo()
+    _, fileName, loc = clUtils.getCallerInfo()
 
     clLogApi.clLogMsgWrite(
         CL_LOG_HANDLE_APP,
