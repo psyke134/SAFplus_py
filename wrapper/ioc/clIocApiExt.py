@@ -1,8 +1,14 @@
 import sys
 sys.path.append("..")
 
-from utils import clUtils
-from common import saAis
+from utils import clUtils, clLib
+from common import saAis, clCommon
+from ioc import clIocApi
+
+import ctypes
+
+CL_IOC_NO_SESSION = 0
+CL_IOC_SESSION_BASED = 1
 
 ClIocNotificationIdT = saAis.SaInt32T
 class eClIocNotificationIdT(clUtils.CEnum):
@@ -19,3 +25,93 @@ class eClIocNotificationIdT(clUtils.CEnum):
     CL_IOC_NODE_LINK_UP_NOTIFICATION = 10,
     CL_IOC_NODE_LINK_DOWN_NOTIFICATION = 11,
     CL_IOC_NODE_DISCOVER_PEER_NOTIFICATION = 12
+
+class ClIocQueueNotificationT(ctypes.Structure):
+    _fields_ = [
+        ("wmID", clCommon.ClWaterMarkIdT),
+        ("wm", clCommon.ClWaterMarkT),
+        ("queueSize", clCommon.ClUint32T),
+        ("messageLength", clCommon.ClUint32T)
+    ]
+
+class _sendqWMNotification(ctypes.Structure):
+    _fields_ = [
+        ("queueNotification", ClIocQueueNotificationT)
+    ]
+
+class _commPortWMNotification(ctypes.Structure):
+    _fields_ = [
+        ("queueNotification", ClIocQueueNotificationT)
+    ]
+
+class _notificationData(ctypes.Union):
+    _fields_ = [
+        ("sendqWMNotification", _sendqWMNotification),
+        ("commPortWMNotification", _commPortWMNotification)
+    ]
+
+class ClIocNotificationT(ctypes.Structure):
+    _fields_ = [
+        ("id", ClIocNotificationIdT),
+        ("protoVersion", clCommon.ClUint32T),
+        ("nodeAddress", clIocApi.ClIocAddressT),
+        ("nodeVersion", clCommon.ClUint32T),
+        ("notificationData", _notificationData)
+    ]
+
+def clIocLibInitialize(pConfig):
+    """
+    arg types:
+        ClPtrT pConfig
+    return type:
+        ClRcT
+    """
+    return clLib.libmw_so.clIocLibInitialize(pConfig)
+
+def clIocLibFinalize():
+    """
+    arg types:
+        void
+    return type:
+        ClRcT
+    """
+    return clLib.libmw_so.clIocLibFinalize()
+
+def clIocMaxPayloadSizeGet(pSize):
+    """
+    arg types:
+        ClUint32T * pSize
+    return type:
+        ClRcT
+    """
+    return clLib.libmw_so.clIocMaxPayloadSizeGet(pSize)
+
+def clIocTotalNeighborEntryGet(pNumberOfEntries):
+    """
+    arg types:
+        ClUint32T * pNumberOfEntries
+    return type:
+        ClRcT
+    """
+    return clLib.libmw_so.clIocTotalNeighborEntryGet(pNumberOfEntries)
+
+
+def clIocNeighborListGet(pNumberOfEntries, pAddrList):
+    """
+    arg types:
+        ClUint32T * pNumberOfEntries,
+        ClIocNodeAddressT * pAddrList
+    return type:
+        ClRcT
+    """
+    return clLib.libmw_so.clIocNeighborListGet(pNumberOfEntries, pAddrList)
+
+def clConfigChange(requestType):
+    """
+    Notifies the system of a configuration change request.
+    arg types:
+        ClConfigChange requestType
+    return type:
+        ClRcT
+    """
+    return clLib.libmw_so.clConfigChange(requestType)

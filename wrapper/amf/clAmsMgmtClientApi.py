@@ -8,8 +8,8 @@ import ctypes
 ASP_INSTALL_KEY = "ASP_INSTALL_INFO"
 
 def CL_AMS_NAME_LENGTH_CHECK(entity):
-    if entity.name.length.value == libc.strlen(entity.name.value):
-        entity.name.length.value += 1
+    if entity.name.length == libc.strlen(entity.name.value):
+        entity.name.length += 1
 
 class ClAmsMgmtCallbacksT(ctypes.Structure):
     _fields_ = [
