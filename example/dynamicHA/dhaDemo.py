@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-from amf import saAmf, clCpmApi
-from common import saAis, clCommon
+from amf import saAmf, clCpmApi, clAmsMgmtClientApi, clAmsTypes, clAmsEntities
+from common import saAis, clCommon, clCommonErrors
 from log import clLogApi
-from utils import clUtils, clLib, libc
+from utils import clUtils, clLib, libc, clHandleApi, clHeapApi
 from ioc import clIocApi
 from eo import clEoApi, clEoConfigApi
 from osal import clOsalApi
+import dhaDemoOps
 import ctypes
 
 CL_LOG_HANDLE_APP = clCommon.ClHandleT.in_dll(clLib.libmw_so, "CL_LOG_HANDLE_APP")
@@ -129,6 +130,14 @@ COMP_EO_CLIENTLIB_PM    = clCommon.CL_FALSE
 #clEoClientLibs[10] = COMP_EO_CLIENTLIB_DEBUG    #Lib: Debug Service
 #clEoClientLibs[11] = COMP_EO_CLIENTLIB_GMS      #Lib: Cluster/Group Membership Service
 #clEoClientLibs[12] = COMP_EO_CLIENTLIB_PM       #Lib: PM Management
+
+#
+#   ---BEGIN_APPLICATION_CODE---
+#
+
+#
+#   ---END_APPLICATION_CODE---
+#
 
 ############################################################################
 #   Global Variables.
@@ -348,6 +357,13 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
         # AMF has requested application to take the active HA state 
         # for the CSI.
         #
+
+        dhaDemoOps.dhaInfoPrint("Starting dynamic HA demo.")
+        dhaDemoOps.dhaInfoPrint("It will create 2N SG : %sSG", dhaDemoOps.BASE_NAME)
+        rc = clDhaDemoStart()
+        if rc != clCommonErrors.CL_OK:
+            dhaDemoOps.dhaErrorPrint("Failed to start dynamic HA demo.")
+
         saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
     elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY.value:
         #
@@ -361,6 +377,10 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
         # assigned the active or quiescing HA state. The application 
         # must stop work associated with the CSI immediately.
         #
+
+        rc = clDhaDemoStop()
+        if rc != clCommonErrors.CL_OK:
+            dhaDemoOps.dhaErrorPrint("Failed to stop dynamic HA demo.")
         saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
     elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCING.value:
         #
@@ -485,6 +505,153 @@ def clCompAppAMFPrintCSI(csiDescriptor, haState):
 # Insert any other utility functions here.
 #
 
+def clDhaDemoCreate(arg):
+    mgmtHandle = clAmsTypes.ClAmsMgmtHandleT(0)
+    ccbHandle = clAmsTypes.ClAmsMgmtCCBHandleT(clHandleApi.CL_HANDLE_INVALID_VALUE)
+    pBaseName = dhaDemoOps.BASE_NAME
+
+    version = clCommon.ClVersionT()
+    version.releaseCode = ord('B')
+    version.majorVersion = 0x1
+    version.minorVersion = 0x1
+
+    rc = dhaDemoOps.dhaMgmtInit(mgmtHandle, version)
+    if rc != clCommonErrors.CL_OK: return None
+    rc = dhaDemoOps.dhaMgmtCcbInit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaSgCheck(mgmtHandle)
+    if rc == clCommonErrors.CL_OK:
+        dhaDemoOps.dhaInfoPrint("Not creating SG[%sSG], it already exist", pBaseName)
+        dhaDemoOps.dhaCleanUp(mgmtHandle, ccbHandle)
+        return None
+    
+    dhaDemoOps.dhaInfoPrint("Creating 2N SG [%sSG] and other entities(si, csi, su, comp, etc)", pBaseName)
+
+    rc = dhaDemoOps.dhaSgCreate(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaSiCreate(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaCsiCreate(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps.dhaSuCreate(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps.dhaCompCreate(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaCommit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaInfoPrint("Fill SG config")
+    rc = dhaDemoOps.dhaSgConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaInfoPrint("Fill SI config")
+    rc = dhaDemoOps.dhaSiConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaInfoPrint("Fill CSI config")
+    rc = dhaDemoOps.dhaCsiConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaInfoPrint("Fill SU config")
+    rc = dhaDemoOps.dhaSuConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaInfoPrint("Fill NODE config")
+    rc = dhaDemoOps.dhaNodeConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaInfoPrint("Fill COMP config")
+    rc = dhaDemoOps.dhaCompConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaInfoPrint("Unlock AMS entities")
+    rc = dhaDemoOps.dhaEntitiesUnlock(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaCleanUp(mgmtHandle, ccbHandle)
+    return None
+
+_TaskRoutineT = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)
+demoCreateRoutine = _TaskRoutineT(clDhaDemoCreate)
+def clDhaDemoStart():
+    rc = clOsalApi.clOsalTaskCreateDetached(
+        "dhaDemoCreate",
+        clOsalApi.eClOsalSchedulePolicyT.CL_OSAL_SCHED_OTHER,
+        clOsalApi.eClOsalThreadPriorityT.CL_OSAL_THREAD_PRI_NOT_APPLICABLE,
+        clOsalApi.CL_OSAL_MIN_STACK_SIZE,
+        demoCreateRoutine,
+        None
+    )
+    return rc
+
+def clDhaDemoDelete(arg):
+    mgmtHandle = clAmsTypes.ClAmsMgmtHandleT(0)
+    ccbHandle = clAmsTypes.ClAmsMgmtCCBHandleT(clHandleApi.CL_HANDLE_INVALID_VALUE)
+    pBaseName = dhaDemoOps.BASE_NAME
+
+    version = clCommon.ClVersionT()
+    version.releaseCode = ord('B')
+    version.majorVersion = 0x1
+    version.minorVersion = 0x1
+
+    rc = dhaDemoOps.dhaMgmtInit(mgmtHandle, version)
+    if rc != clCommonErrors.CL_OK: return None
+    rc = dhaDemoOps.dhaMgmtCcbInit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaSgCheck(mgmtHandle)
+    if rc != clCommonErrors.CL_OK:
+        dhaDemoOps.dhaInfoPrint("Not deleting SG[%sSG], it doesn't exist", pBaseName)
+        dhaDemoOps.dhaCleanUp(mgmtHandle, ccbHandle)
+        return None
+    
+    dhaDemoOps.dhaInfoPrint("Deleting SG [%sSG] and other entities(si, csi, su, comp, etc)", pBaseName)
+
+    rc = dhaDemoOps.dhaEntitiesLockI(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps.dhaCompDelete(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps.dhaSuDelete(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaCsiDelete(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaSiDelete(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaSgDelete(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps.dhaCommit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps.dhaCleanUp(mgmtHandle, ccbHandle)
+    return None
+
+demoDeleteRoutine = _TaskRoutineT(clDhaDemoDelete)
+def clDhaDemoStop():
+    rc = clOsalApi.clOsalTaskCreateDetached(
+        "dhaDemoDelete",
+        clOsalApi.eClOsalSchedulePolicyT.CL_OSAL_SCHED_OTHER,
+        clOsalApi.eClOsalThreadPriorityT.CL_OSAL_THREAD_PRI_NOT_APPLICABLE,
+        clOsalApi.CL_OSAL_MIN_STACK_SIZE,
+        demoDeleteRoutine,
+        None
+    )
+    return rc
 
 #
 # Python entry point

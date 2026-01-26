@@ -40,6 +40,7 @@ def strlen(cArray):
 
 select = libc.select
 getpid = libc.getpid
+memcpy = libc.memcpy
 
 SIZEOF_SEM_T = 32
 

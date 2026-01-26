@@ -166,7 +166,7 @@ def clHeapLibCustomFinalize():
 
 allocHookT = ctypes.CFUNCTYPE(clCommon.ClPtrT, clCommon.ClUint32T)
 reallocHookT = ctypes.CFUNCTYPE(clCommon.ClPtrT, clCommon.ClPtrT, clCommon.ClUint32T)
-callocHookT = ctypes.CFUNCTION(clCommon.ClPtrT, clCommon.ClUint32T, clCommon.ClUint32T)
+callocHookT = ctypes.CFUNCTYPE(clCommon.ClPtrT, clCommon.ClUint32T, clCommon.ClUint32T)
 freeHookT = ctypes.CFUNCTYPE(None, clCommon.ClPtrT)
 
 def clHeapHooksRegister(allocHook, reallocHook, callocHook, freeHook):

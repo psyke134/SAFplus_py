@@ -94,6 +94,12 @@ class ClNameT(ctypes.Structure):
         ("length", ClUint16T),
         ("value", CL_MAX_NAME_LENGTH * ClCharT)
     ]
+    def __init__(self, name):
+        name = name.encode('utf-8')
+        super(ClNameT, self).__init__(len(name), name)
+
+    def __str__(self):
+        return self.value.decode('utf-8')
 
 def clNameSet(name, str):
     """
@@ -101,7 +107,8 @@ def clNameSet(name, str):
         ClNameT* name,
         const char* str
     """
-    clLib.libmw_so.clNameSet(name, str)
+    pStr = clUtils.toCharP(str)
+    clLib.libmw_so.clNameSet(name, pStr)
 
 def clNameCopy(nameOut, nameIn):
     """
@@ -119,10 +126,11 @@ def clNameConcat(nameOut, prefix, separator, suffix):
         const char* separator,
         const ClNameT *suffix
     """
+    pSeparator = clUtils.toCharP(separator)
     clLib.libmw_so.clNameConcat(
         nameOut,
         prefix,
-        separator,
+        pSeparator,
         suffix
     )
 

@@ -87,6 +87,7 @@ class ClCpmEventPayLoadT(ctypes.Structure):
         ("eoId", clEoConfigApi.ClEoIdT),
         ("nodeIocAddress", clIocApi.ClIocNodeAddressT),
         ("eoIocPort", clIocApi.ClIocNodeAddressT),
+        ("operation", ClCpmCompEventT)
     ]
 
 class ClCpmEventNodePayLoadT(ctypes.Structure):

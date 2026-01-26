@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from amf import saAmf, clCpmApi
-from common import saAis, clCommon
+from amf import saAmf, clCpmApi, clAmsClientNotification, clAmsUtils
+from common import saAis, clCommon, clCommonErrors
 from log import clLogApi
 from utils import clUtils, clLib, libc
 from ioc import clIocApi
@@ -224,6 +224,8 @@ def main():
     # Do the application specific initialization here.
     #
 
+    pycallback = clAmsClientNotification.ClAmsClientNotificationCallbackT(amsNotficationCallback)
+    clAmsNotificationInitialize(pycallback)
 
     #
     # Now register the component with AMF. At this point it is
@@ -263,6 +265,8 @@ def main():
     #
     # Do the application specific finalization here.
     #
+
+    clAmsNotificationFinalize()
 
     rc = saAmf.saAmfFinalize(amfHandle)
     if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
@@ -485,6 +489,154 @@ def clCompAppAMFPrintCSI(csiDescriptor, haState):
 # Insert any other utility functions here.
 #
 
+def CL_AMS_STRING_NTF(S):
+    if S == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_SI_PARTIALLY_ASSIGNED.value:
+        return "partially assigned"
+    elif S == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_SI_FULLY_ASSIGNED.value:
+        return "fully assigned"
+    elif S == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_SI_UNASSIGNED.value:
+        return "unassigned"
+    else:
+        "unkown"
+
+def amsNotficationCallback(notification):
+    """
+        ClAmsNotificationInfoT *notification
+        return: ClRcT
+    """
+
+    ntfObj = notification.contents
+    ntfType = ntfObj.type
+    if (ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_SI_PARTIALLY_ASSIGNED.value
+        or ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_SI_UNASSIGNED.value):
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Received SI [%s] event",
+            CL_AMS_STRING_NTF(ntfType)
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "SI name : [%.*s]",
+            ntfObj.amsNotificationInfo.amsStateInfo.siName.length,
+            ntfObj.amsNotificationInfo.amsStateInfo.siName.value,
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "SU name : [%.*s]",
+            ntfObj.amsNotificationInfo.amsStateInfo.suName.length,
+            ntfObj.amsNotificationInfo.amsStateInfo.suName.value,
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Last HA State : [%s]",
+            clAmsUtils.CL_AMS_STRING_H_STATE(ntfObj.amsNotificationInfo.amsStateInfo.lastHAState),
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "New HA State : [%s]",
+            clAmsUtils.CL_AMS_STRING_H_STATE(ntfObj.amsNotificationInfo.amsStateInfo.newHAState),
+        )
+    elif ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_SU_HA_STATE_CHANGE.value:
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Received SU HA state change event"
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "SU name : [%.*s]",
+            ntfObj.amsNotificationInfo.amsStateInfo.suName.length,
+            ntfObj.amsNotificationInfo.amsStateInfo.suName.value,
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "SI name : [%.*s]",
+            ntfObj.amsNotificationInfo.amsStateInfo.siName.length,
+            ntfObj.amsNotificationInfo.amsStateInfo.siName.value,
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Last HA State : [%s]",
+            clAmsUtils.CL_AMS_STRING_H_STATE(ntfObj.amsNotificationInfo.amsStateInfo.lastHAState),
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "New HA State : [%s]",
+            clAmsUtils.CL_AMS_STRING_H_STATE(ntfObj.amsNotificationInfo.amsStateInfo.newHAState),
+        )
+    elif ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_OPER_STATE_CHANGE.value:
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Received operational state [%s - %s] notification for type [%s] entity [%.*s]",
+            clAmsUtils.CL_AMS_STRING_O_STATE(ntfObj.amsNotificationInfo.amsStateInfo.lastOperState),
+            clAmsUtils.CL_AMS_STRING_O_STATE(ntfObj.amsNotificationInfo.amsStateInfo.newOperState),
+            clAmsUtils.CL_AMS_STRING_ENTITY_TYPE(ntfObj.amsNotificationInfo.amsStateInfo.entityType),
+            ntfObj.amsNotificationInfo.amsStateInfo.entityName.length,
+            ntfObj.amsNotificationInfo.amsStateInfo.entityName.value,
+        )
+    elif ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_ADMIN_STATE_CHANGE.value:
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Received admin state [%s - %s] notification for type [%s] entity [%.*s]",
+            clAmsUtils.CL_AMS_STRING_O_STATE(ntfObj.amsNotificationInfo.amsStateInfo.lastAdminState),
+            clAmsUtils.CL_AMS_STRING_O_STATE(ntfObj.amsNotificationInfo.amsStateInfo.newAdminState),
+            clAmsUtils.CL_AMS_STRING_ENTITY_TYPE(ntfObj.amsNotificationInfo.amsStateInfo.entityType),
+            ntfObj.amsNotificationInfo.amsStateInfo.entityName.length,
+            ntfObj.amsNotificationInfo.amsStateInfo.entityName.value,
+        )
+    elif ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_COMP_ARRIVAL.value:
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Component arrival for [%.*s]",
+            ntfObj.amsNotificationInfo.amsCompInfo.compName.length,
+            ntfObj.amsNotificationInfo.amsCompInfo.compName.value,
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Comp node [%.*s]",
+            ntfObj.amsNotificationInfo.amsCompInfo.nodeName.length,
+            ntfObj.amsNotificationInfo.amsCompInfo.nodeName.value,
+        )
+    elif ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_COMP_DEPARTURE.value:
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Component [%s] for [%.*s]",
+            "death" if ntfObj.amsNotificationInfo.amsCompInfo.operation == clCpmApi.eClCpmCompEventT.CL_CPM_COMP_DEATH.value else "departure",
+            ntfObj.amsNotificationInfo.amsCompInfo.compName.length,
+            ntfObj.amsNotificationInfo.amsCompInfo.compName.value,
+        )
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+            "Comp node [%.*s]",
+            ntfObj.amsNotificationInfo.amsCompInfo.nodeName.length,
+            ntfObj.amsNotificationInfo.amsCompInfo.nodeName.value,
+        )
+    elif ntfType == clAmsClientNotification.eClAmsNotificationTypeT.CL_AMS_NOTIFICATION_NODE_DEPARTURE.value:
+        operation = ntfObj.amsNotificationInfo.amsNodeInfo.operation
+        if (operation == clCpmApi.eClCpmNodeEventT.CL_CPM_NODE_DEPARTURE.value
+            or operation == clCpmApi.eClCpmNodeEventT.CL_CPM_NODE_DEATH.value):
+            clprintf(
+                clLogApi.eClLogSeverityT.CL_LOG_SEV_NOTICE,
+                "Node [%s] for [%.*s], address [%d]",
+                "death" if operation == clCpmApi.eClCpmNodeEventT.CL_CPM_NODE_DEATH.value else "departure",
+                ntfObj.amsNotificationInfo.amsNodeInfo.nodeName.length,
+                ntfObj.amsNotificationInfo.amsNodeInfo.nodeName.value,
+                ntfObj.amsNotificationInfo.amsNodeInfo.nodeIocAddress
+            )
+
+    return clCommonErrors.CL_OK
+
+def clAmsNotificationInitialize(callback):
+    rc = clAmsClientNotification.clAmsClientNotificationInitialize(callback)
+    if rc != clCommonErrors.CL_OK:
+        clprintf(
+            clLogApi.eClLogSeverityT.CL_LOG_SEV_WARNING,
+            "AMF notification initialize returned with [%#x]",
+            rc
+        )
+    return rc
+
+def clAmsNotificationFinalize():
+    clAmsClientNotification.clAmsClientNotificationFinalize()
 
 #
 # Python entry point

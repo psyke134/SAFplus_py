@@ -27,7 +27,10 @@ def handleVarArgs(*va_args):
     return (cVaArgs, argTypes)
 
 def toCharP(pythonStr):
-    return ctypes.c_char_p(pythonStr.encode("utf-8"))
+    if isinstance(pythonStr, str):
+        return ctypes.c_char_p(pythonStr.encode("utf-8"))
+    else: # already bytes
+        return ctypes.c_char_p(pythonStr)
 
 def toUint8P(pythonStr):
     """

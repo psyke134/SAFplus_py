@@ -6,6 +6,9 @@ from common import saAis, clCommon
 
 import ctypes
 
+CL_OSAL_MIN_STACK_SIZE = 196608
+CL_OSAL_NAME_MAX = 32
+
 ClOsalSharedMutexFlagsT = clCommon.ClInt32T
 class eClOsalSharedMutexFlagsT(clUtils.CEnum):
     CL_OSAL_SHARED_INVALID   = 0x0,
