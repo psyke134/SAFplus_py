@@ -49,8 +49,8 @@ class ClCkptSectionCreationAttributesT(ctypes.Structure):
     ]
 
 ClCkptSectionStateT = clCommon.ClInt32T
-class eClCkptSectionStateT(clUtils.CEnum):
-    CL_CKPT_SECTION_VALID = 1,
+class eClCkptSectionStateT(clUtils.Enum):
+    CL_CKPT_SECTION_VALID = 1
     CL_CKPT_SECTION_CORRUPTED = 2
 
 class ClCkptSectionDescriptorT(ctypes.Structure):
@@ -63,11 +63,11 @@ class ClCkptSectionDescriptorT(ctypes.Structure):
     ]
 
 ClCkptSectionsChosenT = clCommon.ClInt32T
-class eClCkptSectionsChosenT(clUtils.CEnum):
-    CL_CKPT_SECTIONS_FOREVER = 1,
-    CL_CKPT_SECTIONS_LEQ_EXPIRATION_TIME = 2,
-    CL_CKPT_SECTIONS_GEQ_EXPIRATION_TIME = 3,
-    CL_CKPT_SECTIONS_CORRUPTED = 4,
+class eClCkptSectionsChosenT(clUtils.Enum):
+    CL_CKPT_SECTIONS_FOREVER = 1
+    CL_CKPT_SECTIONS_LEQ_EXPIRATION_TIME = 2
+    CL_CKPT_SECTIONS_GEQ_EXPIRATION_TIME = 3
+    CL_CKPT_SECTIONS_CORRUPTED = 4
     CL_CKPT_SECTIONS_ANY = 5
 
 class ClCkptIOVectorElementT(ctypes.Structure):

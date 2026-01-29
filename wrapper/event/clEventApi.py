@@ -63,10 +63,10 @@ class ClEventPatternArrayT(ctypes.Structure):
     ]
 
 ClEventFilterTypeT = clCommon.ClInt32T
-class eClEventFilterTypeT(clUtils.CEnum):
-    CL_EVENT_PREFIX_FILTER = 1,
-    CL_EVENT_SUFFIX_FILTER = 2,
-    CL_EVENT_EXACT_FILTER = 3,
+class eClEventFilterTypeT(clUtils.Enum):
+    CL_EVENT_PREFIX_FILTER = 1
+    CL_EVENT_SUFFIX_FILTER = 2
+    CL_EVENT_EXACT_FILTER = 3
     CL_EVENT_PASS_ALL_FILTER = 4
 
 class ClEventFilterT(ctypes.Structure):

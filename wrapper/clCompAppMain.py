@@ -1,20 +1,30 @@
 #!/usr/bin/env python3
-from amf import saAmf, clCpmApi
-from common import saAis, clCommon
-from log import clLogApi
-from utils import clUtils, clLib, libc
-from ioc import clIocApi
-from eo import clEoApi, clEoConfigApi
-from osal import clOsalApi
+from amf import saAmf
+from utils import clLib
 import ctypes
 
-CL_LOG_HANDLE_APP = clCommon.ClHandleT.in_dll(clLib.libmw_so, "CL_LOG_HANDLE_APP")
+from amf.saAmf import eSaAmfHAStateT, SaAmfHandleT, SaAmfCallbacksT, SaAmfHealthcheckCallbackT,\
+    SaAmfComponentTerminateCallbackT, SaAmfCSISetCallbackT, SaAmfCSIRemoveCallbackT, SaAmfProtectionGroupTrackCallbackT,\
+    saAmfInitialize, saAmfSelectionObjectGet, saAmfComponentNameGet, saAmfComponentRegister, saAmfDispatch, saAmfFinalize,\
+    saAmfComponentUnregister, saAmfResponse, saAmfCSIQuiescingComplete
+from common.saAis import SaNameT, SaVersionT, eSaAisErrorT, SaSelectionObjectT, eSaDispatchFlagsT
+from common.clCommon import ClHandleT, ClUint32T, CL_TRUE, CL_FALSE
+from log.clLogApi import clLogMsgWrite, CL_LOG_AREA_UNSPECIFIED, CL_LOG_CONTEXT_UNSPECIFIED, eClLogSeverityT
+from utils.clUtils import getCallerInfo
+from utils.libc import fd_set, getpid, FD_ZERO, FD_SET, select, errno
+from ioc.clIocApi import ClIocPortT, clIocLocalAddressGet
+from eo.clEoApi import CL_EO_USER_CLIENT_ID_START, clEoMyEoIocPortGet
+from eo.clEoConfigApi import eClEoApplicationTypeT, ClEoAppCreateCallbackT, ClEoAppDeleteCallbackT, ClEoAppStateChgCallbackT,\
+    ClEoAppHealthCheckCallbackT, ClEoCustomActionT
+from osal.clOsalApi import eClOsalThreadPriorityT
+
+CL_LOG_HANDLE_APP = ClHandleT.in_dll(clLib.libmw_so, "CL_LOG_HANDLE_APP")
 
 def STRING_HA_STATE(S):
-    if S == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE.value: return "Active"
-    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY.value: return "Standby"
-    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCED.value: return "Quiesced"
-    elif S == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCING.value: return "Quiescing"
+    if S == eSaAmfHAStateT.SA_AMF_HA_ACTIVE: return "Active"
+    elif S == eSaAmfHAStateT.SA_AMF_HA_STANDBY: return "Standby"
+    elif S == eSaAmfHAStateT.SA_AMF_HA_QUIESCED: return "Quiesced"
+    elif S == eSaAmfHAStateT.SA_AMF_HA_QUIESCING: return "Quiescing"
     else: return "Uknown"
 
 def STRING_CSI_FLAGS(S):
@@ -24,14 +34,14 @@ def STRING_CSI_FLAGS(S):
     else: return "Uknown"
 
 def clprintf(severity, fmtString, *va_args):
-    _, fileName, loc = clUtils.getCallerInfo()
+    _, fileName, loc = getCallerInfo()
 
-    clLogApi.clLogMsgWrite(
+    clLogMsgWrite(
         CL_LOG_HANDLE_APP,
         severity,
         10,
-        clLogApi.CL_LOG_AREA_UNSPECIFIED,
-        clLogApi.CL_LOG_CONTEXT_UNSPECIFIED,
+        CL_LOG_AREA_UNSPECIFIED,
+        CL_LOG_CONTEXT_UNSPECIFIED,
         fileName,
         loc,
         fmtString,
@@ -44,48 +54,48 @@ def clprintf(severity, fmtString, *va_args):
 
 COMP_NAME                   = "SAFComponent0"
 COMP_EO_NAME                = "SAFComponent0_EO"
-COMP_EO_THREAD_PRIORITY     = clOsalApi.eClOsalThreadPriorityT.CL_OSAL_THREAD_PRI_MEDIUM
+COMP_EO_THREAD_PRIORITY     = eClOsalThreadPriorityT.CL_OSAL_THREAD_PRI_MEDIUM
 COMP_EO_NUM_THREAD          = 2
 COMP_IOC_PORT               = 0
-COMP_EO_USER_CLIENT_ID      = clCommon.ClUint32T(clEoApi.CL_EO_USER_CLIENT_ID_START)
-COMP_EO_USE_THREAD_MODEL    = clEoConfigApi.eClEoApplicationTypeT.CL_EO_USE_THREAD_FOR_RECV
+COMP_EO_USER_CLIENT_ID      = ClUint32T(CL_EO_USER_CLIENT_ID_START)
+COMP_EO_USE_THREAD_MODEL    = eClEoApplicationTypeT.CL_EO_USE_THREAD_FOR_RECV
 
-NULL_EO_CREATE_CALLOUT  = clEoConfigApi.ClEoAppCreateCallbackT()     # no arg = NULL, calling will cause seg fault
-NULL_EO_DELETE_CALLOUT  = clEoConfigApi.ClEoAppDeleteCallbackT()
-NULL_EO_ST_CHG_CALLOUT  = clEoConfigApi.ClEoAppStateChgCallbackT()
-NULL_EO_HP_CHK_CALLOUT  = clEoConfigApi.ClEoAppHealthCheckCallbackT()
-NULL_EO_CTM_ACT         = clEoConfigApi.ClEoCustomActionT()
+NULL_EO_CREATE_CALLOUT  = ClEoAppCreateCallbackT()     # no arg = NULL, calling will cause seg fault
+NULL_EO_DELETE_CALLOUT  = ClEoAppDeleteCallbackT()
+NULL_EO_ST_CHG_CALLOUT  = ClEoAppStateChgCallbackT()
+NULL_EO_HP_CHK_CALLOUT  = ClEoAppHealthCheckCallbackT()
+NULL_EO_CTM_ACT         = ClEoCustomActionT()
 
 # Component EO Basic Libraries
-COMP_EO_BASICLIB_OSAL   = clCommon.CL_TRUE
-COMP_EO_BASICLIB_TIMER  = clCommon.CL_TRUE
-COMP_EO_BASICLIB_BUFFER = clCommon.CL_TRUE
-COMP_EO_BASICLIB_IOC    = clCommon.CL_TRUE
-COMP_EO_BASICLIB_RMD    = clCommon.CL_TRUE
-COMP_EO_BASICLIB_EO     = clCommon.CL_TRUE
-COMP_EO_BASICLIB_OM     = clCommon.CL_FALSE
-COMP_EO_BASICLIB_HAL    = clCommon.CL_FALSE
-COMP_EO_BASICLIB_DBAL   = clCommon.CL_FALSE
+COMP_EO_BASICLIB_OSAL   = CL_TRUE
+COMP_EO_BASICLIB_TIMER  = CL_TRUE
+COMP_EO_BASICLIB_BUFFER = CL_TRUE
+COMP_EO_BASICLIB_IOC    = CL_TRUE
+COMP_EO_BASICLIB_RMD    = CL_TRUE
+COMP_EO_BASICLIB_EO     = CL_TRUE
+COMP_EO_BASICLIB_OM     = CL_FALSE
+COMP_EO_BASICLIB_HAL    = CL_FALSE
+COMP_EO_BASICLIB_DBAL   = CL_FALSE
 
 # Component EO Client Libraries
-COMP_EO_CLIENTLIB_COR   = clCommon.CL_TRUE
-COMP_EO_CLIENTLIB_CM    = clCommon.CL_FALSE                  
-COMP_EO_CLIENTLIB_NAME  = clCommon.CL_TRUE                  
-COMP_EO_CLIENTLIB_LOG   = clCommon.CL_TRUE                  
-COMP_EO_CLIENTLIB_TRACE = clCommon.CL_FALSE                 
-COMP_EO_CLIENTLIB_DIAG  = clCommon.CL_FALSE
-COMP_EO_CLIENTLIB_TXN   = clCommon.CL_TRUE
-COMP_EO_CLIENTLIB_MSO   = clCommon.CL_FALSE
-COMP_EO_CLIENTLIB_PROV  = clCommon.CL_FALSE
-COMP_EO_CLIENTLIB_ALARM = clCommon.CL_FALSE
-COMP_EO_CLIENTLIB_DEBUG = clCommon.CL_TRUE
-COMP_EO_CLIENTLIB_GMS   = clCommon.CL_FALSE
-COMP_EO_CLIENTLIB_PM    = clCommon.CL_FALSE
+COMP_EO_CLIENTLIB_COR   = CL_TRUE
+COMP_EO_CLIENTLIB_CM    = CL_FALSE                  
+COMP_EO_CLIENTLIB_NAME  = CL_TRUE                  
+COMP_EO_CLIENTLIB_LOG   = CL_TRUE                  
+COMP_EO_CLIENTLIB_TRACE = CL_FALSE                 
+COMP_EO_CLIENTLIB_DIAG  = CL_FALSE
+COMP_EO_CLIENTLIB_TXN   = CL_TRUE
+COMP_EO_CLIENTLIB_MSO   = CL_FALSE
+COMP_EO_CLIENTLIB_PROV  = CL_FALSE
+COMP_EO_CLIENTLIB_ALARM = CL_FALSE
+COMP_EO_CLIENTLIB_DEBUG = CL_TRUE
+COMP_EO_CLIENTLIB_GMS   = CL_FALSE
+COMP_EO_CLIENTLIB_PM    = CL_FALSE
 
 # EO config variables
-#clEoConfig      = clEoConfigApi.ClEoConfigT.in_dll(clLib.libmw_so, "clEoConfig")
-#clEoBasicLibs   = clEoConfigApi._clEoBasicLibArray.in_dll(clLib.libmw_so, "clEoBasicLibs")
-#clEoClientLibs  = clEoConfigApi._clEoClientLibArray.in_dll(clLib.libmw_so, "clEoClientLibs")
+#clEoConfig      = ClEoConfigT.in_dll(clLib.libmw_so, "clEoConfig")
+#clEoBasicLibs   = _clEoBasicLibArray.in_dll(clLib.libmw_so, "clEoBasicLibs")
+#clEoClientLibs  = _clEoClientLibArray.in_dll(clLib.libmw_so, "clEoClientLibs")
 
 # Description of this EO
 #clEoConfig.EOname                   = COMP_EO_NAME.encode("utf-8")  # EO Name
@@ -99,7 +109,7 @@ COMP_EO_CLIENTLIB_PM    = clCommon.CL_FALSE
 #clEoConfig.clEoStateChgCallout      = NULL_EO_ST_CHG_CALLOUT        # Application State Change Callback
 #clEoConfig.clEoHealthCheckCallout   = NULL_EO_HP_CHK_CALLOUT        # Application Health Check Callback
 #clEoConfig.clEoCustomAction         = NULL_EO_CTM_ACT
-#clEoConfig.needSerialization        = clCommon.CL_FALSE
+#clEoConfig.needSerialization        = CL_FALSE
 
 # Basic libraries used by this EO. The first 6 libraries are
 # mandatory, the others can be enabled or disabled by setting to
@@ -137,10 +147,10 @@ COMP_EO_CLIENTLIB_PM    = clCommon.CL_FALSE
 pid_t = ctypes.c_int
 
 mypid = pid_t(0)
-amfHandle = saAmf.SaAmfHandleT(0)
-appName = saAis.SaNameT("")
+amfHandle = SaAmfHandleT(0)
+appName = SaNameT("")
 
-unblockNow = clCommon.CL_FALSE
+unblockNow = CL_FALSE
 
 #
 #   Declare other global variables here.
@@ -157,13 +167,13 @@ unblockNow = clCommon.CL_FALSE
 #
 
 def main():
-    callbacks = saAmf.SaAmfCallbacksT()
-    version = saAis.SaVersionT()
-    iocPort = clIocApi.ClIocPortT(0)
-    rc = saAis.eSaAisErrorT.SA_AIS_OK
+    callbacks = SaAmfCallbacksT()
+    version = SaVersionT()
+    iocPort = ClIocPortT(0)
+    rc = eSaAisErrorT.SA_AIS_OK
 
-    dispatch_fd = saAis.SaSelectionObjectT(0)
-    read_fds = libc.fd_set()
+    dispatch_fd = SaSelectionObjectT(0)
+    read_fds = fd_set()
 
     #
     #   Declare other local variables here.
@@ -176,7 +186,7 @@ def main():
     global mypid
     global amfHandle
     global appName
-    mypid = libc.getpid()
+    mypid = getpid()
 
     #
     # Initialize and register with CPM. 'version' specifies the
@@ -189,36 +199,36 @@ def main():
     version.majorVersion = 1
     version.minorVersion = 1
 
-    callbacks.saAmfHealthcheckCallback          = saAmf.SaAmfHealthcheckCallbackT() # NULL
-    callbacks.saAmfComponentTerminateCallback   = saAmf.SaAmfComponentTerminateCallbackT(clCompAppTerminate)
-    callbacks.saAmfCSISetCallback               = saAmf.SaAmfCSISetCallbackT(clCompAppAMFCSISet)
-    callbacks.saAmfCSIRemoveCallback            = saAmf.SaAmfCSIRemoveCallbackT(clCompAppAMFCSIRemove)
-    callbacks.saAmfProtectionGroupTrackCallback = saAmf.SaAmfProtectionGroupTrackCallbackT() # NULL
+    callbacks.saAmfHealthcheckCallback          = SaAmfHealthcheckCallbackT() # NULL
+    callbacks.saAmfComponentTerminateCallback   = SaAmfComponentTerminateCallbackT(clCompAppTerminate)
+    callbacks.saAmfCSISetCallback               = SaAmfCSISetCallbackT(clCompAppAMFCSISet)
+    callbacks.saAmfCSIRemoveCallback            = SaAmfCSIRemoveCallbackT(clCompAppAMFCSIRemove)
+    callbacks.saAmfProtectionGroupTrackCallback = SaAmfProtectionGroupTrackCallbackT() # NULL
 
     #
     # Initialize AMF client library.
     #
 
-    rc = saAmf.saAmfInitialize(
+    rc = saAmfInitialize(
         ctypes.byref(amfHandle),
         ctypes.byref(callbacks),
         ctypes.byref(version)
     )
 
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
+    if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
-    libc.FD_ZERO(read_fds)
+    FD_ZERO(read_fds)
 
-    rc = saAmf.saAmfSelectionObjectGet(
+    rc = saAmfSelectionObjectGet(
         amfHandle,
         ctypes.byref(dispatch_fd)
     )
 
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
+    if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
-    libc.FD_SET(dispatch_fd.value, read_fds)
+    FD_SET(dispatch_fd.value, read_fds)
 
     #
     # Do the application specific initialization here.
@@ -230,47 +240,47 @@ def main():
     # ready to provide service, i.e. take work assignments.
     #
 
-    rc = saAmf.saAmfComponentNameGet(amfHandle, ctypes.byref(appName))
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
+    rc = saAmfComponentNameGet(amfHandle, ctypes.byref(appName))
+    if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
-    rc = saAmf.saAmfComponentRegister(amfHandle, ctypes.byref(appName), None)
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
+    rc = saAmfComponentRegister(amfHandle, ctypes.byref(appName), None)
+    if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
     #
     # Print out standard information for this component.
     #
 
-    rc = clEoApi.clEoMyEoIocPortGet(ctypes.byref(iocPort))
+    rc = clEoMyEoIocPortGet(ctypes.byref(iocPort))
 
-    clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO, "Component [%.*s] : PID [%d]. Initializing\n", appName.length, appName.__str__(), mypid)
-    clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO, "   IOC Address             : 0x%x\n", clIocApi.clIocLocalAddressGet())
-    clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO, "   IOC Port                : 0x%x\n", iocPort)
+    clprintf(eClLogSeverityT.CL_LOG_SEV_INFO, "Component [%.*s] : PID [%d]. Initializing\n", appName.length, appName.__str__(), mypid)
+    clprintf(eClLogSeverityT.CL_LOG_SEV_INFO, "   IOC Address             : 0x%x\n", clIocLocalAddressGet())
+    clprintf(eClLogSeverityT.CL_LOG_SEV_INFO, "   IOC Port                : 0x%x\n", iocPort)
 
     #
     # Block on AMF dispatch file descriptor for callbacks
     #
     EINTR = 4   # Interrupted system call
     while(not unblockNow):
-        if libc.select(dispatch_fd.value + 1, ctypes.byref(read_fds), None, None, None) < 0:
-            if libc.errno() == EINTR:
+        if select(dispatch_fd.value + 1, ctypes.byref(read_fds), None, None, None) < 0:
+            if errno() == EINTR:
                 continue
-            clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_ERROR, "Error in select()")
+            clprintf(eClLogSeverityT.CL_LOG_SEV_ERROR, "Error in select()")
             break
-        saAmf.saAmfDispatch(amfHandle, saAis.eSaDispatchFlagsT.SA_DISPATCH_ALL)
+        saAmfDispatch(amfHandle, eSaDispatchFlagsT.SA_DISPATCH_ALL)
 
     #
     # Do the application specific finalization here.
     #
 
-    rc = saAmf.saAmfFinalize(amfHandle)
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
-        clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_ERROR, "AMF finalization error[0x%X]", rc)
-    clprintf (clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO, "AMF Finalized")
+    rc = saAmfFinalize(amfHandle)
+    if rc != eSaAisErrorT.SA_AIS_OK:
+        clprintf(eClLogSeverityT.CL_LOG_SEV_ERROR, "AMF finalization error[0x%X]", rc)
+    clprintf (eClLogSeverityT.CL_LOG_SEV_INFO, "AMF Finalized")
 
 def errorexit(rc):
-    clprintf(clLogApi.eClLogSeverityT.CL_LOG_SEV_ERROR, "Component [%.*s] : PID [%d]. Initialization error [0x%x]\n", appName.length, appName.__str__(), mypid, rc)
+    clprintf(eClLogSeverityT.CL_LOG_SEV_ERROR, "Component [%.*s] : PID [%d]. Initialization error [0x%x]\n", appName.length, appName.__str__(), mypid, rc)
     exit()
 
 #
@@ -281,10 +291,10 @@ def errorexit(rc):
 
 def clCompAppTerminate(invocation, compName):
     invocation = ctypes.c_ulonglong(invocation)
-    rc = saAis.eSaAisErrorT.SA_AIS_OK
+    rc = eSaAisErrorT.SA_AIS_OK
 
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "Component [%.*s] : PID [%d]. Terminating\n",
         compName.contents.length, compName.contents.__str__(), mypid
     )
@@ -294,25 +304,25 @@ def clCompAppTerminate(invocation, compName):
     # termination was successful or not.
     #
 
-    rc = saAmf.saAmfComponentUnregister(amfHandle, compName, None)
-    if rc != saAis.eSaAisErrorT.SA_AIS_OK.value:
+    rc = saAmfComponentUnregister(amfHandle, compName, None)
+    if rc != eSaAisErrorT.SA_AIS_OK:
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_ERROR,
+            eClLogSeverityT.CL_LOG_SEV_ERROR,
             "Component [%.*s] : PID [%d]. Termination error [0x%x]\n",
             compName.contents.length, compName.contents.__str__(), mypid, rc
         )
         return
     
-    saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
+    saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
 
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "Component [%.*s] : PID [%d]. Terminated\n",
         compName.contents.length, compName.contents.__str__(), mypid
     )
     
     global unblockNow
-    unblockNow = clCommon.CL_TRUE
+    unblockNow = CL_TRUE
 
 ############################################################################
 #   Application Work Assignment Functions.
@@ -332,7 +342,7 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
     invocation = ctypes.c_ulonglong(invocation)
 
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "Component [%.*s] : PID [%d]. CSI Set Received\n",
         compName.contents.length, compName.contents.__str__(), mypid
     )
@@ -343,33 +353,33 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
     # Take appropriate action based on state
     #
 
-    if haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE.value:
+    if haState == eSaAmfHAStateT.SA_AMF_HA_ACTIVE:
         #
         # AMF has requested application to take the active HA state 
         # for the CSI.
         #
-        saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY.value:
+        saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
+    elif haState == eSaAmfHAStateT.SA_AMF_HA_STANDBY:
         #
         # AMF has requested application to take the standby HA state 
         # for this CSI.
         #
-        saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCED.value:
+        saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
+    elif haState == eSaAmfHAStateT.SA_AMF_HA_QUIESCED:
         #
         # AMF has requested application to quiesce the CSI currently
         # assigned the active or quiescing HA state. The application 
         # must stop work associated with the CSI immediately.
         #
-        saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_QUIESCING.value:
+        saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
+    elif haState == eSaAmfHAStateT.SA_AMF_HA_QUIESCING:
         #
         # AMF has requested application to quiesce the CSI currently
         # assigned the active HA state. The application must stop work
         # associated with the CSI gracefully and not accept any new
         # workloads while the work is being terminated.
         #
-        saAmf.saAmfCSIQuiescingComplete(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
+        saAmfCSIQuiescingComplete(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
     else:
         exit(0)
 
@@ -382,17 +392,17 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
 def clCompAppAMFCSIRemove(invocation, compName, csiName, csiFlags):
     invocation = ctypes.c_ulonglong(invocation)
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "Component [%.*s] : PID [%d]. CSI Remove Received\n",
         compName.contents.length, compName.contents.__str__(), mypid
     )
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "   CSI                     : %.*s\n",
         csiName.contents.length, csiName.contents.__str__()
     )
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "   CSI Flags               : 0x%d\n",
         csiFlags
     )
@@ -401,7 +411,7 @@ def clCompAppAMFCSIRemove(invocation, compName, csiName, csiFlags):
     # Add application specific logic for removing the work for this CSI.
     #
 
-    saAmf.saAmfResponse(amfHandle, invocation, saAis.eSaAisErrorT.SA_AIS_OK)
+    saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
 
 ############################################################################
 #   Utility functions .
@@ -415,68 +425,68 @@ def clCompAppAMFCSIRemove(invocation, compName, csiName, csiFlags):
 
 def clCompAppAMFPrintCSI(csiDescriptor, haState):
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "CSI Flags : [%s]",
         STRING_CSI_FLAGS(csiDescriptor.csiFlags)
     )
 
     if csiDescriptor.csiFlags != saAmf.SA_AMF_CSI_TARGET_ALL:
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "CSI Name : [%s]",
             csiDescriptor.csiName.__str__()
         )
 
     if csiDescriptor.csiFlags == saAmf.SA_AMF_CSI_ADD_ONE:
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "Name value pairs :"
         )
         for i in range(0, csiDescriptor.csiAttr.number):
             clprintf(
-                clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+                eClLogSeverityT.CL_LOG_SEV_INFO,
                 "Name : [%s]",
                 csiDescriptor.csiAttr.attr[i].attrName
             )
             clprintf(
-                clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+                eClLogSeverityT.CL_LOG_SEV_INFO,
                 "Value : [%s]",
                 csiDescriptor.csiAttr.attr[i].attrValue
             )
 
     clprintf(
-        clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+        eClLogSeverityT.CL_LOG_SEV_INFO,
         "HA state : [%s]",
         STRING_HA_STATE(haState)
     )
 
-    if haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_ACTIVE.value:
+    if haState == eSaAmfHAStateT.SA_AMF_HA_ACTIVE:
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "Active Descriptor :"
         )
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "Transition Descriptor : [%d]",
             csiDescriptor.csiStateDescriptor.activeDescriptor.transitionDescriptor
         )
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "Active Component : [%s]",
             csiDescriptor.csiStateDescriptor.activeDescriptor.activeCompName.__str__()
         )
-    elif haState == saAmf.eSaAmfHAStateT.SA_AMF_HA_STANDBY.value:
+    elif haState == eSaAmfHAStateT.SA_AMF_HA_STANDBY:
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "Standby Descriptor :"
         )
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "Standby Rank : [%d]",
             csiDescriptor.csiStateDescriptor.standbyDescriptor.standbyRank
         )
         clprintf(
-            clLogApi.eClLogSeverityT.CL_LOG_SEV_INFO,
+            eClLogSeverityT.CL_LOG_SEV_INFO,
             "Active Component : [%s]",
             csiDescriptor.csiStateDescriptor.standbyDescriptor.activeCompName.__str__()
         )

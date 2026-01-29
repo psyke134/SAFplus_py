@@ -8,14 +8,14 @@ from amf import clAmsEntities
 import ctypes
 
 ClAmsMgmtAdminOperT = clCommon.ClInt32T
-class eClAmsMgmtAdminOperT(clUtils.CEnum):
-    CL_AMS_MGMT_ADMIN_OPER_UNLOCK = 0,
-    CL_AMS_MGMT_ADMIN_OPER_LOCKA = 1,
-    CL_AMS_MGMT_ADMIN_OPER_LOCKI = 2,
-    CL_AMS_MGMT_ADMIN_OPER_SHUTDOWN = 3,
-    CL_AMS_MGMT_ADMIN_OPER_RESTART = 4,
-    CL_AMS_MGMT_ADMIN_OPER_REPAIRED = 5,
-    CL_AMS_MGMT_ADMIN_OPER_SI_SWAP = 6,
+class eClAmsMgmtAdminOperT(clUtils.Enum):
+    CL_AMS_MGMT_ADMIN_OPER_UNLOCK = 0
+    CL_AMS_MGMT_ADMIN_OPER_LOCKA = 1
+    CL_AMS_MGMT_ADMIN_OPER_LOCKI = 2
+    CL_AMS_MGMT_ADMIN_OPER_SHUTDOWN = 3
+    CL_AMS_MGMT_ADMIN_OPER_RESTART = 4
+    CL_AMS_MGMT_ADMIN_OPER_REPAIRED = 5
+    CL_AMS_MGMT_ADMIN_OPER_SI_SWAP = 6
     CL_AMS_MGMT_ADMIN_OPER_MAX = 7
 
 class ClAmsMgmtEntityAdminResponseT(ctypes.Structure):

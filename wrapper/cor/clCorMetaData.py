@@ -10,7 +10,7 @@ from buffer import clBufferApi
 
 import ctypes, enum
 
-CL_COR_WTH_COOKIE_ID =  clEoApi.eClEoServerIdT.CL_EO_COR_SERVER_COOKIE_ID.value+1
+CL_COR_WTH_COOKIE_ID =  clEoApi.eClEoServerIdT.CL_EO_COR_SERVER_COOKIE_ID+1
 
 CL_COR_VERSION_NO =  0x0100
 CL_COR_DEFAULT_MAX_SESSIONS =  5
@@ -73,47 +73,47 @@ ClCorBundleHandleT = clCommon.ClHandleT
 ClCorBundleHandlePtrT = ctypes.POINTER(clCommon.ClPtrT)
 
 ClCorTypeT = clCommon.ClInt32T
-class eClCorTypeT(clUtils.CEnum):
-    CL_COR_INVALID_DATA_TYPE = -1,
-    CL_COR_VOID = 0,
-    CL_COR_INT8 = 1,
-    CL_COR_UINT8 = 2,
-    CL_COR_INT16 = 3,
-    CL_COR_UINT16 = 4,
-    CL_COR_INT32 = 5,
-    CL_COR_UINT32 = 6,
-    CL_COR_INT64 = 7,
-    CL_COR_UINT64 = 8,
-    CL_COR_FLOAT = 9,
-    CL_COR_DOUBLE = 10,
-    CL_COR_COUNTER32 = 11,
-    CL_COR_COUNTER64 = 12,
+class eClCorTypeT(clUtils.Enum):
+    CL_COR_INVALID_DATA_TYPE = -1
+    CL_COR_VOID = 0
+    CL_COR_INT8 = 1
+    CL_COR_UINT8 = 2
+    CL_COR_INT16 = 3
+    CL_COR_UINT16 = 4
+    CL_COR_INT32 = 5
+    CL_COR_UINT32 = 6
+    CL_COR_INT64 = 7
+    CL_COR_UINT64 = 8
+    CL_COR_FLOAT = 9
+    CL_COR_DOUBLE = 10
+    CL_COR_COUNTER32 = 11
+    CL_COR_COUNTER64 = 12
     CL_COR_SEQUENCE32 = 13
 
 ClCorAttrTypeT = clCommon.ClInt32T
-class eClCorAttrTypeT(clUtils.CEnum):
-    CL_COR_MAX_TYPE = eClCorTypeT.CL_COR_SEQUENCE32.value
-    CL_COR_SIMPLE_ATTR = enum.auto()
-    CL_COR_ARRAY_ATTR = enum.auto()
-    CL_COR_CONTAINMENT_ATTR = enum.auto()
-    CL_COR_ASSOCIATION_ATTR = enum.auto()
-    CL_COR_VIRTUAL_ATTR = enum.auto()
+class eClCorAttrTypeT(clUtils.Enum):
+    CL_COR_MAX_TYPE = eClCorTypeT.CL_COR_SEQUENCE32
+    CL_COR_SIMPLE_ATTR = eClCorTypeT.CL_COR_SEQUENCE32 + 1
+    CL_COR_ARRAY_ATTR = eClCorTypeT.CL_COR_SEQUENCE32 + 2
+    CL_COR_CONTAINMENT_ATTR = eClCorTypeT.CL_COR_SEQUENCE32 + 3
+    CL_COR_ASSOCIATION_ATTR = eClCorTypeT.CL_COR_SEQUENCE32 + 4
+    CL_COR_VIRTUAL_ATTR = eClCorTypeT.CL_COR_SEQUENCE32 + 5
 
 ClCorAttrCmpFlagT = clCommon.ClInt32T
-class eClCorAttrCmpFlagT(clUtils.CEnum):
-    CL_COR_ATTR_CMP_FLAG_INVALID = 0,
-    CL_COR_ATTR_CMP_FLAG_VALUE_EQUAL_TO = 1,
-    CL_COR_ATTR_CMP_FLAG_VALUE_LESS_THAN = 2,
-    CL_COR_ATTR_CMP_FLAG_VALUE_LESS_OR_EQUALS = 3,
-    CL_COR_ATTR_CMP_FLAG_VALUE_GREATER_THAN = 4,
-    CL_COR_ATTR_CMP_FLAG_VALUE_GREATER_OR_EQUALS = 5,
+class eClCorAttrCmpFlagT(clUtils.Enum):
+    CL_COR_ATTR_CMP_FLAG_INVALID = 0
+    CL_COR_ATTR_CMP_FLAG_VALUE_EQUAL_TO = 1
+    CL_COR_ATTR_CMP_FLAG_VALUE_LESS_THAN = 2
+    CL_COR_ATTR_CMP_FLAG_VALUE_LESS_OR_EQUALS = 3
+    CL_COR_ATTR_CMP_FLAG_VALUE_GREATER_THAN = 4
+    CL_COR_ATTR_CMP_FLAG_VALUE_GREATER_OR_EQUALS = 5
     CL_COR_ATTR_CMP_FLAG_MAX = 6
 
 ClCorAttrWalkOpT = clCommon.ClInt32T
-class eClCorAttrWalkOpT(clUtils.CEnum):
-    CL_COR_ATTR_INVALID_OPTION = 0,
-    CL_COR_ATTR_WALK_ALL_ATTR = 1,
-    CL_COR_ATTR_WALK_ONLY_MATCHED_ATTR = 2,
+class eClCorAttrWalkOpT(clUtils.Enum):
+    CL_COR_ATTR_INVALID_OPTION = 0
+    CL_COR_ATTR_WALK_ALL_ATTR = 1
+    CL_COR_ATTR_WALK_ONLY_MATCHED_ATTR = 2
     CL_COR_ATTR_WALK_MAX = 3
 
 class ClCorAttrValuesT(ctypes.Structure):
@@ -151,29 +151,29 @@ ClCorClassAttrWalkFunc = ctypes.CFUNCTYPE(
 )
 
 ClCorObjTypesT = clCommon.ClInt32T
-class eClCorObjTypesT(clUtils.CEnum):
-    CL_COR_OBJ_TYPE_SIMPLE = 0,
-    CL_COR_OBJ_TYPE_MO = 1,
+class eClCorObjTypesT(clUtils.Enum):
+    CL_COR_OBJ_TYPE_SIMPLE = 0
+    CL_COR_OBJ_TYPE_MO = 1
     CL_COR_OBJ_TYPE_MSO = 2
 
 ClCorObjLockFlagsT = clCommon.ClInt32T
-class eClCorObjLockFlagsT(clUtils.CEnum):
-    CL_COR_LOCK_OBJECT = 0,
+class eClCorObjLockFlagsT(clUtils.Enum):
+    CL_COR_LOCK_OBJECT = 0
     CL_COR_LOCK_SUBTREE = 1
 
 ClCorObjWalkFlagsT = clCommon.ClInt32T
-class eClCorObjWalkFlagsT(clUtils.CEnum):
-    CL_COR_MOTREE_WALK = 0,  
-    CL_COR_MO_WALK = 1,
-    CL_COR_MSO_WALK = 2,
-    CL_COR_MO_SUBTREE_WALK = 3,
-    CL_COR_MSO_SUBTREE_WALK = 4,
-    CL_COR_MO_WALK_UP = 5,
+class eClCorObjWalkFlagsT(clUtils.Enum):
+    CL_COR_MOTREE_WALK = 0
+    CL_COR_MO_WALK = 1
+    CL_COR_MSO_WALK = 2
+    CL_COR_MO_SUBTREE_WALK = 3
+    CL_COR_MSO_SUBTREE_WALK = 4
+    CL_COR_MO_WALK_UP = 5
     CL_COR_MSO_WALK_UP = 6
 
 ClCorMoIdClassGetFlagsT = clCommon.ClInt32T
-class eClCorMoIdClassGetFlagsT(clUtils.CEnum):
-    CL_COR_MO_CLASS_GET = 0,
+class eClCorMoIdClassGetFlagsT(clUtils.Enum):
+    CL_COR_MO_CLASS_GET = 0
     CL_COR_MSO_CLASS_GET = 1
 
 ClCorObjectHandleT = clCommon.ClPtrT
@@ -195,7 +195,7 @@ ClCorTxnIdT = clCommon.ClPtrT
 ClCorTxnJobIdT = clCommon.ClUint32T
 
 ClCorOpsT = clCommon.ClInt32T
-class eClCorOpsT(clUtils.CEnum):
+class eClCorOpsT(clUtils.Enum):
     CL_COR_OP_RESERVED = 0
     CL_COR_OP_CREATE = 0x1
     CL_COR_OP_SET =    0x2
@@ -209,12 +209,12 @@ class eClCorOpsT(clUtils.CEnum):
                      CL_COR_OP_CREATE_AND_SET)
 
 ClCorTxnJobStatusT = clCommon.ClInt32T
-class eClCorTxnJobStatusT(clUtils.CEnum):
+class eClCorTxnJobStatusT(clUtils.Enum):
     CL_COR_TXN_JOB_PASS = 0
     CL_COR_TXN_JOB_FAIL = 1
 
 ClCorObjFlagsT = clCommon.ClInt32T
-class eClCorObjFlagsT(clUtils.CEnum):
+class eClCorObjFlagsT(clUtils.Enum):
     CL_COR_OBJ_CACHE_LOCAL = 0x1
     CL_COR_OBJ_CACHE_ONLY_ON_MASTER = 0x2
     CL_COR_OBJ_CACHE_ON_MASTER = 0x4
@@ -229,12 +229,12 @@ class eClCorObjFlagsT(clUtils.CEnum):
                             CL_COR_OBJ_DO_NOT_PUBLISH |
                             CL_COR_OBJ_ALLOW_SUB_TREE_DELETE)
 
-CL_COR_OBJ_FLAGS_DEFAULT = (eClCorObjFlagsT.CL_COR_OBJ_CACHE_GLOBAL.value |
-                            eClCorObjFlagsT.CL_COR_OBJ_PERSIST.value |
-                            eClCorObjFlagsT.CL_COR_OBJ_ALLOW_SUB_TREE_DELETE.value)
+CL_COR_OBJ_FLAGS_DEFAULT = (eClCorObjFlagsT.CL_COR_OBJ_CACHE_GLOBAL |
+                            eClCorObjFlagsT.CL_COR_OBJ_PERSIST |
+                            eClCorObjFlagsT.CL_COR_OBJ_ALLOW_SUB_TREE_DELETE)
 
 ClCorBundleOperationTypeT = clCommon.ClInt32T
-class eClCorBundleOperationTypeT(clUtils.CEnum):
+class eClCorBundleOperationTypeT(clUtils.Enum):
     CL_COR_BUNDLE_TRANSACTIONAL = 1
     CL_COR_BUNDLE_NON_TRANSACTIONAL = 2
 
@@ -252,7 +252,7 @@ class ClCorCommInfoT(ctypes.Structure):
 ClCorCommInfoPtrT = ctypes.POINTER(ClCorCommInfoT)
 
 ClCorMoPathQualifierT = clCommon.ClInt32T
-class eClCorMoPathQualifierT(clUtils.CEnum):
+class eClCorMoPathQualifierT(clUtils.Enum):
     CL_COR_MO_PATH_ABSOLUTE = 0
     CL_COR_MO_PATH_RELATIVE = 1
     CL_COR_MO_PATH_RELATIVE_TO_BASE = 2
@@ -351,7 +351,7 @@ class ClCorTxnInfoT(ctypes.Structure):
 ClCorTxnInfoPtrT = ctypes.POINTER(ClCorTxnInfoT)
 
 ClCorTxnEntryIdT = clCommon.ClInt32T
-class eClCorTxnEntryIdT(clUtils.CEnum):
+class eClCorTxnEntryIdT(clUtils.Enum):
     CL_COR_TXN_INFO_ADD = 0
     CL_COR_TXN_INFO_FIRST_GET = 1
     CL_COR_TXN_INFO_NEXT_GET = 2

@@ -12,26 +12,26 @@ CL_AMS_EVENT_PUBLISHER_NAME = "AMS_NOTIFICATION_MANAGER"
 CL_AMS_EVENT_VERSION        = "B.01.01"
 
 ClAmsNotificationTypeT = clCommon.ClInt32T
-class eClAmsNotificationTypeT(clUtils.CEnum):
+class eClAmsNotificationTypeT(clUtils.Enum):
     CL_AMS_NOTIFICATION_NONE                        = 0
-    CL_AMS_NOTIFICATION_FAULT                       = enum.auto()
-    CL_AMS_NOTIFICATION_SU_INSTANTIATION_FAILURE    = enum.auto()
-    CL_AMS_NOTIFICATION_SU_HA_STATE_CHANGE          = enum.auto()
-    CL_AMS_NOTIFICATION_SI_FULLY_ASSIGNED           = enum.auto()
-    CL_AMS_NOTIFICATION_SI_PARTIALLY_ASSIGNED       = enum.auto()
-    CL_AMS_NOTIFICATION_SI_UNASSIGNED               = enum.auto()
-    CL_AMS_NOTIFICATION_COMP_ARRIVAL                = enum.auto()
-    CL_AMS_NOTIFICATION_COMP_DEPARTURE              = enum.auto()
-    CL_AMS_NOTIFICATION_NODE_ARRIVAL                = enum.auto()
-    CL_AMS_NOTIFICATION_NODE_DEPARTURE              = enum.auto()
-    CL_AMS_NOTIFICATION_ENTITY_CREATE               = enum.auto()
-    CL_AMS_NOTIFICATION_ENTITY_DELETE               = enum.auto() 
-    CL_AMS_NOTIFICATION_OPER_STATE_CHANGE           = enum.auto()    
-    CL_AMS_NOTIFICATION_ADMIN_STATE_CHANGE          = enum.auto()
-    CL_AMS_NOTIFICATION_NODE_SWITCHOVER             = enum.auto()
-    CL_AMS_NOTIFICATION_NODE_FAILOVER               = enum.auto()
-    CL_AMS_NOTIFICATION_COMP_HA_STATE_CHANGE        = enum.auto()
-    CL_AMS_NOTIFICATION_MAX                         = enum.auto()
+    CL_AMS_NOTIFICATION_FAULT                       = 1
+    CL_AMS_NOTIFICATION_SU_INSTANTIATION_FAILURE    = 2
+    CL_AMS_NOTIFICATION_SU_HA_STATE_CHANGE          = 3
+    CL_AMS_NOTIFICATION_SI_FULLY_ASSIGNED           = 4
+    CL_AMS_NOTIFICATION_SI_PARTIALLY_ASSIGNED       = 5
+    CL_AMS_NOTIFICATION_SI_UNASSIGNED               = 6
+    CL_AMS_NOTIFICATION_COMP_ARRIVAL                = 7
+    CL_AMS_NOTIFICATION_COMP_DEPARTURE              = 8
+    CL_AMS_NOTIFICATION_NODE_ARRIVAL                = 9
+    CL_AMS_NOTIFICATION_NODE_DEPARTURE              = 10
+    CL_AMS_NOTIFICATION_ENTITY_CREATE               = 11
+    CL_AMS_NOTIFICATION_ENTITY_DELETE               = 12
+    CL_AMS_NOTIFICATION_OPER_STATE_CHANGE           = 13   
+    CL_AMS_NOTIFICATION_ADMIN_STATE_CHANGE          = 14
+    CL_AMS_NOTIFICATION_NODE_SWITCHOVER             = 15
+    CL_AMS_NOTIFICATION_NODE_FAILOVER               = 16
+    CL_AMS_NOTIFICATION_COMP_HA_STATE_CHANGE        = 17
+    CL_AMS_NOTIFICATION_MAX                         = 18
 
 class ClAmsNotificationDescriptorT(ctypes.Structure):
     _fields_ = [

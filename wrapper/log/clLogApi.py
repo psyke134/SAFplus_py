@@ -14,14 +14,14 @@ CL_LOG_STREAM_NAME_MAX_LENGTH = 128
 CL_LOG_SLINE_MSG_LEN = 256
 
 ClLogStreamScopeT = saAis.SaInt32T
-class eClLogStreamScopeT(clUtils.CEnum):
-    CL_LOG_STREAM_GLOBAL = 0,
+class eClLogStreamScopeT(clUtils.Enum):
+    CL_LOG_STREAM_GLOBAL = 0
     CL_LOG_STREAM_LOCAL  = 1
 
 ClLogFileFullActionT = saAis.SaInt32T
-class eClLogFileFullActionT(clUtils.CEnum):
-    CL_LOG_FILE_FULL_ACTION_ROTATE = 0,
-    CL_LOG_FILE_FULL_ACTION_WRAP   = 1,
+class eClLogFileFullActionT(clUtils.Enum):
+    CL_LOG_FILE_FULL_ACTION_ROTATE = 0
+    CL_LOG_FILE_FULL_ACTION_WRAP   = 1
     CL_LOG_FILE_FULL_ACTION_HALT   = 2
 
 class ClLogStreamAttributesT(ctypes.Structure):
@@ -65,25 +65,25 @@ CL_LOG_HANDLER_WILL_ACK = 0x1
 ClLogStreamHandlerFlagsT = clCommon.ClUint8T
 
 ClLogSeverityT = saAis.SaInt32T
-class eClLogSeverityT(clUtils.CEnum):
-    CL_LOG_SEV_EMERGENCY = 1,
-    CL_LOG_SEV_ALERT = 2,
-    CL_LOG_SEV_CRITICAL = 3,
-    CL_LOG_SEV_ERROR = 4,
-    CL_LOG_SEV_WARNING = 5,
-    CL_LOG_SEV_NOTICE = 6,
-    CL_LOG_SEV_INFO = 7,
-    CL_LOG_SEV_DEBUG = 8,
-    CL_LOG_SEV_DEBUG1   =      8,
-    CL_LOG_SEV_DEBUG2 = 9,
-    CL_LOG_SEV_DEBUG3 = 10,
-    CL_LOG_SEV_DEBUG4 = 11,
-    CL_LOG_SEV_DEBUG5 = 12,
-    CL_LOG_SEV_TRACE  =    12,
-    CL_LOG_SEV_DEBUG6 = 13,
-    CL_LOG_SEV_DEBUG7 = 14,
-    CL_LOG_SEV_DEBUG8 = 15,
-    CL_LOG_SEV_DEBUG9 = 16,
+class eClLogSeverityT(clUtils.Enum):
+    CL_LOG_SEV_EMERGENCY = 1
+    CL_LOG_SEV_ALERT = 2
+    CL_LOG_SEV_CRITICAL = 3
+    CL_LOG_SEV_ERROR = 4
+    CL_LOG_SEV_WARNING = 5
+    CL_LOG_SEV_NOTICE = 6
+    CL_LOG_SEV_INFO = 7
+    CL_LOG_SEV_DEBUG = 8
+    CL_LOG_SEV_DEBUG1   =      8
+    CL_LOG_SEV_DEBUG2 = 9
+    CL_LOG_SEV_DEBUG3 = 10
+    CL_LOG_SEV_DEBUG4 = 11
+    CL_LOG_SEV_DEBUG5 = 12
+    CL_LOG_SEV_TRACE  =    12
+    CL_LOG_SEV_DEBUG6 = 13
+    CL_LOG_SEV_DEBUG7 = 14
+    CL_LOG_SEV_DEBUG8 = 15
+    CL_LOG_SEV_DEBUG9 = 16
     CL_LOG_SEV_MAX    =    16
 
 ClLogSeverityFilterT = clCommon.ClUint16T

@@ -9,8 +9,8 @@ import ctypes
 CL_MEM_STATS_MAX_LIMIT = 0
 
 ClMemDirectionT = clCommon.ClInt32T
-class eClMemDirectionT(clUtils.CEnum):
-    CL_MEM_ALLOC = 0x0,
+class eClMemDirectionT(clUtils.Enum):
+    CL_MEM_ALLOC = 0x0
     CL_MEM_FREE  = 0x1
 
 class ClMemStatsT(ctypes.Structure):

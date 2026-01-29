@@ -43,8 +43,8 @@ class ClCpmMgmtCompT(ctypes.Structure):
     ]
 
 ClCpmNodeLeaveT = clCommon.ClInt32T
-class eClCpmNodeLeaveT(clUtils.CEnum):
-    CL_CPM_NODE_LEAVING = 1,
+class eClCpmNodeLeaveT(clUtils.Enum):
+    CL_CPM_NODE_LEAVING = 1
     CL_CPM_NODE_LEFT    = 2
 
 ClCpmComponentInstantiateT = ctypes.CFUNCTYPE(

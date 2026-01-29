@@ -13,7 +13,7 @@ SaNtfNotificationFilterHandleT = saAis.SaUint64T
 SaNtfReadHandleT = saAis.SaUint64T
 
 SaNtfNotificationTypeT = saAis.SaInt32T
-class eSaNtfNotificationTypeT(clUtils.CEnum):
+class eSaNtfNotificationTypeT(clUtils.Enum):
     SA_NTF_TYPE_OBJECT_CREATE_DELETE    = 0x1000
     SA_NTF_TYPE_ATTRIBUTE_CHANGE        = 0x2000
     SA_NTF_TYPE_STATE_CHANGE            = 0x3000
@@ -24,51 +24,51 @@ class eSaNtfNotificationTypeT(clUtils.CEnum):
 SA_NTF_NOTIFICATIONS_TYPE_MASK = 0xF000
 
 SaNtfEventTypeT = saAis.SaInt32T
-class eSaNtfEventTypeT(clUtils.CEnum):
-    SA_NTF_OBJECT_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_OBJECT_CREATE_DELETE.value
-    SA_NTF_OBJECT_CREATION              = enum.auto()
-    SA_NTF_OBJECT_DELETION              = enum.auto()
+class eSaNtfEventTypeT(clUtils.Enum):
+    SA_NTF_OBJECT_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_OBJECT_CREATE_DELETE
+    SA_NTF_OBJECT_CREATION              = eSaNtfNotificationTypeT.SA_NTF_TYPE_OBJECT_CREATE_DELETE + 1
+    SA_NTF_OBJECT_DELETION              = eSaNtfNotificationTypeT.SA_NTF_TYPE_OBJECT_CREATE_DELETE + 2
 
-    SA_NTF_ATTRIBUTE_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_ATTRIBUTE_CHANGE.value
-    SA_NTF_ATTRIBUTE_ADDED              = enum.auto()
-    SA_NTF_ATTRIBUTE_REMOVED            = enum.auto()
-    SA_NTF_ATTRIBUTE_CHANGED            = enum.auto()
-    SA_NTF_ATTRIBUTE_RESET              = enum.auto()
+    SA_NTF_ATTRIBUTE_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_ATTRIBUTE_CHANGE
+    SA_NTF_ATTRIBUTE_ADDED              = eSaNtfNotificationTypeT.SA_NTF_TYPE_ATTRIBUTE_CHANGE + 1
+    SA_NTF_ATTRIBUTE_REMOVED            = eSaNtfNotificationTypeT.SA_NTF_TYPE_ATTRIBUTE_CHANGE + 2
+    SA_NTF_ATTRIBUTE_CHANGED            = eSaNtfNotificationTypeT.SA_NTF_TYPE_ATTRIBUTE_CHANGE + 3
+    SA_NTF_ATTRIBUTE_RESET              = eSaNtfNotificationTypeT.SA_NTF_TYPE_ATTRIBUTE_CHANGE + 4
 
-    SA_NTF_STATE_CHANGE_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_STATE_CHANGE.value
-    SA_NTF_OBJECT_STATE_CHANGE          = enum.auto()
+    SA_NTF_STATE_CHANGE_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_STATE_CHANGE
+    SA_NTF_OBJECT_STATE_CHANGE          = eSaNtfNotificationTypeT.SA_NTF_TYPE_STATE_CHANGE + 1
 
-    SA_NTF_ALARM_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_ALARM.value
-    SA_NTF_ALARM_COMMUNICATION          = enum.auto()
-    SA_NTF_ALARM_QOS                    = enum.auto()
-    SA_NTF_ALARM_PROCESSING             = enum.auto()
-    SA_NTF_ALARM_EQUIPMENT              = enum.auto()
-    SA_NTF_ALARM_ENVIRONMENT            = enum.auto()
+    SA_NTF_ALARM_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_ALARM
+    SA_NTF_ALARM_COMMUNICATION          = eSaNtfNotificationTypeT.SA_NTF_TYPE_ALARM + 1
+    SA_NTF_ALARM_QOS                    = eSaNtfNotificationTypeT.SA_NTF_TYPE_ALARM + 2
+    SA_NTF_ALARM_PROCESSING             = eSaNtfNotificationTypeT.SA_NTF_TYPE_ALARM + 3
+    SA_NTF_ALARM_EQUIPMENT              = eSaNtfNotificationTypeT.SA_NTF_TYPE_ALARM + 4
+    SA_NTF_ALARM_ENVIRONMENT            = eSaNtfNotificationTypeT.SA_NTF_TYPE_ALARM + 5
 
-    SA_NTF_SECURITY_ALARM_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_SECURITY_ALARM.value
-    SA_NTF_INTEGRITY_VIOLATION          = enum.auto()
-    SA_NTF_OPERATION_VIOLATION          = enum.auto()
-    SA_NTF_PHYSICAL_VIOLATION           = enum.auto()
-    SA_NTF_SECURITY_SERVICE_VIOLATION   = enum.auto()
-    SA_NTF_TIME_VIOLATION               = enum.auto()
+    SA_NTF_SECURITY_ALARM_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_SECURITY_ALARM
+    SA_NTF_INTEGRITY_VIOLATION          = eSaNtfNotificationTypeT.SA_NTF_TYPE_SECURITY_ALARM + 1
+    SA_NTF_OPERATION_VIOLATION          = eSaNtfNotificationTypeT.SA_NTF_TYPE_SECURITY_ALARM + 2
+    SA_NTF_PHYSICAL_VIOLATION           = eSaNtfNotificationTypeT.SA_NTF_TYPE_SECURITY_ALARM + 3
+    SA_NTF_SECURITY_SERVICE_VIOLATION   = eSaNtfNotificationTypeT.SA_NTF_TYPE_SECURITY_ALARM + 4
+    SA_NTF_TIME_VIOLATION               = eSaNtfNotificationTypeT.SA_NTF_TYPE_SECURITY_ALARM + 5
 
-    SA_NTF_MISCELLANEOUS_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS.value
-    SA_NTF_APPLICATION_EVENT            = enum.auto()
-    SA_NTF_ADMIN_OPERATION_START        = enum.auto()
-    SA_NTF_ADMIN_OPERATION_END          = enum.auto()
-    SA_NTF_CONFIG_UPDATE_START          = enum.auto()
-    SA_NTF_CONFIG_UPDATE_END            = enum.auto()
-    SA_NTF_ERROR_REPORT                 = enum.auto()
-    SA_NTF_ERROR_CLEAR                  = enum.auto()
-    SA_NTF_HPI_EVENT_RESOURCE           = enum.auto()
-    SA_NTF_HPI_EVENT_SENSOR             = enum.auto()
-    SA_NTF_HPI_EVENT_WATCHDOG           = enum.auto()
-    SA_NTF_HPI_EVENT_DIMI               = enum.auto()
-    SA_NTF_HPI_EVENT_FUMI               = enum.auto()
-    SA_NTF_HPI_EVENT_OTHER              = enum.auto()
+    SA_NTF_MISCELLANEOUS_NOTIFICATIONS_START = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS
+    SA_NTF_APPLICATION_EVENT            = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 1
+    SA_NTF_ADMIN_OPERATION_START        = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 2
+    SA_NTF_ADMIN_OPERATION_END          = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 3
+    SA_NTF_CONFIG_UPDATE_START          = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 4
+    SA_NTF_CONFIG_UPDATE_END            = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 5
+    SA_NTF_ERROR_REPORT                 = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 6
+    SA_NTF_ERROR_CLEAR                  = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 7
+    SA_NTF_HPI_EVENT_RESOURCE           = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 8
+    SA_NTF_HPI_EVENT_SENSOR             = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 9
+    SA_NTF_HPI_EVENT_WATCHDOG           = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 10
+    SA_NTF_HPI_EVENT_DIMI               = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 11
+    SA_NTF_HPI_EVENT_FUMI               = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 12
+    SA_NTF_HPI_EVENT_OTHER              = eSaNtfNotificationTypeT.SA_NTF_TYPE_MISCELLANEOUS + 13
 
 SaNtfNotificationTypeBitsT = saAis.SaInt32T
-class eSaNtfNotificationTypeBitsT(clUtils.CEnum):
+class eSaNtfNotificationTypeBitsT(clUtils.Enum):
     SA_NTF_TYPE_OBJECT_CREATE_DELETE_BIT    = 0x0001
     SA_NTF_TYPE_ATTRIBUTE_CHANGE_BIT        = 0x0002
     SA_NTF_TYPE_STATE_CHANGE_BIT            = 0x0004
@@ -130,22 +130,22 @@ class SaNtfCorrelationIdsT(ctypes.Structure):
 	]
 
 SaNtfValueTypeT = saAis.SaInt32T
-class eSaNtfValueTypeT(clUtils.CEnum):
+class eSaNtfValueTypeT(clUtils.Enum):
     SA_NTF_VALUE_UINT8      = 1
-    SA_NTF_VALUE_INT8       = enum.auto()
-    SA_NTF_VALUE_UINT16     = enum.auto()
-    SA_NTF_VALUE_INT16      = enum.auto()
-    SA_NTF_VALUE_UINT32     = enum.auto()
-    SA_NTF_VALUE_INT32      = enum.auto()
-    SA_NTF_VALUE_FLOAT      = enum.auto()
-    SA_NTF_VALUE_UINT64     = enum.auto()
-    SA_NTF_VALUE_INT64      = enum.auto()
-    SA_NTF_VALUE_DOUBLE     = enum.auto()
-    SA_NTF_VALUE_LDAP_NAME  = enum.auto()
-    SA_NTF_VALUE_STRING     = enum.auto()
-    SA_NTF_VALUE_IPADDRESS  = enum.auto()
-    SA_NTF_VALUE_BINARY     = enum.auto()
-    SA_NTF_VALUE_ARRAY      = enum.auto()
+    SA_NTF_VALUE_INT8       = 2
+    SA_NTF_VALUE_UINT16     = 3
+    SA_NTF_VALUE_INT16      = 4
+    SA_NTF_VALUE_UINT32     = 5
+    SA_NTF_VALUE_INT32      = 6
+    SA_NTF_VALUE_FLOAT      = 7
+    SA_NTF_VALUE_UINT64     = 8
+    SA_NTF_VALUE_INT64      = 9
+    SA_NTF_VALUE_DOUBLE     = 10
+    SA_NTF_VALUE_LDAP_NAME  = 11
+    SA_NTF_VALUE_STRING     = 12
+    SA_NTF_VALUE_IPADDRESS  = 13
+    SA_NTF_VALUE_BINARY     = 14
+    SA_NTF_VALUE_ARRAY      = 15
 
 class _ptrVal(ctypes.Structure):
     _fields_ = [
@@ -255,82 +255,82 @@ class SaNtfStateChangeNotificationT(ctypes.Structure):
     ]
 
 SaNtfProbableCauseT = saAis.SaInt32T
-class eSaNtfProbableCauseT(clUtils.CEnum):
+class eSaNtfProbableCauseT(clUtils.Enum):
     SA_NTF_ADAPTER_ERROR                                    = 0
-    SA_NTF_APPLICATION_SUBSYSTEM_FAILURE                    = enum.auto()
-    SA_NTF_BANDWIDTH_REDUCED                                = enum.auto()
-    SA_NTF_CALL_ESTABLISHMENT_ERROR                         = enum.auto()
-    SA_NTF_COMMUNICATIONS_PROTOCOL_ERROR                    = enum.auto()
-    SA_NTF_COMMUNICATIONS_SUBSYSTEM_FAILURE                 = enum.auto()
-    SA_NTF_CONFIGURATION_OR_CUSTOMIZATION_ERROR             = enum.auto()
-    SA_NTF_CONGESTION                                       = enum.auto()
-    SA_NTF_CORRUPT_DATA                                     = enum.auto()
-    SA_NTF_CPU_CYCLES_LIMIT_EXCEEDED                        = enum.auto()
-    SA_NTF_DATASET_OR_MODEM_ERROR                           = enum.auto()
-    SA_NTF_DEGRADED_SIGNAL                                  = enum.auto()
-    SA_NTF_D_T_E                                            = enum.auto()
-    SA_NTF_ENCLOSURE_DOOR_OPEN                              = enum.auto()
-    SA_NTF_EQUIPMENT_MALFUNCTION                            = enum.auto()
-    SA_NTF_EXCESSIVE_VIBRATION                              = enum.auto()
-    SA_NTF_FILE_ERROR                                       = enum.auto()
-    SA_NTF_FIRE_DETECTED                                    = enum.auto()
-    SA_NTF_FLOOD_DETECTED                                   = enum.auto()
-    SA_NTF_FRAMING_ERROR                                    = enum.auto()
-    SA_NTF_HEATING_OR_VENTILATION_OR_COOLING_SYSTEM_PROBLEM = enum.auto()
-    SA_NTF_HUMIDITY_UNACCEPTABLE                            = enum.auto()
-    SA_NTF_INPUT_OUTPUT_DEVICE_ERROR                        = enum.auto()
-    SA_NTF_INPUT_DEVICE_ERROR                               = enum.auto()
-    SA_NTF_L_A_N_ERROR                                      = enum.auto()
-    SA_NTF_LEAK_DETECTED                                    = enum.auto()
-    SA_NTF_LOCAL_NODE_TRANSMISSION_ERROR                    = enum.auto()
-    SA_NTF_LOSS_OF_FRAME                                    = enum.auto()
-    SA_NTF_LOSS_OF_SIGNAL                                   = enum.auto()
-    SA_NTF_MATERIAL_SUPPLY_EXHAUSTED                        = enum.auto()
-    SA_NTF_MULTIPLEXER_PROBLEM                              = enum.auto()
-    SA_NTF_OUT_OF_MEMORY                                    = enum.auto()
-    SA_NTF_OUTPUT_DEVICE_ERROR                              = enum.auto()
-    SA_NTF_PERFORMANCE_DEGRADED                             = enum.auto()
-    SA_NTF_POWER_PROBLEM                                    = enum.auto()
-    SA_NTF_PRESSURE_UNACCEPTABLE                            = enum.auto()
-    SA_NTF_PROCESSOR_PROBLEM                                = enum.auto()
-    SA_NTF_PUMP_FAILURE                                     = enum.auto()
-    SA_NTF_QUEUE_SIZE_EXCEEDED                              = enum.auto()
-    SA_NTF_RECEIVE_FAILURE                                  = enum.auto()
-    SA_NTF_RECEIVER_FAILURE                                 = enum.auto()
-    SA_NTF_REMOTE_NODE_TRANSMISSION_ERROR                   = enum.auto()
-    SA_NTF_RESOURCE_AT_OR_NEARING_CAPACITY                  = enum.auto()
-    SA_NTF_RESPONSE_TIME_EXCESSIVE                          = enum.auto()
-    SA_NTF_RETRANSMISSION_RATE_EXCESSIVE                    = enum.auto()
-    SA_NTF_SOFTWARE_ERROR                                   = enum.auto()
-    SA_NTF_SOFTWARE_PROGRAM_ABNORMALLY_TERMINATED           = enum.auto()
-    SA_NTF_SOFTWARE_PROGRAM_ERROR                           = enum.auto()
-    SA_NTF_STORAGE_CAPACITY_PROBLEM                         = enum.auto()
-    SA_NTF_TEMPERATURE_UNACCEPTABLE                         = enum.auto()
-    SA_NTF_THRESHOLD_CROSSED                                = enum.auto()
-    SA_NTF_TIMING_PROBLEM                                   = enum.auto()
-    SA_NTF_TOXIC_LEAK_DETECTED                              = enum.auto()
-    SA_NTF_TRANSMIT_FAILURE                                 = enum.auto()
-    SA_NTF_TRANSMITTER_FAILURE                              = enum.auto()
-    SA_NTF_UNDERLYING_RESOURCE_UNAVAILABLE                  = enum.auto()
-    SA_NTF_VERSION_MISMATCH                                 = enum.auto()
-    SA_NTF_AUTHENTICATION_FAILURE                           = enum.auto()
-    SA_NTF_BREACH_OF_CONFIDENTIALITY                        = enum.auto()
-    SA_NTF_CABLE_TAMPER                                     = enum.auto()
-    SA_NTF_DELAYED_INFORMATION                              = enum.auto()
-    SA_NTF_DENIAL_OF_SERVICE                                = enum.auto()
-    SA_NTF_DUPLICATE_INFORMATION                            = enum.auto()
-    SA_NTF_INFORMATION_MISSING                              = enum.auto()
-    SA_NTF_INFORMATION_MODIFICATION_DETECTED                = enum.auto()
-    SA_NTF_INFORMATION_OUT_OF_SEQUENCE                      = enum.auto()
-    SA_NTF_INTRUSION_DETECTION                              = enum.auto()
-    SA_NTF_KEY_EXPIRED                                      = enum.auto()
-    SA_NTF_NON_REPUDIATION_FAILURE                          = enum.auto()
-    SA_NTF_OUT_OF_HOURS_ACTIVITY                            = enum.auto()
-    SA_NTF_OUT_OF_SERVICE                                   = enum.auto()
-    SA_NTF_PROCEDURAL_ERROR                                 = enum.auto()
-    SA_NTF_UNAUTHORIZED_ACCESS_ATTEMPT                      = enum.auto()
-    SA_NTF_UNEXPECTED_INFORMATION                           = enum.auto()
-    SA_NTF_UNSPECIFIED_REASON                               = enum.auto()
+    SA_NTF_APPLICATION_SUBSYSTEM_FAILURE                    = 1
+    SA_NTF_BANDWIDTH_REDUCED                                = 2
+    SA_NTF_CALL_ESTABLISHMENT_ERROR                         = 3
+    SA_NTF_COMMUNICATIONS_PROTOCOL_ERROR                    = 4
+    SA_NTF_COMMUNICATIONS_SUBSYSTEM_FAILURE                 = 5
+    SA_NTF_CONFIGURATION_OR_CUSTOMIZATION_ERROR             = 6
+    SA_NTF_CONGESTION                                       = 7
+    SA_NTF_CORRUPT_DATA                                     = 8
+    SA_NTF_CPU_CYCLES_LIMIT_EXCEEDED                        = 9
+    SA_NTF_DATASET_OR_MODEM_ERROR                           = 10
+    SA_NTF_DEGRADED_SIGNAL                                  = 11
+    SA_NTF_D_T_E                                            = 12
+    SA_NTF_ENCLOSURE_DOOR_OPEN                              = 13
+    SA_NTF_EQUIPMENT_MALFUNCTION                            = 14
+    SA_NTF_EXCESSIVE_VIBRATION                              = 15
+    SA_NTF_FILE_ERROR                                       = 16
+    SA_NTF_FIRE_DETECTED                                    = 17
+    SA_NTF_FLOOD_DETECTED                                   = 18
+    SA_NTF_FRAMING_ERROR                                    = 19
+    SA_NTF_HEATING_OR_VENTILATION_OR_COOLING_SYSTEM_PROBLEM = 20
+    SA_NTF_HUMIDITY_UNACCEPTABLE                            = 21
+    SA_NTF_INPUT_OUTPUT_DEVICE_ERROR                        = 22
+    SA_NTF_INPUT_DEVICE_ERROR                               = 23
+    SA_NTF_L_A_N_ERROR                                      = 24
+    SA_NTF_LEAK_DETECTED                                    = 25
+    SA_NTF_LOCAL_NODE_TRANSMISSION_ERROR                    = 26
+    SA_NTF_LOSS_OF_FRAME                                    = 27
+    SA_NTF_LOSS_OF_SIGNAL                                   = 28
+    SA_NTF_MATERIAL_SUPPLY_EXHAUSTED                        = 29
+    SA_NTF_MULTIPLEXER_PROBLEM                              = 30
+    SA_NTF_OUT_OF_MEMORY                                    = 31
+    SA_NTF_OUTPUT_DEVICE_ERROR                              = 32
+    SA_NTF_PERFORMANCE_DEGRADED                             = 33
+    SA_NTF_POWER_PROBLEM                                    = 34
+    SA_NTF_PRESSURE_UNACCEPTABLE                            = 35
+    SA_NTF_PROCESSOR_PROBLEM                                = 36
+    SA_NTF_PUMP_FAILURE                                     = 37
+    SA_NTF_QUEUE_SIZE_EXCEEDED                              = 38
+    SA_NTF_RECEIVE_FAILURE                                  = 39
+    SA_NTF_RECEIVER_FAILURE                                 = 40
+    SA_NTF_REMOTE_NODE_TRANSMISSION_ERROR                   = 41
+    SA_NTF_RESOURCE_AT_OR_NEARING_CAPACITY                  = 42
+    SA_NTF_RESPONSE_TIME_EXCESSIVE                          = 43
+    SA_NTF_RETRANSMISSION_RATE_EXCESSIVE                    = 44
+    SA_NTF_SOFTWARE_ERROR                                   = 45
+    SA_NTF_SOFTWARE_PROGRAM_ABNORMALLY_TERMINATED           = 46
+    SA_NTF_SOFTWARE_PROGRAM_ERROR                           = 47
+    SA_NTF_STORAGE_CAPACITY_PROBLEM                         = 48
+    SA_NTF_TEMPERATURE_UNACCEPTABLE                         = 49
+    SA_NTF_THRESHOLD_CROSSED                                = 50
+    SA_NTF_TIMING_PROBLEM                                   = 51
+    SA_NTF_TOXIC_LEAK_DETECTED                              = 52
+    SA_NTF_TRANSMIT_FAILURE                                 = 53
+    SA_NTF_TRANSMITTER_FAILURE                              = 54
+    SA_NTF_UNDERLYING_RESOURCE_UNAVAILABLE                  = 55
+    SA_NTF_VERSION_MISMATCH                                 = 56
+    SA_NTF_AUTHENTICATION_FAILURE                           = 57
+    SA_NTF_BREACH_OF_CONFIDENTIALITY                        = 58
+    SA_NTF_CABLE_TAMPER                                     = 59
+    SA_NTF_DELAYED_INFORMATION                              = 60
+    SA_NTF_DENIAL_OF_SERVICE                                = 61
+    SA_NTF_DUPLICATE_INFORMATION                            = 62
+    SA_NTF_INFORMATION_MISSING                              = 63
+    SA_NTF_INFORMATION_MODIFICATION_DETECTED                = 64
+    SA_NTF_INFORMATION_OUT_OF_SEQUENCE                      = 65
+    SA_NTF_INTRUSION_DETECTION                              = 66
+    SA_NTF_KEY_EXPIRED                                      = 67
+    SA_NTF_NON_REPUDIATION_FAILURE                          = 68
+    SA_NTF_OUT_OF_HOURS_ACTIVITY                            = 69
+    SA_NTF_OUT_OF_SERVICE                                   = 70
+    SA_NTF_PROCEDURAL_ERROR                                 = 71
+    SA_NTF_UNAUTHORIZED_ACCESS_ATTEMPT                      = 72
+    SA_NTF_UNEXPECTED_INFORMATION                           = 73
+    SA_NTF_UNSPECIFIED_REASON                               = 74
 
 class SaNtfSpecificProblemT(ctypes.Structure):
     _fields_ = [
@@ -341,19 +341,19 @@ class SaNtfSpecificProblemT(ctypes.Structure):
     ]
 
 SaNtfSeverityT = saAis.SaInt32T
-class eSaNtfSeverityT(clUtils.CEnum):
+class eSaNtfSeverityT(clUtils.Enum):
     SA_NTF_SEVERITY_CLEARED = 0
-    SA_NTF_SEVERITY_INDETERMINATE = enum.auto()
-    SA_NTF_SEVERITY_WARNING = enum.auto()
-    SA_NTF_SEVERITY_MINOR = enum.auto()
-    SA_NTF_SEVERITY_MAJOR = enum.auto()
-    SA_NTF_SEVERITY_CRITICAL = enum.auto()
+    SA_NTF_SEVERITY_INDETERMINATE = 1
+    SA_NTF_SEVERITY_WARNING = 2
+    SA_NTF_SEVERITY_MINOR = 3
+    SA_NTF_SEVERITY_MAJOR = 4
+    SA_NTF_SEVERITY_CRITICAL = 5
 
 SaNtfSeverityTrendT = saAis.SaInt32T
-class eSaNtfSeverityTrendT(clUtils.CEnum):
+class eSaNtfSeverityTrendT(clUtils.Enum):
     SA_NTF_TREND_MORE_SEVERE = 0
-    SA_NTF_TREND_NO_CHANGE = enum.auto()
-    SA_NTF_TREND_LESS_SEVERE = enum.auto()
+    SA_NTF_TREND_NO_CHANGE = 1
+    SA_NTF_TREND_LESS_SEVERE = 2
 
 class SaNtfThresholdInformationT(ctypes.Structure):
     _fields_ = [
@@ -504,7 +504,7 @@ class SaNtfMiscellaneousNotificationFilterT(ctypes.Structure):
     ]
 
 SaNtfSearchModeT = saAis.SaInt32T
-class eSaNtfSearchModeT(clUtils.CEnum):
+class eSaNtfSearchModeT(clUtils.Enum):
     SA_NTF_SEARCH_BEFORE_OR_AT_TIME = 1
     SA_NTF_SEARCH_AT_TIME = 2
     SA_NTF_SEARCH_AT_OR_AFTER_TIME = 3
@@ -521,8 +521,8 @@ class SaNtfSearchCriteriaT(ctypes.Structure):
     ]
 
 SaNtfSearchDirectionT = saAis.SaInt32T
-class eSaNtfSearchDirectionT(clUtils.CEnum):
-    SA_NTF_SEARCH_OLDER = 1,
+class eSaNtfSearchDirectionT(clUtils.Enum):
+    SA_NTF_SEARCH_OLDER = 1
     SA_NTF_SEARCH_YOUNGER = 2
 
 class SaNtfNotificationTypeFilterHandlesT(ctypes.Structure):
@@ -562,22 +562,22 @@ class SaNtfNotificationsT(ctypes.Structure):
     ]
 
 SaNtfStateT = saAis.SaInt32T
-class eSaNtfStateT(clUtils.CEnum):
+class eSaNtfStateT(clUtils.Enum):
     SA_NTF_STATIC_FILTER_STATE = 1
     SA_NTF_SUBSCRIBER_STATE = 2
 
 SaNtfStaticFilterStateT = saAis.SaInt32T
-class eSaNtfStaticFilterStateT(clUtils.CEnum):
+class eSaNtfStaticFilterStateT(clUtils.Enum):
     SA_NTF_STATIC_FILTER_STATE_INACTIVE = 1
     SA_NTF_STATIC_FILTER_STATE_ACTIVE = 2
 
 SaNtfSubscriberStateT = saAis.SaInt32T
-class eSaNtfSubscriberStateT(clUtils.CEnum):
+class eSaNtfSubscriberStateT(clUtils.Enum):
     SA_NTF_SUBSCRIBER_STATE_FORWARD_NOT_OK = 1
     SA_NTF_SUBSCRIBER_STATE_FORWARD_OK = 2
 
 SaNtfNotificationMinorIdT = saAis.SaInt32T
-class eSaNtfNotificationMinorIdT(clUtils.CEnum):
+class eSaNtfNotificationMinorIdT(clUtils.Enum):
     SA_NTF_NTFID_STATIC_FILTER_ACTIVATED = 0x065
     SA_NTF_NTFID_STATIC_FILTER_DEACTIVATED = 0x066
     SA_NTF_NTFID_CONSUMER_SLOW = 0x067

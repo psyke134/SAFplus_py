@@ -1,11 +1,13 @@
 import ctypes
-import enum
 import inspect
 
-class CEnum(enum.Enum):
-    def __new__(cls, *args):
-        dummy = 0
-        return ctypes.c_int(dummy)
+class Enum():
+    @classmethod
+    def str(cls, val):
+        for k, v in cls.__dict__.items():
+            if v == val:
+                return k
+        return "Uknown"
 
 def handleVarArgs(*va_args):
     cVaArgs = []

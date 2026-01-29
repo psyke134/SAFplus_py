@@ -85,14 +85,12 @@ CL_CID_OFFSET = 16
 CL_ERROR_CODE_MASK = 0xffff
 
 def CL_RC(CID, ERROR_CODE):
-    _cid = CID.value
-
-    return ERROR_CODE if ERROR_CODE == CL_OK else (_cid << CL_CID_OFFSET) | (ERROR_CODE & CL_ERROR_CODE_MASK)
+    return ERROR_CODE if ERROR_CODE == CL_OK else (CID << CL_CID_OFFSET) | (ERROR_CODE & CL_ERROR_CODE_MASK)
 
 def CL_GET_ERROR_CODE(RC):
-    _rc = RC.value
+    _rc = RC
     return _rc & CL_ERROR_CODE_MASK
 
 def CL_GET_CID(RC):
-    _rc = RC.value
+    _rc = RC
     return _rc >> CL_CID_OFFSET

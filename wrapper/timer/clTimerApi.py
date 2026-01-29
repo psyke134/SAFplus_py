@@ -24,30 +24,28 @@ class ClTimerConfigT(ctypes.Structure):
     ]
 
 ClTimerTypeT = clCommon.ClInt32T
-class eClTimerTypeT(clUtils.CEnum):
-    CL_TIMER_ONE_SHOT = 0,
-    CL_TIMER_REPETITIVE = 1,
-    CL_TIMER_VOLATILE = 2,
-    CL_TIMER_MAX_TYPE = 3,
+class eClTimerTypeT(clUtils.Enum):
+    CL_TIMER_ONE_SHOT = 0
+    CL_TIMER_REPETITIVE = 1
+    CL_TIMER_VOLATILE = 2
+    CL_TIMER_MAX_TYPE = 3
 
 ClTimerContextT = clCommon.ClInt32T
-class eClTimerContextT(clUtils.CEnum):
-    CL_TIMER_TASK_CONTEXT = 0,
-    CL_TIMER_SEPARATE_CONTEXT = 1,
-    CL_TIMER_MAX_CONTEXT = 3,
+class eClTimerContextT(clUtils.Enum):
+    CL_TIMER_TASK_CONTEXT = 0
+    CL_TIMER_SEPARATE_CONTEXT = 1
+    CL_TIMER_MAX_CONTEXT = 3
 
-def CL_TIMER_TYPE_STR(type):
-    _type = type.value
-    if _type == eClTimerTypeT.CL_TIMER_ONE_SHOT.value:
+def CL_TIMER_TYPE_STR(t):
+    if t == eClTimerTypeT.CL_TIMER_ONE_SHOT:
         return "one shot"
-    elif _type == eClTimerTypeT.CL_TIMER_REPETITIVE.value:
+    elif t == eClTimerTypeT.CL_TIMER_REPETITIVE:
         return "repetitive"
     else:
         return "volatile"
     
 def CL_TIMER_CONTEXT_STR(ctxt):
-    _ctxt = ctxt.value
-    if _ctxt == eClTimerContextT.CL_TIMER_SEPARATE_CONTEXT.value:
+    if ctxt == eClTimerContextT.CL_TIMER_SEPARATE_CONTEXT:
         return "thread"
     else:
         return "inline"

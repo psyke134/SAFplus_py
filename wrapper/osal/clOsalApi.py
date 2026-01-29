@@ -10,13 +10,13 @@ CL_OSAL_MIN_STACK_SIZE = 196608
 CL_OSAL_NAME_MAX = 32
 
 ClOsalSharedMutexFlagsT = clCommon.ClInt32T
-class eClOsalSharedMutexFlagsT(clUtils.CEnum):
-    CL_OSAL_SHARED_INVALID   = 0x0,
-    CL_OSAL_SHARED_NORMAL    = 0x1,
-    CL_OSAL_SHARED_SYSV_SEM  = 0x2,
-    CL_OSAL_SHARED_POSIX_SEM = 0x4,
-    CL_OSAL_SHARED_RECURSIVE = 0x8,
-    CL_OSAL_SHARED_PROCESS   = 0x10,
+class eClOsalSharedMutexFlagsT(clUtils.Enum):
+    CL_OSAL_SHARED_INVALID   = 0x0
+    CL_OSAL_SHARED_NORMAL    = 0x1
+    CL_OSAL_SHARED_SYSV_SEM  = 0x2
+    CL_OSAL_SHARED_POSIX_SEM = 0x4
+    CL_OSAL_SHARED_RECURSIVE = 0x8
+    CL_OSAL_SHARED_PROCESS   = 0x10
     CL_OSAL_SHARED_ERROR_CHECK = 0x20
 
 class ClSem(ctypes.Structure):
@@ -42,8 +42,8 @@ ClOsalMutexAttrT = libc.pthread_mutexattr_t
 ClOsalCondAttrT = libc.pthread_condattr_t
 
 ClOsalSharedTypeT = clCommon.ClInt32T
-class eClOsalSharedTypeT(clUtils.CEnum):
-    CL_OSAL_PROCESS_PRIVATE = 0,
+class eClOsalSharedTypeT(clUtils.Enum):
+    CL_OSAL_PROCESS_PRIVATE = 0
     CL_OSAL_PROCESS_SHARED = 1
 
 ClOsalCondT = libc.pthread_cond_t
@@ -63,30 +63,30 @@ ClOsalProcessFuncT = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 ClOsalTaskKeyDeleteCallBackT = ctypes.CFUNCTYPE(None, ctypes.c_void_p)
 
 ClOsalSchedulePolicyT = clCommon.ClInt32T
-class eClOsalSchedulePolicyT(clUtils.CEnum):
-    CL_OSAL_SCHED_OTHER = 0,
-    CL_OSAL_SCHED_FIFO = 1,
-    CL_OSAL_SCHED_RR = 2,
+class eClOsalSchedulePolicyT(clUtils.Enum):
+    CL_OSAL_SCHED_OTHER = 0
+    CL_OSAL_SCHED_FIFO = 1
+    CL_OSAL_SCHED_RR = 2
 
 ClOsalThreadPriorityT = clCommon.ClInt32T
-class eClOsalThreadPriorityT(clUtils.CEnum):
-    CL_OSAL_THREAD_PRI_NOT_APPLICABLE = 0,
-    CL_OSAL_THREAD_PRI_HIGH = 160,
-    CL_OSAL_THREAD_PRI_MEDIUM = 80,
+class eClOsalThreadPriorityT(clUtils.Enum):
+    CL_OSAL_THREAD_PRI_NOT_APPLICABLE = 0
+    CL_OSAL_THREAD_PRI_HIGH = 160
+    CL_OSAL_THREAD_PRI_MEDIUM = 80
     CL_OSAL_THREAD_PRI_LOW = 1
 
 ClOsalProcessFlagT = clCommon.ClInt32T
-class eClOsalProcessFlagT(clUtils.CEnum):
-    CL_OSAL_PROCESS_WITH_NEW_SESSION = 1,
+class eClOsalProcessFlagT(clUtils.Enum):
+    CL_OSAL_PROCESS_WITH_NEW_SESSION = 1
     CL_OSAL_PROCESS_WITH_NEW_GROUP = 2
 
 ClOsalShmSecurityModeFlagT = clCommon.ClInt32T
-class eClOsalShmSecurityModeFlagT(clUtils.CEnum):
-    CL_OSAL_SHM_MODE_READ_USER      = 0x0100,
-    CL_OSAL_SHM_MODE_READ_GROUP     = 0x0020,
-    CL_OSAL_SHM_MODE_READ_OTHERS    = 0x0004,
-    CL_OSAL_SHM_MODE_WRITE_USER     = 0x0080,
-    CL_OSAL_SHM_MODE_WRITE_GROUP    = 0x0010,
+class eClOsalShmSecurityModeFlagT(clUtils.Enum):
+    CL_OSAL_SHM_MODE_READ_USER      = 0x0100
+    CL_OSAL_SHM_MODE_READ_GROUP     = 0x0020
+    CL_OSAL_SHM_MODE_READ_OTHERS    = 0x0004
+    CL_OSAL_SHM_MODE_WRITE_USER     = 0x0080
+    CL_OSAL_SHM_MODE_WRITE_GROUP    = 0x0010
     CL_OSAL_SHM_MODE_WRITE_OTHERS   = 0x0002
 
 CL_OSAL_SHM_EXCEPTION_LENGTH = 2048

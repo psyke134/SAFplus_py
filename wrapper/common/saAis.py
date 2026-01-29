@@ -45,18 +45,18 @@ SA_TRACK_START_STEP = 0x10
 SA_TRACK_VALIDATE_STEP = 0x20
 
 SaBoolT = SaInt32T
-class eSaBoolT(clUtils.CEnum):
+class eSaBoolT(clUtils.Enum):
     SA_FALSE = 0
     SA_TRUE = 1
 
 SaDispatchFlagsT = SaInt32T
-class eSaDispatchFlagsT(clUtils.CEnum):
+class eSaDispatchFlagsT(clUtils.Enum):
     SA_DISPATCH_ONE = 1
     SA_DISPATCH_ALL = 2
     SA_DISPATCH_BLOCKING = 3
 
 SaAisErrorT = SaInt32T
-class eSaAisErrorT(clUtils.CEnum):
+class eSaAisErrorT(clUtils.Enum):
     SA_AIS_OK = 1
     SA_AIS_ERR_LIBRARY = 2
     SA_AIS_ERR_VERSION = 3
@@ -99,7 +99,7 @@ class eSaAisErrorT(clUtils.CEnum):
     SA_AIS_ERR_DEPLOYMENT = 40
 
 SaServicesT = SaInt32T
-class eSaServicesT(clUtils.CEnum):
+class eSaServicesT(clUtils.Enum):
     SA_SVC_HPI  =  1
     SA_SVC_AMF  =  2
     SA_SVC_CLM  =  3
@@ -140,6 +140,10 @@ class SaVersionT(ctypes.Structure):
 		("majorVersion", SaUint8T),
         ("minorVersion", SaUint8T),
 	]
+
+    def __init__(self, relCode, majVer, minVer):
+        relCode = ord(relCode[0])
+        super().__init__(relCode, majVer, minVer)
 
 class eSaLimitValueT(ctypes.Structure):
     _fields_ = [

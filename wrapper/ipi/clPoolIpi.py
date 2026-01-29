@@ -14,10 +14,10 @@ ClPoolT = clCommon.ClPtrT
 ClExtendedPoolT = clCommon.ClPtrT
 
 ClPoolFlagsT = clCommon.ClInt32T
-class eClPoolFlagsT(clUtils.CEnum):
-    CL_POOL_DEFAULT_FLAG    = 0x0,
-    CL_POOL_LAZY_FLAG       = 0x1,
-    CL_POOL_DEBUG_FLAG      = 0x2,
+class eClPoolFlagsT(clUtils.Enum):
+    CL_POOL_DEFAULT_FLAG    = 0x0
+    CL_POOL_LAZY_FLAG       = 0x1
+    CL_POOL_DEBUG_FLAG      = 0x2
 
 class ClPoolConfigT(ctypes.Structure):
     _fields_ = [
@@ -38,9 +38,9 @@ class ClPoolStatsT(ctypes.Structure):
     ]
 
 ClPoolShrinkFlagsT = clCommon.ClInt32T
-class eClPoolShrinkFlagsT(clUtils.CEnum):
-    CL_POOL_SHRINK_DEFAULT = 0,
-    CL_POOL_SHRINK_ONE = 1,
+class eClPoolShrinkFlagsT(clUtils.Enum):
+    CL_POOL_SHRINK_DEFAULT = 0
+    CL_POOL_SHRINK_ONE = 1
     CL_POOL_SHRINK_ALL = 2
 
 class ClPoolShrinkOptionsT(ctypes.Structure):

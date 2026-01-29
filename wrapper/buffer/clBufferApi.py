@@ -8,18 +8,18 @@ from ipi import clPoolIpi
 import ctypes
 
 ClBufferSeekTypeT = clCommon.ClInt32T
-class eClBufferSeekTypeT(clUtils.CEnum):
-    CL_BUFFER_SEEK_SET = 0,
-    CL_BUFFER_SEEK_CUR = 1,
-    CL_BUFFER_SEEK_END = 2,
+class eClBufferSeekTypeT(clUtils.Enum):
+    CL_BUFFER_SEEK_SET = 0
+    CL_BUFFER_SEEK_CUR = 1
+    CL_BUFFER_SEEK_END = 2
     CL_BUFFER_SEEK_MAX = 3
 
 ClBufferHandleT = clCommon.ClPtrT
 
 ClBufferModeT = clCommon.ClInt32T
-class eClBufferModeT(clUtils.CEnum):
-    CL_BUFFER_NATIVE_MODE = 0,
-    CL_BUFFER_PREALLOCATED_MODE = 1,
+class eClBufferModeT(clUtils.Enum):
+    CL_BUFFER_NATIVE_MODE = 0
+    CL_BUFFER_PREALLOCATED_MODE = 1
     CL_BUFFER_MAX_MODE = 2
 
 class ClBufferPoolConfigT(ctypes.Structure):

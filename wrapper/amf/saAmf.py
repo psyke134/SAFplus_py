@@ -15,14 +15,14 @@ SA_AMF_PM_ABNORMAL_END = 0x4
 SaAmfPmErrorsT = saAis.SaUint32T
 
 SaAmfPmStopQualifierT = saAis.SaInt32T
-class eSaAmfPmStopQualifierT(clUtils.CEnum):
-    SA_AMF_PM_PROC = 1,
-    SA_AMF_PM_PROC_AND_DESCENDENTS = 2,
+class eSaAmfPmStopQualifierT(clUtils.Enum):
+    SA_AMF_PM_PROC = 1
+    SA_AMF_PM_PROC_AND_DESCENDENTS = 2
     SA_AMF_PM_ALL_PROCESSES = 3
 
 SaAmfHealthcheckInvocationT = saAis.SaInt32T
-class eSaAmfHealthcheckInvocationT(clUtils.CEnum):
-    SA_AMF_HEALTHCHECK_AMF_INVOKED = 1,
+class eSaAmfHealthcheckInvocationT(clUtils.Enum):
+    SA_AMF_HEALTHCHECK_AMF_INVOKED = 1
     SA_AMF_HEALTHCHECK_COMPONENT_INVOKED= 2
 
 SA_AMF_HEALTHCHECK_KEY_MAX = 32
@@ -34,10 +34,10 @@ class SaAmfHealthcheckKeyT(ctypes.Structure):
     ]
 
 SaAmfHAStateT = saAis.SaInt32T
-class eSaAmfHAStateT(clUtils.CEnum):
-    SA_AMF_HA_ACTIVE = 1,
-    SA_AMF_HA_STANDBY = 2,
-    SA_AMF_HA_QUIESCED = 3,
+class eSaAmfHAStateT(clUtils.Enum):
+    SA_AMF_HA_ACTIVE = 1
+    SA_AMF_HA_STANDBY = 2
+    SA_AMF_HA_QUIESCED = 3
     SA_AMF_HA_QUIESCING = 4
 
 SA_AMF_CSI_ADD_ONE = 0X1
@@ -47,10 +47,10 @@ SA_AMF_CSI_TARGET_ALL = 0X4
 SaAmfCSIFlagsT = saAis.SaUint32T
 
 SaAmfCSITransitionDescriptorT = saAis.SaInt32T
-class eSaAmfCSITransitionDescriptorT(clUtils.CEnum):
-    SA_AMF_CSI_NEW_ASSIGN = 1,
-    SA_AMF_CSI_QUIESCED = 2,
-    SA_AMF_CSI_NOT_QUIESCED = 3,
+class eSaAmfCSITransitionDescriptorT(clUtils.Enum):
+    SA_AMF_CSI_NEW_ASSIGN = 1
+    SA_AMF_CSI_QUIESCED = 2
+    SA_AMF_CSI_NOT_QUIESCED = 3
     SA_AMF_CSI_STILL_ACTIVE = 4
 
 class SaAmfCSIActiveDescriptorT(ctypes.Structure):
@@ -99,10 +99,10 @@ class SaAmfProtectionGroupMemberT(ctypes.Structure):
     ]
 
 SaAmfProtectionGroupChangesT = saAis.SaInt32T
-class eSaAmfProtectionGroupChangesT(clUtils.CEnum):
-    SA_AMF_PROTECTION_GROUP_NO_CHANGE = 1,
-    SA_AMF_PROTECTION_GROUP_ADDED = 2,
-    SA_AMF_PROTECTION_GROUP_REMOVED = 3,
+class eSaAmfProtectionGroupChangesT(clUtils.Enum):
+    SA_AMF_PROTECTION_GROUP_NO_CHANGE = 1
+    SA_AMF_PROTECTION_GROUP_ADDED = 2
+    SA_AMF_PROTECTION_GROUP_REMOVED = 3
     SA_AMF_PROTECTION_GROUP_STATE_CHANGE = 4
 
 class SaAmfProtectionGroupNotificationT(ctypes.Structure):
@@ -118,13 +118,13 @@ class SaAmfProtectionGroupNotificationBufferT(ctypes.Structure):
     ]
 
 SaAmfRecommendedRecoveryT = saAis.SaInt32T
-class eSaAmfRecommendedRecoveryT(clUtils.CEnum):
-    SA_AMF_NO_RECOMMENDATION = 1,
-    SA_AMF_COMPONENT_RESTART = 2,
-    SA_AMF_COMPONENT_FAILOVER = 3,
-    SA_AMF_NODE_SWITCHOVER = 4,
-    SA_AMF_NODE_FAILOVER = 5,
-    SA_AMF_NODE_FAILFAST = 6,
+class eSaAmfRecommendedRecoveryT(clUtils.Enum):
+    SA_AMF_NO_RECOMMENDATION = 1
+    SA_AMF_COMPONENT_RESTART = 2
+    SA_AMF_COMPONENT_FAILOVER = 3
+    SA_AMF_NODE_SWITCHOVER = 4
+    SA_AMF_NODE_FAILOVER = 5
+    SA_AMF_NODE_FAILFAST = 6
     SA_AMF_CLUSTER_RESET =7
 
 SaAmfHealthcheckCallbackT = ctypes.CFUNCTYPE(

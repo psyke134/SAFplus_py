@@ -16,18 +16,19 @@ def CL_RULE_SWAP16(x):
     return (((x >> 8) & 0xFF) | 
             ((x << 8) & 0xFF00))
 
-class ClRuleExprFlagsT(clUtils.CEnum):
-    CL_RULE_LITTLE_END = 0x1,
-    CL_RULE_BIG_END = 0x2,
-    CL_RULE_NON_ZERO_MATCH = 0x4,
-    CL_RULE_MATCH_EXACT    = 0x8,
-    CL_RULE_EXPR_CHAIN_AND = 0x10,
+ClRuleExprFlagsT = clCommon.ClInt32T
+class eClRuleExprFlagsT(clUtils.Enum):
+    CL_RULE_LITTLE_END = 0x1
+    CL_RULE_BIG_END = 0x2
+    CL_RULE_NON_ZERO_MATCH = 0x4
+    CL_RULE_MATCH_EXACT    = 0x8
+    CL_RULE_EXPR_CHAIN_AND = 0x10
     CL_RULE_EXPR_CHAIN_GROUP_OR  = 0x40
 
 CL_RULE_EXPR_FLAG_BITS = 2
 CL_RULE_ARCH_FLAG_MASK = 0x3
 CL_RULE_EXPR_FLAG_MASK = ~CL_RULE_ARCH_FLAG_MASK
-CL_RULE_EXPR_FLAG_DEFAULT = ClRuleExprFlagsT.CL_RULE_NON_ZERO_MATCH.value | ClRuleExprFlagsT.CL_RULE_EXPR_CHAIN_AND.value
+CL_RULE_EXPR_FLAG_DEFAULT = eClRuleExprFlagsT.CL_RULE_NON_ZERO_MATCH | eClRuleExprFlagsT.CL_RULE_EXPR_CHAIN_AND
 
 class _BI_u(ctypes.Union):
     _fields_ = [

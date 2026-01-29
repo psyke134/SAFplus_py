@@ -15,7 +15,7 @@ CL_RMD_CALL_DO_NOT_OPTIMIZE = (1<<3)
 CL_RMD_CALL_NON_PERSISTENT = (1<<4)
 CL_RMD_CALL_IN_SESSION = (1<<5)
 CL_RMD_HEADER_VERSION = 1
-CL_RMD_DEFAULT_PRIORITY = clIocApi.eClIocPriorityT.CL_IOC_DEFAULT_PRIORITY.value
+CL_RMD_DEFAULT_PRIORITY = clIocApi.eClIocPriorityT.CL_IOC_DEFAULT_PRIORITY
 CL_RMD_DEFAULT_TIMEOUT = 10000
 CL_RMD_DEFAULT_RETRIES = 5
 CL_RMD_DEFAULT_TRANSPORT_HANDLE = 0
@@ -28,10 +28,10 @@ def CL_RMD_TIMEOUT_UNREACHABLE_CHECK(ret):
     return clCommonErrors.CL_GET_ERROR_CODE(ret) == clCommonErrors.CL_ERR_TIMEOUT or CL_RMD_UNREACHABLE_CHECK(ret)
 
 def CL_RMD_VERSION_ERROR(rc):
-    _rc = rc.value
     err_doesnt_exist = clCommonErrors.CL_ERR_DOESNT_EXIST
     err_version_mismatch = clCommonErrors.CL_ERR_VERSION_MISMATCH
-    return _rc == clCommonErrors.CL_RC(clCommon.eClCompIdT.CL_CID_EO, err_doesnt_exist) or _rc == clCommonErrors.CL_RC(clCommon.eClCompIdT.CL_CID_EO, err_version_mismatch)
+    cl_cid_eo = clCommon.eClCompIdT.CL_CID_EO
+    return rc == clCommonErrors.CL_RC(cl_cid_eo, err_doesnt_exist) or rc == clCommonErrors.CL_RC(cl_cid_eo, err_version_mismatch)
 
 ClRmdAsyncCallbackT = ctypes.CFUNCTYPE(
     None,

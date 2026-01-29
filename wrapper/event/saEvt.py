@@ -62,10 +62,10 @@ SA_EVT_EVENTID_LOST = 1
 SA_EVT_LOST_EVENT = "SA_EVT_LOST_EVENT_PATTERN"
 
 SaEvtEventFilterTypeT = saAis.SaInt32T
-class eSaEvtEventFilterTypeT(clUtils.CEnum):
-    SA_EVT_PREFIX_FILTER = 1,
-    SA_EVT_SUFFIX_FILTER = 2,
-    SA_EVT_EXACT_FILTER = 3,
+class eSaEvtEventFilterTypeT(clUtils.Enum):
+    SA_EVT_PREFIX_FILTER = 1
+    SA_EVT_SUFFIX_FILTER = 2
+    SA_EVT_EXACT_FILTER = 3
     SA_EVT_PASS_ALL_FILTER = 4
 
 class SaEvtEventFilterT(ctypes.Structure):

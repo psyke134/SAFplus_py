@@ -28,10 +28,10 @@ class ClTargetInfoT(ctypes.Structure):
     ]
 
 ClCpmSlotInfoFieldIdT = clCommon.ClInt32T
-class eClCpmSlotInfoFieldIdT(clUtils.CEnum):
-    CL_CPM_SLOT_ID = 0,
-    CL_CPM_IOC_ADDRESS = 1,
-    CL_CPM_NODE_MOID = 2,
+class eClCpmSlotInfoFieldIdT(clUtils.Enum):
+    CL_CPM_SLOT_ID = 0
+    CL_CPM_IOC_ADDRESS = 1
+    CL_CPM_NODE_MOID = 2
     CL_CPM_NODENAME = 3
 
 class ClCpmNodeConfigT(ctypes.Structure):
@@ -44,8 +44,8 @@ class ClCpmNodeConfigT(ctypes.Structure):
     ]
 
 ClCpmEventTypeT = clCommon.ClInt32T
-class eClCpmEventTypeT(clUtils.CEnum):
-    CL_CPM_COMP_EVENT = 0,
+class eClCpmEventTypeT(clUtils.Enum):
+    CL_CPM_COMP_EVENT = 0
     CL_CPM_NODE_EVENT = 1
 
 def clCpmEventPayLoadExtract(eventHandle, eventDataSize, cpmEventType, payLoad):

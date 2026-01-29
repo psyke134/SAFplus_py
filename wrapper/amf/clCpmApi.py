@@ -46,15 +46,15 @@ CL_CPM_NODE_DEPART_PATTERN = (1 << 4)
 CL_CPM_NODE_DEATH_PATTERN = (1 << 5)
 
 ClCpmNodeEventT = saAis.SaInt32T
-class eClCpmNodeEventT(clUtils.CEnum):
-    CL_CPM_NODE_ARRIVAL = 1,
-    CL_CPM_NODE_DEPARTURE = 2,
+class eClCpmNodeEventT(clUtils.Enum):
+    CL_CPM_NODE_ARRIVAL = 1
+    CL_CPM_NODE_DEPARTURE = 2
     CL_CPM_NODE_DEATH = 3
 
 ClCpmCompEventT = saAis.SaInt32T
-class eClCpmCompEventT(clUtils.CEnum):
-    CL_CPM_COMP_ARRIVAL = 1,
-    CL_CPM_COMP_DEPARTURE = 2,
+class eClCpmCompEventT(clUtils.Enum):
+    CL_CPM_COMP_ARRIVAL = 1
+    CL_CPM_COMP_DEPARTURE = 2
     CL_CPM_COMP_DEATH = 3
 
 def ClCpmCompEventT2Str(x):

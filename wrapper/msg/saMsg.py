@@ -29,10 +29,10 @@ class SaMsgQueueCreationAttributesT(ctypes.Structure):
     ]
 
 SaMsgQueueGroupPolicyT = saAis.SaInt32T
-class eSaMsgQueueGroupPolicyT(clUtils.CEnum):
-    SA_MSG_QUEUE_GROUP_ROUND_ROBIN          = 1,
-    SA_MSG_QUEUE_GROUP_LOCAL_ROUND_ROBIN    = 2,
-    SA_MSG_QUEUE_GROUP_LOCAL_BEST_QUEUE     = 3,
+class eSaMsgQueueGroupPolicyT(clUtils.Enum):
+    SA_MSG_QUEUE_GROUP_ROUND_ROBIN          = 1
+    SA_MSG_QUEUE_GROUP_LOCAL_ROUND_ROBIN    = 2
+    SA_MSG_QUEUE_GROUP_LOCAL_BEST_QUEUE     = 3
     SA_MSG_QUEUE_GROUP_BROADCAST            = 4
 
 SA_MSG_QUEUE_CREATE = 0x1
@@ -57,10 +57,10 @@ class SaMsgQueueStatusT(ctypes.Structure):
     ]
 
 SaMsgQueueGroupChangesT = saAis.SaInt32T
-class eSaMsgQueueGroupChangesT(clUtils.CEnum):
-    SA_MSG_QUEUE_GROUP_NO_CHANGE        = 1,
-    SA_MSG_QUEUE_GROUP_ADDED            = 2,
-    SA_MSG_QUEUE_GROUP_REMOVED          = 3,
+class eSaMsgQueueGroupChangesT(clUtils.Enum):
+    SA_MSG_QUEUE_GROUP_NO_CHANGE        = 1
+    SA_MSG_QUEUE_GROUP_ADDED            = 2
+    SA_MSG_QUEUE_GROUP_REMOVED          = 3
     SA_MSG_QUEUE_GROUP_STATE_CHANGED    = 4
 
 class SaMsgQueueGroupMemberT(ctypes.Structure):

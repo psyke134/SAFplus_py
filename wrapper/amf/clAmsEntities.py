@@ -10,16 +10,16 @@ from ioc import clIocApi
 import ctypes, enum
 
 ClAmsEntityTypeT = clCommon.ClInt32T
-class eClAmsEntityTypeT(clUtils.CEnum):
-    CL_AMS_ENTITY_TYPE_ENTITY       = 0, # unused
-    CL_AMS_ENTITY_TYPE_NODE         = 1, # A Cluster Node (system,computer)
-    CL_AMS_ENTITY_TYPE_APP          = 2, # A SAF application
-    CL_AMS_ENTITY_TYPE_SG           = 3, # A SAF service group
-    CL_AMS_ENTITY_TYPE_SU           = 4, # A SAF service unit
-    CL_AMS_ENTITY_TYPE_SI           = 5, # A SAF service instance (work assignment)
-    CL_AMS_ENTITY_TYPE_COMP         = 6, # A SAF component (program)
-    CL_AMS_ENTITY_TYPE_CSI          = 7, # A SAF component service instance (work assigned to a particular program)
-    CL_AMS_ENTITY_TYPE_CLUSTER      = 8, # A cluster
+class eClAmsEntityTypeT(clUtils.Enum):
+    CL_AMS_ENTITY_TYPE_ENTITY       = 0 # unused
+    CL_AMS_ENTITY_TYPE_NODE         = 1 # A Cluster Node (system,computer)
+    CL_AMS_ENTITY_TYPE_APP          = 2 # A SAF application
+    CL_AMS_ENTITY_TYPE_SG           = 3 # A SAF service group
+    CL_AMS_ENTITY_TYPE_SU           = 4 # A SAF service unit
+    CL_AMS_ENTITY_TYPE_SI           = 5 # A SAF service instance (work assignment)
+    CL_AMS_ENTITY_TYPE_COMP         = 6 # A SAF component (program)
+    CL_AMS_ENTITY_TYPE_CSI          = 7 # A SAF component service instance (work assigned to a particular program)
+    CL_AMS_ENTITY_TYPE_CLUSTER      = 8 # A cluster
 
 CL_AMS_ENTITY_TYPE_MAX = 7
 
@@ -110,29 +110,29 @@ CL_AMS_SG_ADJUST_PROBATION = CL_AMS_SG_ADJUST_DURATION
 CL_AMS_SU_ASSIGNMENT_DELAY = 3000
 
 ClAmsEntityTimerTypeT = clCommon.ClInt32T
-class eClAmsEntityTimerTypeT(clUtils.CEnum):
-    CL_AMS_NODE_TIMER_SUFAILOVER                        = 1,
+class eClAmsEntityTimerTypeT(clUtils.Enum):
+    CL_AMS_NODE_TIMER_SUFAILOVER                        = 1
 
-    CL_AMS_SG_TIMER_INSTANTIATE                         = 10,
-    CL_AMS_SG_TIMER_ADJUST                              = 11,
-    CL_AMS_SG_TIMER_ADJUST_PROBATION                    = 12,
-    CL_AMS_SU_TIMER_COMPRESTART                         = 20,
-    CL_AMS_SU_TIMER_SURESTART                           = 21,
-    CL_AMS_SU_TIMER_PROBATION                           = 22,
-    CL_AMS_SU_TIMER_ASSIGNMENT                          = 23,
+    CL_AMS_SG_TIMER_INSTANTIATE                         = 10
+    CL_AMS_SG_TIMER_ADJUST                              = 11
+    CL_AMS_SG_TIMER_ADJUST_PROBATION                    = 12
+    CL_AMS_SU_TIMER_COMPRESTART                         = 20
+    CL_AMS_SU_TIMER_SURESTART                           = 21
+    CL_AMS_SU_TIMER_PROBATION                           = 22
+    CL_AMS_SU_TIMER_ASSIGNMENT                          = 23
 
-    CL_AMS_COMP_TIMER_INSTANTIATE                       = 40,
-    CL_AMS_COMP_TIMER_TERMINATE                         = 41,
-    CL_AMS_COMP_TIMER_CLEANUP                           = 42,
-    CL_AMS_COMP_TIMER_AMSTART                           = 43,
-    CL_AMS_COMP_TIMER_AMSTOP                            = 44,
-    CL_AMS_COMP_TIMER_QUIESCINGCOMPLETE                 = 45,
-    CL_AMS_COMP_TIMER_CSISET                            = 46,
-    CL_AMS_COMP_TIMER_CSIREMOVE                         = 47,
-    CL_AMS_COMP_TIMER_PROXIEDCOMPINSTANTIATE            = 48,
-    CL_AMS_COMP_TIMER_PROXIEDCOMPCLEANUP                = 49,
-    CL_AMS_COMP_TIMER_INSTANTIATEDELAY                  = 50,
-    CL_AMS_COMP_TIMER_MAX                               = 51,
+    CL_AMS_COMP_TIMER_INSTANTIATE                       = 40
+    CL_AMS_COMP_TIMER_TERMINATE                         = 41
+    CL_AMS_COMP_TIMER_CLEANUP                           = 42
+    CL_AMS_COMP_TIMER_AMSTART                           = 43
+    CL_AMS_COMP_TIMER_AMSTOP                            = 44
+    CL_AMS_COMP_TIMER_QUIESCINGCOMPLETE                 = 45
+    CL_AMS_COMP_TIMER_CSISET                            = 46
+    CL_AMS_COMP_TIMER_CSIREMOVE                         = 47
+    CL_AMS_COMP_TIMER_PROXIEDCOMPINSTANTIATE            = 48
+    CL_AMS_COMP_TIMER_PROXIEDCOMPCLEANUP                = 49
+    CL_AMS_COMP_TIMER_INSTANTIATEDELAY                  = 50
+    CL_AMS_COMP_TIMER_MAX                               = 51
 
 class ClAmsEntityTimerT(ctypes.Structure):
     _fields_ = [
@@ -153,18 +153,18 @@ class ClAmsEntityRefT(ctypes.Structure):
     ]
 
 ClAmsEntityRefTypeT = clCommon.ClInt32T
-class eClAmsEntityRefTypeT(clUtils.CEnum):
-    CL_AMS_ENTITY_REF_TYPE_ENTITY   = 0,
-    CL_AMS_ENTITY_REF_TYPE_NODE     = 1,
-    CL_AMS_ENTITY_REF_TYPE_APP      = 2,
-    CL_AMS_ENTITY_REF_TYPE_SG       = 3,
-    CL_AMS_ENTITY_REF_TYPE_SU       = 4,
-    CL_AMS_ENTITY_REF_TYPE_SI       = 5,
-    CL_AMS_ENTITY_REF_TYPE_COMP     = 6,
-    CL_AMS_ENTITY_REF_TYPE_CSI      = 7,
-    CL_AMS_ENTITY_REF_TYPE_SUSI     = 8,
-    CL_AMS_ENTITY_REF_TYPE_SISU     = 9,
-    CL_AMS_ENTITY_REF_TYPE_COMPCSI  = 10,
+class eClAmsEntityRefTypeT(clUtils.Enum):
+    CL_AMS_ENTITY_REF_TYPE_ENTITY   = 0
+    CL_AMS_ENTITY_REF_TYPE_NODE     = 1
+    CL_AMS_ENTITY_REF_TYPE_APP      = 2
+    CL_AMS_ENTITY_REF_TYPE_SG       = 3
+    CL_AMS_ENTITY_REF_TYPE_SU       = 4
+    CL_AMS_ENTITY_REF_TYPE_SI       = 5
+    CL_AMS_ENTITY_REF_TYPE_COMP     = 6
+    CL_AMS_ENTITY_REF_TYPE_CSI      = 7
+    CL_AMS_ENTITY_REF_TYPE_SUSI     = 8
+    CL_AMS_ENTITY_REF_TYPE_SISU     = 9
+    CL_AMS_ENTITY_REF_TYPE_COMPCSI  = 10
     CL_AMS_ENTITY_REF_TYPE_CSICOMP  = 11
 
 CL_AMS_ENTITY_REF_TYPE_MAX = 11
@@ -179,68 +179,68 @@ class ClAmsEntityListT(ctypes.Structure):
     ]
 
 ClAmsEntityListTypeT = clCommon.ClInt32T
-class eClAmsEntityListTypeT(clUtils.CEnum):
+class eClAmsEntityListTypeT(clUtils.Enum):
     CL_AMS_START_LIST = 0
 
     #
     # Config lists
     #
 
-    CL_AMS_CONFIG_LIST_START = enum.auto()
-    CL_AMS_NODE_CONFIG_NODE_DEPENDENT_LIST = enum.auto()
-    CL_AMS_NODE_CONFIG_NODE_DEPENDENCIES_LIST = enum.auto()
-    CL_AMS_NODE_CONFIG_SU_LIST = enum.auto()
-    CL_AMS_SG_CONFIG_SU_LIST = enum.auto()
-    CL_AMS_SG_CONFIG_SI_LIST = enum.auto()
-    CL_AMS_SU_CONFIG_COMP_LIST = enum.auto()
-    CL_AMS_SI_CONFIG_SU_RANK_LIST = enum.auto()
-    CL_AMS_SI_CONFIG_SI_DEPENDENTS_LIST = enum.auto()
-    CL_AMS_SI_CONFIG_SI_DEPENDENCIES_LIST = enum.auto()
-    CL_AMS_SI_CONFIG_CSI_LIST = enum.auto()
-    CL_AMS_CSI_CONFIG_NVP_LIST = enum.auto()
-    CL_AMS_CSI_CONFIG_CSI_DEPENDENTS_LIST = enum.auto()
-    CL_AMS_CSI_CONFIG_CSI_DEPENDENCIES_LIST = enum.auto()
-    CL_AMS_CONFIG_LIST_END = enum.auto()
+    CL_AMS_CONFIG_LIST_START = 1
+    CL_AMS_NODE_CONFIG_NODE_DEPENDENT_LIST = 2
+    CL_AMS_NODE_CONFIG_NODE_DEPENDENCIES_LIST = 3
+    CL_AMS_NODE_CONFIG_SU_LIST = 4
+    CL_AMS_SG_CONFIG_SU_LIST = 5
+    CL_AMS_SG_CONFIG_SI_LIST = 6
+    CL_AMS_SU_CONFIG_COMP_LIST = 7
+    CL_AMS_SI_CONFIG_SU_RANK_LIST = 8
+    CL_AMS_SI_CONFIG_SI_DEPENDENTS_LIST = 9
+    CL_AMS_SI_CONFIG_SI_DEPENDENCIES_LIST = 10
+    CL_AMS_SI_CONFIG_CSI_LIST = 11
+    CL_AMS_CSI_CONFIG_NVP_LIST = 12
+    CL_AMS_CSI_CONFIG_CSI_DEPENDENTS_LIST = 13
+    CL_AMS_CSI_CONFIG_CSI_DEPENDENCIES_LIST = 14
+    CL_AMS_CONFIG_LIST_END = 15
 
     #
     # Status lists
     #
 
-    CL_AMS_SG_STATUS_INSTANTIABLE_SU_LIST = enum.auto()
-    CL_AMS_SG_STATUS_INSTANTIATED_SU_LIST = enum.auto()
-    CL_AMS_SG_STATUS_IN_SERVICE_SPARE_SU_LIST = enum.auto()
-    CL_AMS_SG_STATUS_ASSIGNED_SU_LIST = enum.auto()
-    CL_AMS_SG_STATUS_FAULTY_SU_LIST = enum.auto()
-    CL_AMS_SU_STATUS_SI_LIST = enum.auto()
-    CL_AMS_SI_STATUS_SU_LIST = enum.auto()
-    CL_AMS_COMP_STATUS_CSI_LIST = enum.auto()
-    CL_AMS_CSI_STATUS_PG_LIST = enum.auto()
+    CL_AMS_SG_STATUS_INSTANTIABLE_SU_LIST = 16
+    CL_AMS_SG_STATUS_INSTANTIATED_SU_LIST = 17
+    CL_AMS_SG_STATUS_IN_SERVICE_SPARE_SU_LIST = 18
+    CL_AMS_SG_STATUS_ASSIGNED_SU_LIST = 19
+    CL_AMS_SG_STATUS_FAULTY_SU_LIST = 20
+    CL_AMS_SU_STATUS_SI_LIST = 21
+    CL_AMS_SI_STATUS_SU_LIST = 22
+    CL_AMS_COMP_STATUS_CSI_LIST = 23
+    CL_AMS_CSI_STATUS_PG_LIST = 24
 
     #
     # Start of entity all list types.
     #
 
-    CL_AMS_SG_LIST = enum.auto() # List of all service groups
-    CL_AMS_SI_LIST = enum.auto() # List of all service instances (work assignment)
-    CL_AMS_NODE_LIST = enum.auto() # List of all nodes (computers)
-    CL_AMS_SU_LIST = enum.auto() # List of all service units
-    CL_AMS_COMP_LIST = enum.auto() # List of all components (program)
-    CL_AMS_CSI_LIST = enum.auto() # List of all component service instances (work assigned to one program)
+    CL_AMS_SG_LIST = 25 # List of all service groups
+    CL_AMS_SI_LIST = 26 # List of all service instances (work assignment)
+    CL_AMS_NODE_LIST = 27 # List of all nodes (computers)
+    CL_AMS_SU_LIST = 28 # List of all service units
+    CL_AMS_COMP_LIST = 29 # List of all components (program)
+    CL_AMS_CSI_LIST = 30 # List of all component service instances (work assigned to one program)
 
     #
     # End of entity all list types.
     #
 
-    CL_AMS_ENTITY_LIST_ALL_END = enum.auto()
+    CL_AMS_ENTITY_LIST_ALL_END = 31
 
     #
     # Internal entity list types.
     #
 
-    CL_AMS_CSI_PGTRACK_CLIENT_LIST = enum.auto()
-    CL_AMS_SU_STATUS_SI_EXTENDED_LIST = enum.auto()
-    CL_AMS_SI_STATUS_SU_EXTENDED_LIST = enum.auto()
-    CL_AMS_END_LIST = enum.auto()
+    CL_AMS_CSI_PGTRACK_CLIENT_LIST = 32
+    CL_AMS_SU_STATUS_SI_EXTENDED_LIST = 33
+    CL_AMS_SI_STATUS_SU_EXTENDED_LIST = 34
+    CL_AMS_END_LIST = 35
 
 ClAmsEntityRefCallbackT = ctypes.CFUNCTYPE(clCommon.ClRcT, ctypes.POINTER(ClAmsEntityRefT), ClAmsEntityListTypeT)
 

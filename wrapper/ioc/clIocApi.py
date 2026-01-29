@@ -28,7 +28,7 @@ CL_IOC_USER_ADDRESS_TYPE = 10
 CL_IOC_BROADCAST_ADDRESS_TYPE = 0xff
 
 ClIocPriorityT = clCommon.ClInt32T
-class eClIocPriorityT(clUtils.CEnum):
+class eClIocPriorityT(clUtils.Enum):
     CL_IOC_DEFAULT_PRIORITY   = 0
     CL_IOC_HIGH_PRIORITY      = 1
     CL_IOC_LOW_PRIORITY       = 2
@@ -40,7 +40,7 @@ class eClIocPriorityT(clUtils.CEnum):
     CL_IOC_MAX_PRIORITIES     = CL_IOC_RESERVED_PRIORITY_USER_END + 1
 
 ClIocNotificationActionT = clCommon.ClInt32T
-class eClIocNotificationActionT(clUtils.CEnum):
+class eClIocNotificationActionT(clUtils.Enum):
     CL_IOC_NOTIFICATION_DISABLE = 0
     CL_IOC_NOTIFICATION_ENABLE = 1
 
@@ -89,8 +89,8 @@ class ClIocAddressT(ctypes.Union):
     ]
 
 ClIocMessageOptionT = clCommon.ClInt32T
-class eClIocMessageOptionT(clUtils.CEnum):
-    CL_IOC_PERSISTENT_MSG = 0,
+class eClIocMessageOptionT(clUtils.Enum):
+    CL_IOC_PERSISTENT_MSG = 0
     CL_IOC_NON_PERSISTENT_MSG = 1
 
 class ClIocSendOptionT(ctypes.Structure):
@@ -116,10 +116,10 @@ class ClIocRecvOptionT(ctypes.Structure):
     ]
 
 ClIocQueueIdT = clCommon.ClInt32T
-class eClIocQueueIdT(clUtils.CEnum):
-    CL_IOC_SENDQ = 0,
-    CL_IOC_RECVQ = 1,
-    CL_IOC_QUEUE_MAX = 2,
+class eClIocQueueIdT(clUtils.Enum):
+    CL_IOC_SENDQ = 0
+    CL_IOC_RECVQ = 1
+    CL_IOC_QUEUE_MAX = 2
 
 class ClIocQueueInfoT(ctypes.Structure):
     _fields_ = [
@@ -150,8 +150,8 @@ class ClIocLibConfigT(ctypes.Structure):
     ]
 
 ClIocTLContextT = clCommon.ClInt32T
-class eClIocTLContextT(clUtils.CEnum):
-    CL_IOC_TL_GLOBAL_SCOPE = 0,
+class eClIocTLContextT(clUtils.Enum):
+    CL_IOC_TL_GLOBAL_SCOPE = 0
     CL_IOC_TL_LOCAL_SCOPE = 1
 
 class ClIocTLMappingT(ctypes.Structure):

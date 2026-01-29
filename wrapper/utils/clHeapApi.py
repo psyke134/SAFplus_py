@@ -8,9 +8,9 @@ from ipi import clPoolIpi
 import ctypes
 
 ClHeapModeT = clCommon.ClInt32T
-class eClHeapModeT(clUtils.CEnum):
-    CL_HEAP_PREALLOCATED_MODE = 0,
-    CL_HEAP_NATIVE_MODE = 1,
+class eClHeapModeT(clUtils.Enum):
+    CL_HEAP_PREALLOCATED_MODE = 0
+    CL_HEAP_NATIVE_MODE = 1
     CL_HEAP_CUSTOM_MODE = 2
 
 class ClHeapConfigT(ctypes.Structure):

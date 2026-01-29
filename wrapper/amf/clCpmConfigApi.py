@@ -11,10 +11,10 @@ CL_CPM_DEFAULT_MIN_FREQ = 2000
 CL_CPM_DEFAULT_MAX_FREQ = 32000
 
 ClCpmCompProcessRelT = clCommon.ClInt32T
-class eClCpmCompProcessRelT(clUtils.CEnum):
-    CL_CPM_COMP_NONE = 0,
-    CL_CPM_COMP_MULTI_PROCESS = 1,
-    CL_CPM_COMP_SINGLE_PROCESS = 2,
+class eClCpmCompProcessRelT(clUtils.Enum):
+    CL_CPM_COMP_NONE = 0
+    CL_CPM_COMP_MULTI_PROCESS = 1
+    CL_CPM_COMP_SINGLE_PROCESS = 2
     CL_CPM_COMP_THREADED = 3
 
 class ClCpmNodeClassTypeT(ctypes.Structure):

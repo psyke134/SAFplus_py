@@ -52,8 +52,8 @@ class SaCkptSectionCreationAttributesT(ctypes.Structure):
     ]
 
 SaCkptSectionStateT = saAis.SaInt32T
-class eSaCkptSectionStateT(clUtils.CEnum):
-    SA_CKPT_SECTION_VALID = 1,
+class eSaCkptSectionStateT(clUtils.Enum):
+    SA_CKPT_SECTION_VALID = 1
     SA_CKPT_SECTION_CORRUPTED = 2
 
 class SaCkptSectionDescriptorT(ctypes.Structure):
@@ -66,11 +66,11 @@ class SaCkptSectionDescriptorT(ctypes.Structure):
     ]
 
 SaCkptSectionsChosenT = saAis.SaInt32T
-class eSaCkptSectionsChosenT(clUtils.CEnum):
-    SA_CKPT_SECTIONS_FOREVER = 1,
-    SA_CKPT_SECTIONS_LEQ_EXPIRATION_TIME = 2,
-    SA_CKPT_SECTIONS_GEQ_EXPIRATION_TIME = 3,
-    SA_CKPT_SECTIONS_CORRUPTED = 4,
+class eSaCkptSectionsChosenT(clUtils.Enum):
+    SA_CKPT_SECTIONS_FOREVER = 1
+    SA_CKPT_SECTIONS_LEQ_EXPIRATION_TIME = 2
+    SA_CKPT_SECTIONS_GEQ_EXPIRATION_TIME = 3
+    SA_CKPT_SECTIONS_CORRUPTED = 4
     SA_CKPT_SECTIONS_ANY = 5
 
 class SaCkptIOVectorElementT(ctypes.Structure):
