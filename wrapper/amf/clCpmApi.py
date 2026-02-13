@@ -155,7 +155,7 @@ def clCpmClientInitialize(pCpmHandle, pCallback, pVersion):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmClientInitialize(pCpmHandle, pCallback, pVersion)
+    return clLib.libmw_so.clCpmClientInitialize(clUtils.byref(pCpmHandle), clUtils.byref(pCallback), clUtils.byref(pVersion))
 
 def clCpmClientFinalize(cpmHandle):
     """
@@ -176,7 +176,7 @@ def clCpmSelectionObjectGet(cpmHandle, pSelectionObject):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmSelectionObjectGet(cpmHandle, pSelectionObject)
+    return clLib.libmw_so.clCpmSelectionObjectGet(cpmHandle, clUtils.byref(pSelectionObject))
 
 def clCpmDispatch(cpmHandle, dispatchFlags):
     """
@@ -199,7 +199,7 @@ def clCpmComponentRegister(cpmHandle, pCompName, pProxyCompName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentRegister(cpmHandle, pCompName, pProxyCompName)
+    return clLib.libmw_so.clCpmComponentRegister(cpmHandle, clUtils.byref(pCompName), clUtils.byref(pProxyCompName))
 
 def clCpmComponentUnregister(cpmHandle, pCompName, pProxyCompName):
     """
@@ -211,7 +211,7 @@ def clCpmComponentUnregister(cpmHandle, pCompName, pProxyCompName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentUnregister(cpmHandle, pCompName, pProxyCompName)
+    return clLib.libmw_so.clCpmComponentUnregister(cpmHandle, clUtils.byref(pCompName), clUtils.byref(pProxyCompName))
 
 def clCpmComponentNameGet(cpmHandle, pCompName):
     """
@@ -222,7 +222,7 @@ def clCpmComponentNameGet(cpmHandle, pCompName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentNameGet(cpmHandle, pCompName)
+    return clLib.libmw_so.clCpmComponentNameGet(cpmHandle, clUtils.byref(pCompName))
 
 def clCpmComponentDNNameGet(cpmHandle, pCompName, pDNName):
     """
@@ -234,7 +234,7 @@ def clCpmComponentDNNameGet(cpmHandle, pCompName, pDNName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentDNNameGet(cpmHandle, pCompName, pDNName)
+    return clLib.libmw_so.clCpmComponentDNNameGet(cpmHandle, clUtils.byref(pCompName), clUtils.byref(pDNName))
 
 def clCpmResponse(cpmHandle, invocation, rc):
     """
@@ -259,7 +259,7 @@ def clCpmHAStateGet(cpmHandle, compName, csiName, haState):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmHAStateGet(cpmHandle, compName, csiName, haState)
+    return clLib.libmw_so.clCpmHAStateGet(cpmHandle, clUtils.byref(compName), clUtils.byref(csiName), clUtils.byref(haState))
 
 def clCpmCSIQuiescingComplete(cpmHandle, invocation, retCode):
     """
@@ -285,7 +285,7 @@ def clCpmComponentFailureReport(cpmHandle, pCompName, errorDetectionTime, recomm
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentFailureReport(cpmHandle, pCompName, errorDetectionTime, recommendedRecovery, alarmHandle)
+    return clLib.libmw_so.clCpmComponentFailureReport(cpmHandle, clUtils.byref(pCompName), errorDetectionTime, recommendedRecovery, alarmHandle)
 
 def clCpmComponentFailureClear(cpmHandle, pCompName):
     """
@@ -296,7 +296,7 @@ def clCpmComponentFailureClear(cpmHandle, pCompName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentFailureClear(cpmHandle, pCompName)
+    return clLib.libmw_so.clCpmComponentFailureClear(cpmHandle, clUtils.byref(pCompName))
 
 def clCpmHealthcheckStart(cpmHandle, pCompName, pCompHealthCheck, invocationType, recommondedRecovery):
     """
@@ -310,7 +310,7 @@ def clCpmHealthcheckStart(cpmHandle, pCompName, pCompHealthCheck, invocationType
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmHealthcheckStart(cpmHandle, pCompName, pCompHealthCheck, invocationType, recommondedRecovery)
+    return clLib.libmw_so.clCpmHealthcheckStart(cpmHandle, clUtils.byref(pCompName), clUtils.byref(pCompHealthCheck), invocationType, recommondedRecovery)
 
 def clCpmHealthcheckConfirm(cpmHandle, pCompName, pCompHealthCheck, healthCheckResult):
     """
@@ -323,7 +323,7 @@ def clCpmHealthcheckConfirm(cpmHandle, pCompName, pCompHealthCheck, healthCheckR
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmHealthcheckConfirm(cpmHandle, pCompName, pCompHealthCheck, healthCheckResult)
+    return clLib.libmw_so.clCpmHealthcheckConfirm(cpmHandle, clUtils.byref(pCompName), clUtils.byref(pCompHealthCheck), healthCheckResult)
 
 def clCpmHealthcheckStop(cpmHandle, pCompName, pCompHealthCheck):
     """
@@ -335,7 +335,7 @@ def clCpmHealthcheckStop(cpmHandle, pCompName, pCompHealthCheck):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmHealthcheckStop(cpmHandle, pCompName, pCompHealthCheck)
+    return clLib.libmw_so.clCpmHealthcheckStop(cpmHandle, clUtils.byref(pCompName), clUtils.byref(pCompHealthCheck))
 
 def clCpmProtectionGroupTrack(cpmHandle, pCsiName, trackFlags, pNotificationBuffer):
     """
@@ -348,7 +348,7 @@ def clCpmProtectionGroupTrack(cpmHandle, pCsiName, trackFlags, pNotificationBuff
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmProtectionGroupTrack(cpmHandle, pCsiName, trackFlags, pNotificationBuffer)
+    return clLib.libmw_so.clCpmProtectionGroupTrack(cpmHandle, clUtils.byref(pCsiName), trackFlags, clUtils.byref(pNotificationBuffer))
 
 def clCpmProtectionGroupTrackStop(cpmHandle, pCsiName):
     """
@@ -359,7 +359,7 @@ def clCpmProtectionGroupTrackStop(cpmHandle, pCsiName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmProtectionGroupTrackStop(cpmHandle, pCsiName)
+    return clLib.libmw_so.clCpmProtectionGroupTrackStop(cpmHandle, clUtils.byref(pCsiName))
 
 def clCpmComponentIdGet(cpmHandle, pCompName, pCompId):
     """
@@ -371,7 +371,7 @@ def clCpmComponentIdGet(cpmHandle, pCompName, pCompId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentIdGet(cpmHandle, pCompName, pCompId)
+    return clLib.libmw_so.clCpmComponentIdGet(cpmHandle, clUtils.byref(pCompName), clUtils.byref(pCompId))
 
 def clCpmComponentAddressGet(nodeAddress, pCompName, pCompAddress):
     """
@@ -383,7 +383,7 @@ def clCpmComponentAddressGet(nodeAddress, pCompName, pCompAddress):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentAddressGet(nodeAddress, pCompName, pCompAddress)
+    return clLib.libmw_so.clCpmComponentAddressGet(nodeAddress, clUtils.byref(pCompName), clUtils.byref(pCompAddress))
 
 def clCpmComponentAddressGetFast(nodeAddress, pCompName, pCompAddress):
     """
@@ -395,7 +395,7 @@ def clCpmComponentAddressGetFast(nodeAddress, pCompName, pCompAddress):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentAddressGetFast(nodeAddress, pCompName, pCompAddress)
+    return clLib.libmw_so.clCpmComponentAddressGetFast(nodeAddress, clUtils.byref(pCompName), clUtils.byref(pCompAddress))
 
 def clCpmComponentStatusGet(pCompName, pNodeName, pPresenceState, pOperationalState):
     """
@@ -408,7 +408,7 @@ def clCpmComponentStatusGet(pCompName, pNodeName, pPresenceState, pOperationalSt
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentStatusGet(pCompName, pNodeName, pPresenceState, pOperationalState)
+    return clLib.libmw_so.clCpmComponentStatusGet(clUtils.byref(pCompName), clUtils.byref(pNodeName), clUtils.byref(pPresenceState), clUtils.byref(pOperationalState))
 
 def clCpmMasterAddressGet(pIocAddress):
     """
@@ -418,7 +418,7 @@ def clCpmMasterAddressGet(pIocAddress):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmMasterAddressGet(pIocAddress)
+    return clLib.libmw_so.clCpmMasterAddressGet(clUtils.byref(pIocAddress))
 
 def clCpmMasterAddressGetExtended(pIocAddress, numRetries, pDelay):
     """
@@ -430,13 +430,14 @@ def clCpmMasterAddressGetExtended(pIocAddress, numRetries, pDelay):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmMasterAddressGetExtended(pIocAddress, numRetries, pDelay)
+    return clLib.libmw_so.clCpmMasterAddressGetExtended(clUtils.byref(pIocAddress), numRetries, clUtils.byref(pDelay))
 
 def clCpmIsMaster():
     """
     return type:
         ClUint32T
     """
+    clLib.libmw_so.clCpmIsMaster.restype = clCommon.ClUint32T
     return clLib.libmw_so.clCpmIsMaster()
 
 def clCpmNodeShutDown(iocNodeAddress):
@@ -490,7 +491,7 @@ def clCpmLocalNodeNameGet(nodeName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmLocalNodeNameGet(nodeName)
+    return clLib.libmw_so.clCpmLocalNodeNameGet(clUtils.byref(nodeName))
 
 def clCpmCompStatusGet(compAddr, pStatus):
     """
@@ -501,7 +502,7 @@ def clCpmCompStatusGet(compAddr, pStatus):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmCompStatusGet(compAddr, pStatus)
+    return clLib.libmw_so.clCpmCompStatusGet(compAddr, clUtils.byref(pStatus))
 
 def clCpmNodeStatusGet(nodeAddr, pStatus):
     """
@@ -512,7 +513,7 @@ def clCpmNodeStatusGet(nodeAddr, pStatus):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmNodeStatusGet(nodeAddr, pStatus)
+    return clLib.libmw_so.clCpmNodeStatusGet(nodeAddr, clUtils.byref(pStatus))
 
 def clCpmNotificationCallbackInstall(compAddr, pFunc, pArg, pHandle):
     """
@@ -525,7 +526,7 @@ def clCpmNotificationCallbackInstall(compAddr, pFunc, pArg, pHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmNotificationCallbackInstall(compAddr, pFunc, pArg, pHandle)
+    return clLib.libmw_so.clCpmNotificationCallbackInstall(compAddr, pFunc, pArg, clUtils.byref(pHandle))
 
 def clCpmNotificationCallbackUninstall(pHandle):
     """
@@ -546,13 +547,14 @@ def clCpmCompCSIList(pCompName, pCSIRef):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmCompCSIList(pCompName, pCSIRef)
+    return clLib.libmw_so.clCpmCompCSIList(clUtils.byref(pCompName), clUtils.byref(pCSIRef))
 
 def clCpmIsSC():
     """
     return type:
         ClBoolT
     """
+    clLib.libmw_so.clCpmIsSC.restype = clCommon.ClBoolT
     return clLib.libmw_so.clCpmIsSC()
 
 def clCpmCompInfoGet(pCompName, nodeAddress, compInfo):
@@ -565,6 +567,6 @@ def clCpmCompInfoGet(pCompName, nodeAddress, compInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmCompInfoGet(pCompName, nodeAddress, compInfo)
+    return clLib.libmw_so.clCpmCompInfoGet(clUtils.byref(pCompName), nodeAddress, clUtils.byref(compInfo))
 
 clCpmHandle = ClCpmHandleT.in_dll(clLib.libmw_so, "clCpmHandle")

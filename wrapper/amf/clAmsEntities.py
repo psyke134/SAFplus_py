@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clUtils, clList
+from utils import clUtils, clList, clHeapApi
 from timer import clTimerApi
 from cnt import clCntApi
 from amf import clAmsTypes, clAmsSAClientApi, clCpmApi
@@ -641,6 +641,10 @@ class ClAmsCompConfigT(ctypes.Structure):
         ("parentSU", ClAmsEntityRefT),
         ("instantiateCommand", clCommon.ClCharT * clCommon.CL_MAX_NAME_LENGTH)
     ]
+
+    def __del__(self):
+        if self.pSupportedCSITypes:
+            clHeapApi.clHeapFree(self.pSupportedCSITypes)
 
 class ClAmsCompStatusT(ctypes.Structure):
     _fields_ = [

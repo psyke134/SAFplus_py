@@ -29,7 +29,9 @@ def handleVarArgs(*va_args):
     return (cVaArgs, argTypes)
 
 def toCharP(pythonStr):
-    if isinstance(pythonStr, str):
+    if isinstance(pythonStr, ctypes.c_char_p) or isinstance(pythonStr, ctypes.POINTER(ctypes.c_char)):
+        return pythonStr
+    elif isinstance(pythonStr, str):
         return ctypes.c_char_p(pythonStr.encode("utf-8"))
     else: # already bytes
         return ctypes.c_char_p(pythonStr)
@@ -54,3 +56,6 @@ def getCallerInfo():
     ) = inspect.getframeinfo(previous_frame)
 
     return (function_name, filename, line_number)
+
+def byref(obj):
+    return None if obj == None else ctypes.byref(obj)

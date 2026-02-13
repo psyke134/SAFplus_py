@@ -5,6 +5,7 @@ import ctypes
 import enum
 
 from utils import clUtils, clLib
+from common import saAis
 import saAis
 
 SaNtfHandleT = saAis.SaUint64T
@@ -614,9 +615,9 @@ def saNtfInitialize(ntfHandle, ntfCallbacks, version):
         SaAisErrorT
     """
     return clLib.libmw_so.saNtfInitialize(
-        ntfHandle,
-        ntfCallbacks,
-        version
+        clUtils.byref(ntfHandle),
+        clUtils.byref(ntfCallbacks),
+        clUtils.byref(version)
     )
 
 def saNtfLocalizedMessageFree(message):
@@ -655,7 +656,7 @@ def saNtfStateChangeNotificationFilterAllocate(
     """
     return clLib.libmw_so.saNtfStateChangeNotificationFilterAllocate(
         ntfHandle,
-        notificationFilter,
+        clUtils.byref(notificationFilter),
         numEventTypes,
         numNotificationObjects,
         numNotifyingObjects,
@@ -686,8 +687,8 @@ def saNtfNotificationReadInitialize(searchCriteria, notificationFilterHandles, r
     """
     return clLib.libmw_so.saNtfNotificationReadInitialize(
         searchCriteria,
-        notificationFilterHandles,
-        readHandle
+        clUtils.byref(notificationFilterHandles),
+        clUtils.byref(readHandle)
     )
 
 SaNtfStaticSuppressionFilterSetCallbackT = ctypes.CFUNCTYPE(None, SaNtfHandleT, saAis.SaUint16T)
@@ -710,9 +711,9 @@ def saNtfInitialize_2(ntfHandle, ntfCallbacks, version):
         SaAisErrorT
     """
     return clLib.libmw_so.saNtfInitialize_2(
-        ntfHandle,
-        ntfCallbacks,
-        version
+        clUtils.byref(ntfHandle),
+        clUtils.byref(ntfCallbacks),
+        clUtils.byref(version)
     )
 
 def saNtfNotificationReadInitialize_2(searchCriteria, notificationFilterHandles, readHandle):
@@ -726,9 +727,9 @@ def saNtfNotificationReadInitialize_2(searchCriteria, notificationFilterHandles,
         SaAisErrorT
     """
     return clLib.libmw_so.saNtfNotificationReadInitialize_2(
-        searchCriteria,
-        notificationFilterHandles,
-        readHandle
+        clUtils.byref(searchCriteria),
+        clUtils.byref(notificationFilterHandles),
+        clUtils.byref(readHandle)
     )
 
 def saNtfNotificationSubscribe(notificationFilterHandles, subscriptionId):
@@ -741,7 +742,7 @@ def saNtfNotificationSubscribe(notificationFilterHandles, subscriptionId):
         SaAisErrorT
     """
     return clLib.libmw_so.saNtfNotificationSubscribe(
-        notificationFilterHandles,
+        clUtils.byref(notificationFilterHandles),
         subscriptionId
     )
 
@@ -765,9 +766,9 @@ def saNtfInitialize_3(ntfHandle, ntfCallbacks, version):
         SaAisErrorT
     """
     return clLib.libmw_so.saNtfInitialize_3(
-        ntfHandle,
-        ntfCallbacks,
-        version
+        clUtils.byref(ntfHandle),
+        clUtils.byref(ntfCallbacks),
+        clUtils.byref(version)
     )
 
 def saNtfSelectionObjectGet(ntfHandle, selectionObject):
@@ -781,7 +782,7 @@ def saNtfSelectionObjectGet(ntfHandle, selectionObject):
     """
     return clLib.libmw_so.saNtfSelectionObjectGet(
         ntfHandle,
-        selectionObject
+        clUtils.byref(selectionObject)
     )
 
 def saNtfDispatch(ntfHandle, dispatchFlags):
@@ -829,7 +830,7 @@ def saNtfObjectCreateDeleteNotificationAllocate(
     """
     return clLib.libmw_so.saNtfObjectCreateDeleteNotificationAllocate(
         ntfHandle,
-        notification,
+        clUtils.byref(notification),
         numCorrelatedNotifications,
         lengthAdditionalText,
         numAdditionalInfo,
@@ -861,7 +862,7 @@ def saNtfAttributeChangeNotificationAllocate(
     """
     return clLib.libmw_so.saNtfAttributeChangeNotificationAllocate(
         ntfHandle,
-        notification,
+        clUtils.byref(notification),
         numCorrelatedNotifications,
         lengthAdditionalText,
         numAdditionalInfo,
@@ -893,7 +894,7 @@ def saNtfStateChangeNotificationAllocate(
     """
     return clLib.libmw_so.saNtfStateChangeNotificationAllocate(
         ntfHandle,
-        notification,
+        clUtils.byref(notification),
         numCorrelatedNotifications,
         lengthAdditionalText,
         numAdditionalInfo,
@@ -929,7 +930,7 @@ def saNtfAlarmNotificationAllocate(
     """
     return clLib.libmw_so.saNtfAlarmNotificationAllocate(
         ntfHandle,
-        notification,
+        clUtils.byref(notification),
         numCorrelatedNotifications,
         lengthAdditionalText,
         numAdditionalInfo,
@@ -961,7 +962,7 @@ def saNtfSecurityAlarmNotificationAllocate(
     """
     return clLib.libmw_so.saNtfSecurityAlarmNotificationAllocate(
         ntfHandle,
-        notification,
+        clUtils.byref(notification),
         numCorrelatedNotifications,
         lengthAdditionalText,
         numAdditionalInfo,
@@ -982,8 +983,8 @@ def saNtfPtrValAllocate(notificationHandle, dataSize, dataPtr, value):
     return clLib.libmw_so.saNtfPtrValAllocate(
         notificationHandle,
         dataSize,
-        dataPtr,
-        value
+        clUtils.byref(dataPtr),
+        clUtils.byref(value)
     )
 
 def saNtfArrayValAllocate(notificationHandle, numElements, elementSize, arrayPtr, value):
@@ -1002,8 +1003,8 @@ def saNtfArrayValAllocate(notificationHandle, numElements, elementSize, arrayPtr
         notificationHandle,
         numElements,
         elementSize,
-        arrayPtr,
-        value
+        clUtils.byref(arrayPtr),
+        clUtils.byref(value)
     )
 
 def saNtfNotificationSend(notificationHandle):
@@ -1037,7 +1038,7 @@ def saNtfVariableDataSizeGet(notificationHandle, variableDataSpaceAvailable):
     """
     return clLib.libmw_so.saNtfVariableDataSizeGet(
         notificationHandle,
-        variableDataSpaceAvailable
+        clUtils.byref(variableDataSpaceAvailable)
     )
 
 def saNtfLocalizedMessageGet(notificationHandle, message):
@@ -1049,10 +1050,7 @@ def saNtfLocalizedMessageGet(notificationHandle, message):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saNtfLocalizedMessageGet(
-        notificationHandle,
-        message
-    )
+    return saAis.eSaAisErrorT.SA_AIS_ERR_NOT_SUPPORTED
 
 def saNtfLocalizedMessageFree_2(ntfHandle, message):
     """
@@ -1063,7 +1061,7 @@ def saNtfLocalizedMessageFree_2(ntfHandle, message):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saNtfLocalizedMessageFree_2(ntfHandle, message)
+    return saAis.eSaAisErrorT.SA_AIS_ERR_NOT_SUPPORTED
 
 def saNtfPtrValGet(notificationHandle, value, dataPtr, dataSize):
     """
@@ -1078,9 +1076,9 @@ def saNtfPtrValGet(notificationHandle, value, dataPtr, dataSize):
     """
     return clLib.libmw_so.saNtfPtrValGet(
         notificationHandle,
-        value,
-        dataPtr,
-        dataSize
+        clUtils.byref(value),
+        clUtils.byref(dataPtr),
+        clUtils.byref(dataSize)
     )
 
 def saNtfArrayValGet(notificationHandle, value, arrayPtr, numElements, elementSize):
@@ -1097,10 +1095,10 @@ def saNtfArrayValGet(notificationHandle, value, arrayPtr, numElements, elementSi
     """
     return clLib.libmw_so.saNtfArrayValGet(
         notificationHandle,
-        value,
-        arrayPtr,
-        numElements,
-        elementSize
+        clUtils.byref(value),
+        clUtils.byref(arrayPtr),
+        clUtils.byref(numElements),
+        clUtils.byref(elementSize)
     )
 
 def saNtfObjectCreateDeleteNotificationFilterAllocate(
@@ -1127,7 +1125,7 @@ def saNtfObjectCreateDeleteNotificationFilterAllocate(
     """
     return clLib.libmw_so.saNtfObjectCreateDeleteNotificationFilterAllocate(
         ntfHandle,
-        notificationFilter,
+        clUtils.byref(notificationFilter),
         numEventTypes,
         numNotificationObjects,
         numNotifyingObjects,
@@ -1159,7 +1157,7 @@ def saNtfAttributeChangeNotificationFilterAllocate(
     """
     return clLib.libmw_so.saNtfAttributeChangeNotificationFilterAllocate(
         ntfHandle,
-        notificationFilter,
+        clUtils.byref(notificationFilter),
         numEventTypes,
         numNotificationObjects,
         numNotifyingObjects,
@@ -1193,7 +1191,7 @@ def saNtfStateChangeNotificationFilterAllocate_2(
     """
     return clLib.libmw_so.saNtfStateChangeNotificationFilterAllocate_2(
         ntfHandle,
-        notificationFilter,
+        clUtils.byref(notificationFilter),
         numEventTypes,
         numNotificationObjects,
         numNotifyingObjects,
@@ -1230,7 +1228,7 @@ def saNtfAlarmNotificationFilterAllocate(
     """
     return clLib.libmw_so.saNtfAlarmNotificationFilterAllocate(
         ntfHandle,
-        notificationFilter,
+        clUtils.byref(notificationFilter),
         numEventTypes,
         numNotificationObjects,
         numNotifyingObjects,
@@ -1272,7 +1270,7 @@ def saNtfSecurityAlarmNotificationFilterAllocate(
     """
     return clLib.libmw_so.saNtfSecurityAlarmNotificationFilterAllocate(
         ntfHandle,
-        notificationFilter,
+        clUtils.byref(notificationFilter),
         numEventTypes,
         numNotificationObjects,
         numNotifyingObjects,
@@ -1304,7 +1302,7 @@ def saNtfNotificationSubscribe_3(notificationFilterHandles, subscriptionId):
         SaAisErrorT
     """
     return clLib.libmw_so.saNtfNotificationSubscribe_3(
-        notificationFilterHandles,
+        clUtils.byref(notificationFilterHandles),
         subscriptionId
     )
 
@@ -1318,11 +1316,7 @@ def saNtfNotificationReadInitialize_3(searchCriteria, notificationFilterHandles,
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saNtfNotificationReadInitialize_3(
-       searchCriteria,
-       notificationFilterHandles,
-       readHandle
-    )
+    return saAis.eSaAisErrorT.SA_AIS_ERR_NOT_SUPPORTED
 
 def saNtfNotificationUnsubscribe_2(ntfHandle, subscriptionId):
     """
@@ -1345,11 +1339,7 @@ def saNtfNotificationReadNext(readHandle, searchDirection, notification):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saNtfNotificationReadNext(
-        readHandle,
-        searchDirection,
-        notification
-    )
+    return saAis.eSaAisErrorT.SA_AIS_ERR_NOT_SUPPORTED
 
 def saNtfNotificationReadFinalize(readHandle):
     """
@@ -1359,4 +1349,4 @@ def saNtfNotificationReadFinalize(readHandle):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saNtfNotificationReadFinalize(readHandle)
+    return saAis.eSaAisErrorT.SA_AIS_ERR_NOT_SUPPORTED

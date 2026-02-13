@@ -9,7 +9,7 @@ from amf.saAmf import eSaAmfHAStateT, SaAmfHandleT, SaAmfCallbacksT, SaAmfHealth
     saAmfComponentUnregister, saAmfResponse, saAmfCSIQuiescingComplete
 from amf.clAmsUtils import CL_AMS_STRING_CSI_FLAGS, CL_AMS_STRING_H_STATE
 from common.saAis import SaNameT, SaVersionT, eSaAisErrorT, SaSelectionObjectT, eSaDispatchFlagsT
-from common.clCommon import ClHandleT, ClUint32T, CL_TRUE, CL_FALSE
+from common.clCommon import ClHandleT, CL_TRUE, CL_FALSE
 from log.clLogApi import clLogMsgWrite, CL_LOG_AREA_UNSPECIFIED, CL_LOG_CONTEXT_UNSPECIFIED, eClLogSeverityT
 from utils.clUtils import getCallerInfo
 from utils.libc import fd_set, getpid, FD_ZERO, FD_SET, select, errno
@@ -62,36 +62,29 @@ def main():
     callbacks.saAmfCSIRemoveCallback            = SaAmfCSIRemoveCallbackT(clCompAppAMFCSIRemove)
     callbacks.saAmfProtectionGroupTrackCallback = SaAmfProtectionGroupTrackCallbackT() # NULL
 
-    rc = saAmfInitialize(
-        ctypes.byref(amfHandle),
-        ctypes.byref(callbacks),
-        ctypes.byref(version)
-    )
+    rc = saAmfInitialize(amfHandle, callbacks, version)
 
     if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
     FD_ZERO(read_fds)
 
-    rc = saAmfSelectionObjectGet(
-        amfHandle,
-        ctypes.byref(dispatch_fd)
-    )
+    rc = saAmfSelectionObjectGet(amfHandle, dispatch_fd)
 
     if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
-    FD_SET(dispatch_fd.value, read_fds)
+    FD_SET(dispatch_fd, read_fds)
 
-    rc = saAmfComponentNameGet(amfHandle, ctypes.byref(appName))
+    rc = saAmfComponentNameGet(amfHandle, appName)
     if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
-    rc = saAmfComponentRegister(amfHandle, ctypes.byref(appName), None)
+    rc = saAmfComponentRegister(amfHandle, appName, None)
     if rc != eSaAisErrorT.SA_AIS_OK:
         errorexit(rc)
 
-    rc = clEoMyEoIocPortGet(ctypes.byref(iocPort))
+    rc = clEoMyEoIocPortGet(iocPort)
 
     clprintf(eClLogSeverityT.CL_LOG_SEV_INFO, "Component [%.*s] : PID [%d]. Initializing\n", appName.length, appName.__str__(), mypid)
     clprintf(eClLogSeverityT.CL_LOG_SEV_INFO, "   IOC Address             : 0x%x\n", clIocLocalAddressGet())
@@ -99,7 +92,7 @@ def main():
 
     EINTR = 4   # Interrupted system call
     while(not unblockNow):
-        if select(dispatch_fd.value + 1, ctypes.byref(read_fds), None, None, None) < 0:
+        if select(dispatch_fd + 1, ctypes.byref(read_fds), None, None, None) < 0:
             if errno() == EINTR:
                 continue
             clprintf(eClLogSeverityT.CL_LOG_SEV_ERROR, "Error in select()")

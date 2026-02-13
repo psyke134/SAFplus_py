@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from utils import clLib
+from utils import clLib, clUtils
 from common import clCommon, clCommonErrors
 from ioc import clIocApi, clIocErrors
 from buffer import clBufferApi
@@ -70,7 +70,7 @@ def clRmdWithMsg(remoteObjAddr, funcId, inMsgHdl, outMsgHdl, flags, pOptions, pA
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdWithMsg(remoteObjAddr, funcId, inMsgHdl, outMsgHdl, flags, pOptions, pAsyncOptions)
+    return clLib.libmw_so.clRmdWithMsg(remoteObjAddr, funcId, inMsgHdl, outMsgHdl, flags, clUtils.byref(pOptions), clUtils.byref(pAsyncOptions))
 
 def clRmdWithMsgVer(remoteObjAddr, version, funcId, inMsgHdl, outMsgHdl, flags, pOptions, pAsyncOptions):
     """
@@ -86,4 +86,4 @@ def clRmdWithMsgVer(remoteObjAddr, version, funcId, inMsgHdl, outMsgHdl, flags, 
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdWithMsgVer(remoteObjAddr, version, funcId, inMsgHdl, outMsgHdl, flags, pOptions, pAsyncOptions)
+    return clLib.libmw_so.clRmdWithMsgVer(remoteObjAddr, clUtils.byref(version), funcId, inMsgHdl, outMsgHdl, flags, clUtils.byref(pOptions), clUtils.byref(pAsyncOptions))

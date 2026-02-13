@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clLib
+from utils import clLib, clUtils
 
 import ctypes
 
@@ -31,7 +31,7 @@ def clQueueCreate(maxSize, fpUserDequeueCallBack, fpUserDestroyCallBack, pQueueH
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clQueueCreate(maxSize, fpUserDequeueCallBack, fpUserDestroyCallBack, pQueueHandle)
+    return clLib.libmw_so.clQueueCreate(maxSize, fpUserDequeueCallBack, fpUserDestroyCallBack, clUtils.byref(pQueueHandle))
 
 def clQueueDelete(pQueueHandle):
     """
@@ -40,7 +40,7 @@ def clQueueDelete(pQueueHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clQueueDelete(pQueueHandle)
+    return clLib.libmw_so.clQueueDelete(clUtils.byref(pQueueHandle))
 
 def clQueueNodeInsert(queueHandle, userData):
     """
@@ -60,7 +60,7 @@ def clQueueNodeDelete(queueHandle, userData):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clQueueNodeDelete(queueHandle, userData)
+    return clLib.libmw_so.clQueueNodeDelete(queueHandle, clUtils.byref(userData))
 
 def clQueueWalk(queueHandle, fpUserWalkFunction, userArg):
     """
@@ -81,4 +81,4 @@ def clQueueSizeGet(queueHandle, pSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clQueueSizeGet(queueHandle, pSize)
+    return clLib.libmw_so.clQueueSizeGet(queueHandle, clUtils.byref(pSize))

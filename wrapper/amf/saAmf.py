@@ -198,9 +198,9 @@ def saAmfInitialize(amfHandle, amfCallbacks, version):
         SaAisErrorT
     """
     return clLib.libmw_so.saAmfInitialize(
-        amfHandle,
-        amfCallbacks,
-        version
+        clUtils.byref(amfHandle),
+        clUtils.byref(amfCallbacks),
+        clUtils.byref(version)
     )
 
 def saAmfSelectionObjectGet(amfHandle, selectionObject):
@@ -214,7 +214,7 @@ def saAmfSelectionObjectGet(amfHandle, selectionObject):
     """
     return clLib.libmw_so.saAmfSelectionObjectGet(
         amfHandle,
-        selectionObject
+        clUtils.byref(selectionObject)
     )
 
 def saAmfDispatch(amfHandle, dispatchFlags):
@@ -255,8 +255,8 @@ def saAmfComponentRegister(amfHandle, compName, proxyCompName):
     """
     return clLib.libmw_so.saAmfComponentRegister(
         amfHandle,
-        compName,
-        proxyCompName
+        clUtils.byref(compName),
+        clUtils.byref(proxyCompName)
     )
 
 def saAmfComponentUnregister(amfHandle, compName, proxyCompName):
@@ -271,8 +271,8 @@ def saAmfComponentUnregister(amfHandle, compName, proxyCompName):
     """
     return clLib.libmw_so.saAmfComponentUnregister(
         amfHandle,
-        compName,
-        proxyCompName
+        clUtils.byref(compName),
+        clUtils.byref(proxyCompName)
     )
 
 def saAmfComponentNameGet(amfHandle, compName):
@@ -286,7 +286,7 @@ def saAmfComponentNameGet(amfHandle, compName):
     """
     return clLib.libmw_so.saAmfComponentNameGet(
         amfHandle,
-        compName
+        clUtils.byref(compName)
     )
 
 def saAmfPmStart(amfHandle, compName, processId, descendentsTreeDepth, pmErrors, recommendedRecovery):
@@ -304,7 +304,7 @@ def saAmfPmStart(amfHandle, compName, processId, descendentsTreeDepth, pmErrors,
     """
     return clLib.libmw_so.saAmfPmStart(
         amfHandle,
-        compName,
+        clUtils.byref(compName),
         processId,
         descendentsTreeDepth,
         pmErrors,
@@ -325,7 +325,7 @@ def saAmfPmStop(amfHandle, compName, stopQualifier, processId, pmErrors):
     """
     return clLib.libmw_so.saAmfPmStop(
         amfHandle,
-        compName,
+        clUtils.byref(compName),
         stopQualifier,
         processId,
         pmErrors
@@ -345,8 +345,8 @@ def saAmfHealthcheckStart(amfHandle, compName, healthcheckKey, invocationType, r
     """
     return clLib.libmw_so.saAmfHealthcheckStart(
         amfHandle,
-        compName,
-        healthcheckKey,
+        clUtils.byref(compName),
+        clUtils.byref(healthcheckKey),
         invocationType,
         recommendedRecovery
     )
@@ -364,8 +364,8 @@ def saAmfHealthcheckConfirm(amfHandle, compName, healthcheckKey, healthcheckResu
     """
     return clLib.libmw_so.saAmfHealthcheckConfirm(
         amfHandle,
-        compName,
-        healthcheckKey,
+        clUtils.byref(compName),
+        clUtils.byref(healthcheckKey),
         healthcheckResult
     )
 
@@ -381,8 +381,8 @@ def saAmfHealthcheckStop(amfHandle, compName, healthcheckKey):
     """
     return clLib.libmw_so.saAmfHealthcheckStop(
         amfHandle,
-        compName,
-        healthcheckKey
+        clUtils.byref(compName),
+        clUtils.byref(healthcheckKey)
     )
 
 def saAmfCSIQuiescingComplete(amfHandle, invocation, error):
@@ -414,9 +414,9 @@ def saAmfHAStateGet(amfHandle, compName, csiName, haState):
     """
     return clLib.libmw_so.saAmfHAStateGet(
         amfHandle,
-        compName,
-        csiName,
-        haState
+        clUtils.byref(compName),
+        clUtils.byref(csiName),
+        clUtils.byref(haState)
     )
 
 def saAmfProtectionGroupTrack(amfHandle, csiName, trackFlags, notificationBuffer):
@@ -432,9 +432,9 @@ def saAmfProtectionGroupTrack(amfHandle, csiName, trackFlags, notificationBuffer
     """
     return clLib.libmw_so.saAmfProtectionGroupTrack(
         amfHandle,
-        csiName,
+        clUtils.byref(csiName),
         trackFlags,
-        notificationBuffer
+        clUtils.byref(notificationBuffer)
     )
 
 def saAmfProtectionGroupTrackStop(amfHandle, csiName):
@@ -448,7 +448,7 @@ def saAmfProtectionGroupTrackStop(amfHandle, csiName):
     """
     return clLib.libmw_so.saAmfProtectionGroupTrackStop(
         amfHandle,
-        csiName
+        clUtils.byref(csiName)
     )
 
 def saAmfComponentErrorReport(amfHandle, erroneousComponent, errorDetectionTime, recommendedRecovery, ntfIdentifier):
@@ -465,7 +465,7 @@ def saAmfComponentErrorReport(amfHandle, erroneousComponent, errorDetectionTime,
     """
     return clLib.libmw_so.saAmfComponentErrorReport(
         amfHandle,
-        erroneousComponent,
+        clUtils.byref(erroneousComponent),
         errorDetectionTime,
         recommendedRecovery,
         ntfIdentifier
@@ -483,7 +483,7 @@ def saAmfComponentErrorClear(amfHandle, compName, ntfIdentifier):
     """
     return clLib.libmw_so.saAmfComponentErrorClear(
         amfHandle,
-        compName,
+        clUtils.byref(compName),
         ntfIdentifier
     )
 

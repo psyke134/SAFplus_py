@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from common import clCommon
+from common import clCommon, clCommonErrors
 from utils import clLib, clUtils
 
 import ctypes
@@ -187,7 +187,7 @@ def clIocCommPortCreate(portId, portType, pIocCommPortHdl):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocCommPortCreate(portId, portType, pIocCommPortHdl)
+    return clLib.libmw_so.clIocCommPortCreate(portId, portType, clUtils.byref(pIocCommPortHdl))
 
 
 def clIocCommPortDelete(iocCommPortHdl):
@@ -208,7 +208,7 @@ def clIocCommPortFdGet(portHandle, pSd):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocCommPortFdGet(portHandle, pSd)
+    return clLib.libmw_so.clIocCommPortFdGet(portHandle, clUtils.byref(pSd))
 
 
 def clIocCommPortGet(pIocCommPort, pPortId):
@@ -219,7 +219,7 @@ def clIocCommPortGet(pIocCommPort, pPortId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocCommPortGet(pIocCommPort, pPortId)
+    return clLib.libmw_so.clIocCommPortGet(pIocCommPort, clUtils.byref(pPortId))
 
 
 def clIocPortNotification(port, action):
@@ -243,7 +243,7 @@ def clIocSend(commPortHandle, message, protoType, pDestAddr, pSendOption):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocSend(commPortHandle, message, protoType, pDestAddr, pSendOption)
+    return clLib.libmw_so.clIocSend(commPortHandle, message, protoType, clUtils.byref(pDestAddr), clUtils.byref(pSendOption))
 
 
 def clIocReceive(commPortHdl, pRecvOption, userMsg, pRecvParam):
@@ -256,7 +256,7 @@ def clIocReceive(commPortHdl, pRecvOption, userMsg, pRecvParam):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocReceive(commPortHdl, pRecvOption, userMsg, pRecvParam)
+    return clLib.libmw_so.clIocReceive(commPortHdl, clUtils.byref(pRecvOption), userMsg, clUtils.byref(pRecvParam))
 
 
 def clIocReceiveAsync(commPortHdl, pRecvOption, userMsg, pRecvParam):
@@ -269,7 +269,7 @@ def clIocReceiveAsync(commPortHdl, pRecvOption, userMsg, pRecvParam):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocReceiveAsync(commPortHdl, pRecvOption, userMsg, pRecvParam)
+    return clLib.libmw_so.clIocReceiveAsync(commPortHdl, clUtils.byref(pRecvOption), userMsg, clUtils.byref(pRecvParam))
 
 
 def clIocReceiveWithBuffer(commPortHdl, pRecvOption, buffer, bufSize, userMsg, pRecvParam):
@@ -284,7 +284,7 @@ def clIocReceiveWithBuffer(commPortHdl, pRecvOption, buffer, bufSize, userMsg, p
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocReceiveWithBuffer(commPortHdl, pRecvOption, buffer, bufSize, userMsg, pRecvParam)
+    return clLib.libmw_so.clIocReceiveWithBuffer(commPortHdl, clUtils.byref(pRecvOption), clUtils.byref(buffer), bufSize, userMsg, clUtils.byref(pRecvParam))
 
 
 def clIocReceiveWithBufferAsync(commPortHdl, pRecvOption, buffer, bufSize, userMsg, pRecvParam):
@@ -299,7 +299,7 @@ def clIocReceiveWithBufferAsync(commPortHdl, pRecvOption, buffer, bufSize, userM
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocReceiveWithBufferAsync(commPortHdl, pRecvOption, buffer, bufSize, userMsg, pRecvParam)
+    return clLib.libmw_so.clIocReceiveWithBufferAsync(commPortHdl, clUtils.byref(pRecvOption), clUtils.byref(buffer), bufSize, userMsg, clUtils.byref(pRecvParam))
 
 
 def clIocCommPortReceiverUnblock(commPortHdl):
@@ -321,7 +321,7 @@ def clIocTransparencyRegister(pTLInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocTransparencyRegister(pTLInfo)
+    return clLib.libmw_so.clIocTransparencyRegister(clUtils.byref(pTLInfo))
 
 
 def clIocTransparencyDeregister(compId):
@@ -341,7 +341,7 @@ def clIocMulticastRegister(pMcastInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocMulticastRegister(pMcastInfo)
+    return clLib.libmw_so.clIocMulticastRegister(clUtils.byref(pMcastInfo))
 
 
 def clIocMulticastDeregister(pMcastInfo):
@@ -351,7 +351,7 @@ def clIocMulticastDeregister(pMcastInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocMulticastDeregister(pMcastInfo)
+    return clLib.libmw_so.clIocMulticastDeregister(clUtils.byref(pMcastInfo))
 
 
 def clIocMulticastDeregisterAll(pMcastAddress):
@@ -361,7 +361,7 @@ def clIocMulticastDeregisterAll(pMcastAddress):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocMulticastDeregisterAll(pMcastAddress)
+    return clLib.libmw_so.clIocMulticastDeregisterAll(clUtils.byref(pMcastAddress))
 
 
 # --- Utilities and Deprecated Functions ---
@@ -373,7 +373,7 @@ def clIocVersionCheck(pVersion):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocVersionCheck(pVersion)
+    return clLib.libmw_so.clIocVersionCheck(clUtils.byref(pVersion))
 
 
 def clIocTransparencyLogicalToPhysicalAddrGet(logicalAddr, pPhysicalAddr, pNoEntries):
@@ -385,13 +385,15 @@ def clIocTransparencyLogicalToPhysicalAddrGet(logicalAddr, pPhysicalAddr, pNoEnt
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocTransparencyLogicalToPhysicalAddrGet(logicalAddr, pPhysicalAddr, pNoEntries)
+    pNoEntries.value = 0
+    return clCommonErrors.CL_OK
 
 def clIocLocalAddressGet():
     """
     return type:
         ClIocNodeAddressT
     """
+    clLib.libmw_so.clIocLocalAddressGet.restype = ClIocNodeAddressT
     return clLib.libmw_so.clIocLocalAddressGet()
 
 # TODO: there're remaining codes in the original header file

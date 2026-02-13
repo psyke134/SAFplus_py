@@ -25,6 +25,12 @@ class eClRuleExprFlagsT(clUtils.Enum):
     CL_RULE_EXPR_CHAIN_AND = 0x10
     CL_RULE_EXPR_CHAIN_GROUP_OR  = 0x40
 
+ClRuleResultT = clCommon.ClInt32T
+class eClRuleResultT(clUtils.Enum):
+    CL_RULE_FALSE = 0
+    CL_RULE_TRUE = 1
+    CL_RULE_UNKNOWN = 2
+
 CL_RULE_EXPR_FLAG_BITS = 2
 CL_RULE_ARCH_FLAG_MASK = 0x3
 CL_RULE_EXPR_FLAG_MASK = ~CL_RULE_ARCH_FLAG_MASK
@@ -54,8 +60,7 @@ def clRuleExprAllocate(length, ppExpr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprAllocate(length, ppExpr)
-
+    return clLib.libmw_so.clRuleExprAllocate(length, clUtils.byref(ppExpr))
 
 def clRuleExprDeallocate(pExpr):
     """
@@ -75,7 +80,7 @@ def clRuleExprAppend(pFirstExpr, pNextExpr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprAppend(pFirstExpr, pNextExpr)
+    return clLib.libmw_so.clRuleExprAppend(clUtils.byref(pFirstExpr), clUtils.byref(pNextExpr))
 
 
 def clRuleExprDuplicate(pSrcExpr, ppDstExpr):
@@ -86,7 +91,7 @@ def clRuleExprDuplicate(pSrcExpr, ppDstExpr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprDuplicate(pSrcExpr, ppDstExpr)
+    return clLib.libmw_so.clRuleExprDuplicate(clUtils.byref(pSrcExpr), clUtils.byref(ppDstExpr))
 
 
 def clRuleExprEvaluate(pExpr, pData, dataLen):
@@ -98,7 +103,8 @@ def clRuleExprEvaluate(pExpr, pData, dataLen):
     return type:
         ClRuleResultT
     """
-    return clLib.libmw_so.clRuleExprEvaluate(pExpr, pData, dataLen)
+    clLib.libmw_so.clRuleExprEvaluate.restype = ClRuleResultT
+    return clLib.libmw_so.clRuleExprEvaluate(clUtils.byref(pExpr), clUtils.byref(pData), dataLen)
 
 
 def clRuleDoubleExprEvaluate(pExpr1, pExpr2):
@@ -109,7 +115,8 @@ def clRuleDoubleExprEvaluate(pExpr1, pExpr2):
     return type:
         ClRuleResultT
     """
-    return clLib.libmw_so.clRuleDoubleExprEvaluate(pExpr1, pExpr2)
+    clLib.libmw_so.clRuleDoubleExprEvaluate.restype = ClRuleResultT
+    return clLib.libmw_so.clRuleDoubleExprEvaluate(clUtils.byref(pExpr1), clUtils.byref(pExpr2))
 
 
 def clRuleExprLocalConvert(pExpr):
@@ -119,7 +126,7 @@ def clRuleExprLocalConvert(pExpr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprLocalConvert(pExpr)
+    return clLib.libmw_so.clRuleExprLocalConvert(clUtils.byref(pExpr))
 
 
 def clRuleExprConvert(pExpr):
@@ -129,7 +136,7 @@ def clRuleExprConvert(pExpr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprConvert(pExpr)
+    return clLib.libmw_so.clRuleExprConvert(clUtils.byref(pExpr))
 
 
 def clRuleExprFlagsSet(pExpr, flags):
@@ -140,7 +147,7 @@ def clRuleExprFlagsSet(pExpr, flags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprFlagsSet(pExpr, flags)
+    return clLib.libmw_so.clRuleExprFlagsSet(clUtils.byref(pExpr), flags)
 
 
 def clRuleExprOffsetSet(pExpr, offset):
@@ -151,7 +158,7 @@ def clRuleExprOffsetSet(pExpr, offset):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprOffsetSet(pExpr, offset)
+    return clLib.libmw_so.clRuleExprOffsetSet(clUtils.byref(pExpr), offset)
 
 
 def clRuleExprMaskSet(pExpr, offset, mask):
@@ -163,7 +170,7 @@ def clRuleExprMaskSet(pExpr, offset, mask):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprMaskSet(pExpr, offset, mask)
+    return clLib.libmw_so.clRuleExprMaskSet(clUtils.byref(pExpr), offset, mask)
 
 
 def clRuleExprValueSet(pExpr, offset, value):
@@ -175,7 +182,7 @@ def clRuleExprValueSet(pExpr, offset, value):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprValueSet(pExpr, offset, value)
+    return clLib.libmw_so.clRuleExprValueSet(clUtils.byref(pExpr), offset, value)
 
 
 def clRuleExprFlagsGet(pExpr, pFlags):
@@ -186,7 +193,7 @@ def clRuleExprFlagsGet(pExpr, pFlags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprFlagsGet(pExpr, pFlags)
+    return clLib.libmw_so.clRuleExprFlagsGet(clUtils.byref(pExpr), clUtils.byref(pFlags))
 
 
 def clRuleExprOffsetGet(pExpr, pOffset):
@@ -197,7 +204,7 @@ def clRuleExprOffsetGet(pExpr, pOffset):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprOffsetGet(pExpr, pOffset)
+    return clLib.libmw_so.clRuleExprOffsetGet(clUtils.byref(pExpr), clUtils.byref(pOffset))
 
 
 def clRuleExprMaskGet(pExpr, offset, pMask):
@@ -209,7 +216,7 @@ def clRuleExprMaskGet(pExpr, offset, pMask):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprMaskGet(pExpr, offset, pMask)
+    return clLib.libmw_so.clRuleExprMaskGet(clUtils.byref(pExpr), offset, clUtils.byref(pMask))
 
 
 def clRuleExprValueGet(pExpr, offset, pValue):
@@ -221,7 +228,7 @@ def clRuleExprValueGet(pExpr, offset, pValue):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprValueGet(pExpr, offset, pValue)
+    return clLib.libmw_so.clRuleExprValueGet(clUtils.byref(pExpr), offset, clUtils.byref(pValue))
 
 
 def clRuleExprMemLenGet(pExpr):
@@ -231,7 +238,8 @@ def clRuleExprMemLenGet(pExpr):
     return type:
         ClUint32T
     """
-    return clLib.libmw_so.clRuleExprMemLenGet(pExpr)
+    clLib.libmw_so.clRuleExprMemLenGet.restype = clCommon.ClUint32T
+    return clLib.libmw_so.clRuleExprMemLenGet(clUtils.byref(pExpr))
 
 
 def clRuleExprPack(pSrcExpr, ppBuf, pLen):
@@ -243,7 +251,7 @@ def clRuleExprPack(pSrcExpr, ppBuf, pLen):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprPack(pSrcExpr, ppBuf, pLen)
+    return clLib.libmw_so.clRuleExprPack(clUtils.byref(pSrcExpr), clUtils.byref(ppBuf), clUtils.byref(pLen))
 
 
 def clRuleExprUnpack(pBuf, length, ppDstExpr):
@@ -255,7 +263,7 @@ def clRuleExprUnpack(pBuf, length, ppDstExpr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprUnpack(pBuf, length, ppDstExpr)
+    return clLib.libmw_so.clRuleExprUnpack(pBuf, length, clUtils.byref(ppDstExpr))
 
 
 def clRuleExprPrint(pExpr):
@@ -265,4 +273,4 @@ def clRuleExprPrint(pExpr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRuleExprPrint(pExpr)
+    return clLib.libmw_so.clRuleExprPrint(clUtils.byref(pExpr))

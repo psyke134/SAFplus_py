@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from utils import clLib, libc
+from utils import clLib, libc, clUtils
 from common import clCommon, saAis
 
 import ctypes
@@ -44,7 +44,7 @@ def clMsgQueuePersistRedundancy(queue, node):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clMsgQueuePersistRedundancy(queue, node)
+    return clLib.libmw_so.clMsgQueuePersistRedundancy(clUtils.byref(queue), clUtils.byref(node))
 
 def clMsgQueueGroupSendWithKeySynch(msgHandle, group, message, key, keylen, timeout):
     """
@@ -58,7 +58,7 @@ def clMsgQueueGroupSendWithKeySynch(msgHandle, group, message, key, keylen, time
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.clMsgQueueGroupSendWithKeySynch(msgHandle, group, message, key, keylen, timeout)
+    return clLib.libmw_so.clMsgQueueGroupSendWithKeySynch(msgHandle, clUtils.byref(group), clUtils.byref(message), clUtils.toCharP(key), keylen, timeout)
 
 
 def clMsgQueueGroupSendWithKeyAsync(msgHandle, invocation, group, message, key, keylen, ackFlags):
@@ -74,7 +74,7 @@ def clMsgQueueGroupSendWithKeyAsync(msgHandle, invocation, group, message, key, 
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.clMsgQueueGroupSendWithKeyAsync(msgHandle, invocation, group, message, key, keylen, ackFlags)
+    return clLib.libmw_so.clMsgQueueGroupSendWithKeyAsync(msgHandle, invocation, clUtils.byref(group), clUtils.byref(message), clUtils.toCharP(key), keylen, ackFlags)
 
 def clMsgMessageSendIovec(msgHandle, destination, message, timeout):
     """
@@ -86,7 +86,7 @@ def clMsgMessageSendIovec(msgHandle, destination, message, timeout):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.clMsgMessageSendIovec(msgHandle, destination, message, timeout)
+    return clLib.libmw_so.clMsgMessageSendIovec(msgHandle, clUtils.byref(destination), clUtils.byref(message), timeout)
 
 
 def clMsgMessageSendAsyncIovec(msgHandle, invocation, destination, message, ackFlags):
@@ -100,7 +100,7 @@ def clMsgMessageSendAsyncIovec(msgHandle, invocation, destination, message, ackF
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.clMsgMessageSendAsyncIovec(msgHandle, invocation, destination, message, ackFlags)
+    return clLib.libmw_so.clMsgMessageSendAsyncIovec(msgHandle, invocation, clUtils.byref(destination), clUtils.byref(message), ackFlags)
 
 def clMsgQueueGroupSendWithKeySynchIovec(msgHandle, group, message, key, keylen, timeout):
     """
@@ -114,7 +114,7 @@ def clMsgQueueGroupSendWithKeySynchIovec(msgHandle, group, message, key, keylen,
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.clMsgQueueGroupSendWithKeySynchIovec(msgHandle, group, message, key, keylen, timeout)
+    return clLib.libmw_so.clMsgQueueGroupSendWithKeySynchIovec(msgHandle, clUtils.byref(group), clUtils.byref(message), clUtils.toCharP(key), keylen, timeout)
 
 def clMsgQueueGroupSendWithKeyAsyncIovec(msgHandle, invocation, group, message, key, keylen, ackFlags):
     """
@@ -123,9 +123,10 @@ def clMsgQueueGroupSendWithKeyAsyncIovec(msgHandle, invocation, group, message, 
         SaInvocationT invocation,
         const SaNameT *group, 
         ClMsgMessageIovecT *message,
-        ClCharT *key, ClInt32T keylen,
+        ClCharT *key,
+        ClInt32T keylen,
         SaMsgAckFlagsT ackFlags
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.clMsgQueueGroupSendWithKeyAsyncIovec(msgHandle, invocation, group, message, key, keylen, ackFlags)
+    return clLib.libmw_so.clMsgQueueGroupSendWithKeyAsyncIovec(msgHandle, invocation, clUtils.byref(group), clUtils.byref(message), clUtils.toCharP(key), keylen, ackFlags)

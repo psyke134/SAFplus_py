@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon, saAis
-from utils import clUtils, clLib
+from utils import clUtils, clLib, clHeapApi
 
 import ctypes
 
@@ -135,9 +135,9 @@ def clLogInitialize(phLog, pLogCallbacks, pVersion):
         ClRcT
     """
     return clLib.libmw_so.clLogInitialize(
-        phLog,
-        pLogCallbacks,
-        pVersion
+        clUtils.byref(phLog),
+        clUtils.byref(pLogCallbacks),
+        clUtils.byref(pVersion)
     )
 
 def clLogFinalize(hLog):
@@ -168,10 +168,10 @@ def clLogStreamOpen(hLog, streamName, streamScope, pStreamAttr, streamOpenFlags,
         hLog,
         streamName,
         streamScope,
-        pStreamAttr,
+        clUtils.byref(pStreamAttr),
         streamOpenFlags,
         timeout,
-        phStream
+        clUtils.byref(phStream)
     )
 
 def clLogStreamClose(hStream):
@@ -238,7 +238,7 @@ def clLogWriteAsyncWithContextHeader(hStream, severity, pArea, pContext, service
     """
     cVaArgs, argTypes = clUtils.handleVarArgs(*va_args)
     clLib.libmw_so.clLogWriteAsyncWithContextHeader.argtypes = [ClLogStreamHandleT, ClLogSeverityT, ctypes.c_char_p, ctypes.c_char_p, clCommon.ClUint16T, clCommon.ClUint16T] + argTypes
-    return clLib.libmw_so.clLogWriteAsyncWithContextHeader(hStream, severity, pArea, pContext, serviceId, msgId, *cVaArgs)
+    return clLib.libmw_so.clLogWriteAsyncWithContextHeader(hStream, severity, clUtils.toCharP(pArea), clUtils.toCharP(pContext), serviceId, msgId, *cVaArgs)
 
 def clLogFilterSet(hStream, filterFlags, filter):
     """
@@ -265,7 +265,7 @@ def clLogHandlerRegister(hLog, streamName, streamScope, nodeName, handlerFlags, 
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogHandlerRegister(hLog, streamName, streamScope, nodeName, handlerFlags, phStream)
+    return clLib.libmw_so.clLogHandlerRegister(hLog, streamName, streamScope, nodeName, handlerFlags, clUtils.byref(phStream))
 
 def clLogHandlerDeregister(hStream):
     """
@@ -303,10 +303,10 @@ def clLogFileOpen(hLog, fileName, fileLocation, isDelete, phFile):
     """
     return clLib.libmw_so.clLogFileOpen(
         hLog,
-        fileName,
-        fileLocation,
+        clUtils.toCharP(fileName),
+        clUtils.toCharP(fileLocation),
         isDelete,
-        phFile
+        clUtils.byref(phFile)
     )
 
 def clLogFileClose(hFileHdlr):
@@ -330,12 +330,18 @@ def clLogFileMetaDataGet(hFileHdlr, pStreamAttr, pNumStreams, ppLogStreams):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogFileMetaDataGet(
+    temp = ctypes.POINTER(ClLogStreamMapT)()
+    rc = clLib.libmw_so.clLogFileMetaDataGet(
         hFileHdlr,
-        pStreamAttr,
-        pNumStreams,
-        ppLogStreams
+        clUtils.byref(pStreamAttr),
+        clUtils.byref(pNumStreams),
+        clUtils.byref(temp)
     )
+
+    if temp:
+        ctypes.memmove(clUtils.byref(ppLogStreams), temp, ctypes.sizeof(ClLogStreamMapT))
+        clHeapApi.clHeapFree(temp)
+    return rc
 
 def clLogFileRecordsGet(hFileHdlr, pStarTime, pEndTime, pNumRecords, pLogRecords):
     """
@@ -351,10 +357,10 @@ def clLogFileRecordsGet(hFileHdlr, pStarTime, pEndTime, pNumRecords, pLogRecords
     """
     return clLib.libmw_so.clLogFileRecordsGet(
         hFileHdlr,
-        pStarTime,
-        pEndTime,
-        pNumRecords,
-        pLogRecords
+        clUtils.byref(pStarTime),
+        clUtils.byref(pEndTime),
+        clUtils.byref(pNumRecords),
+        clUtils.byref(pLogRecords)
     )
 
 def clLogStreamListGet(hLog, pNumStreams, ppLogStreams):
@@ -367,11 +373,16 @@ def clLogStreamListGet(hLog, pNumStreams, ppLogStreams):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogStreamListGet(
+    temp = ctypes.POINTER(ClLogStreamInfoT)()
+    rc = clLib.libmw_so.clLogStreamListGet(
         hLog,
-        pNumStreams,
-        ppLogStreams
+        clUtils.byref(pNumStreams),
+        clUtils.byref(temp)
     )
+    if temp:
+        ctypes.memmove(clUtils.byref(ppLogStreams), temp, ctypes.sizeof(ClLogStreamInfoT))
+        clHeapApi.clHeapFree(temp)
+    return rc
 
 def clLogWriteDeferred(handle, severity, servicId, msgId, pFmtStr, *va_args):
     """
@@ -591,7 +602,7 @@ def clLogSeverityFilterToValueGet(filter, pSeverity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogSeverityFilterToValueGet(filter, pSeverity)
+    return clLib.libmw_so.clLogSeverityFilterToValueGet(filter, clUtils.byref(pSeverity))
 
 def clLogSeverityValueToFilterGet(severity, pFilter):
     """
@@ -602,7 +613,7 @@ def clLogSeverityValueToFilterGet(severity, pFilter):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogSeverityValueToFilterGet(severity, pFilter)
+    return clLib.libmw_so.clLogSeverityValueToFilterGet(severity, clUtils.byref(pFilter))
 
 def clLogStreamFilterSet(pStreamName, streamScope, pStreamScopeNode, filterFlags, filter):
     """
@@ -616,7 +627,7 @@ def clLogStreamFilterSet(pStreamName, streamScope, pStreamScopeNode, filterFlags
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogStreamFilterSet(pStreamName, streamScope, pStreamScopeNode, filterFlags, filter)
+    return clLib.libmw_so.clLogStreamFilterSet(clUtils.byref(pStreamName), streamScope, clUtils.byref(pStreamScopeNode), filterFlags, filter)
 
 def clLogStreamFilterGet(pStreamName, streamScope, pStreamScopeNode, pFilter):
     """
@@ -629,7 +640,7 @@ def clLogStreamFilterGet(pStreamName, streamScope, pStreamScopeNode, pFilter):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogStreamFilterGet(pStreamName, streamScope, pStreamScopeNode, pFilter)
+    return clLib.libmw_so.clLogStreamFilterGet(clUtils.byref(pStreamName), streamScope, clUtils.byref(pStreamScopeNode), clUtils.byref(pFilter))
 
 def clLogSeverityGet(pSevName):
     """
@@ -639,7 +650,8 @@ def clLogSeverityGet(pSevName):
     return type:
         ClLogSeverityT
     """
-    return clLib.libmw_so.clLogSeverityGet(pSevName)
+    clLib.libmw_so.clLogSeverityGet.restype = ClLogSeverityT
+    return clLib.libmw_so.clLogSeverityGet(clUtils.toCharP(pSevName))
 
 def clLogTimeGet(pStrTime, maxBytes):
     """
@@ -650,7 +662,7 @@ def clLogTimeGet(pStrTime, maxBytes):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogTimeGet(pStrTime, maxBytes)
+    return clLib.libmw_so.clLogTimeGet(clUtils.toCharP(pStrTime), maxBytes)
 
 # extern ClBoolT          gClLogCodeLocationEnable;
 #define CL_LOG_PRNT_FMT_STR               "%-26s [%s:%d] (%.*s.%d : %s.%3s.%3s"

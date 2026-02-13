@@ -118,6 +118,8 @@ def clOsalFinalize():
 
 # --- Task Management ---
 
+TaskFunctionT = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)
+
 def clOsalTaskCreateDetached(taskName, schedulePolicy, priority, stackSize, fpTaskFunction, pTaskFuncArgument):
     """
     arg types:
@@ -125,12 +127,12 @@ def clOsalTaskCreateDetached(taskName, schedulePolicy, priority, stackSize, fpTa
         ClOsalSchedulePolicyT schedulePolicy,
         ClUint32T priority,
         ClUint32T stackSize,
-        void* (*fpTaskFunction)(void*),
+        TaskFunctionT fpTaskFunction,
         void* pTaskFuncArgument
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalTaskCreateDetached(taskName, schedulePolicy, priority, stackSize, fpTaskFunction, pTaskFuncArgument)
+    return clLib.libmw_so.clOsalTaskCreateDetached(clUtils.toCharP(taskName), schedulePolicy, priority, stackSize, fpTaskFunction, pTaskFuncArgument)
 
 
 def clOsalTaskCreateAttached(taskName, schedulePolicy, priority, stackSize, fpTaskFunction, pTaskFuncArgument, pTaskId):
@@ -140,13 +142,13 @@ def clOsalTaskCreateAttached(taskName, schedulePolicy, priority, stackSize, fpTa
         ClOsalSchedulePolicyT schedulePolicy,
         ClUint32T priority,
         ClUint32T stackSize,
-        void* (*fpTaskFunction)(void*),
+        TaskFunctionT fpTaskFunction,
         void* pTaskFuncArgument,
         ClOsalTaskIdT* pTaskId
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalTaskCreateAttached(taskName, schedulePolicy, priority, stackSize, fpTaskFunction, pTaskFuncArgument, pTaskId)
+    return clLib.libmw_so.clOsalTaskCreateAttached(clUtils.toCharP(taskName), schedulePolicy, priority, stackSize, fpTaskFunction, pTaskFuncArgument, clUtils.byref(pTaskId))
 
 
 def clOsalTaskJoin(taskId):
@@ -197,7 +199,7 @@ def clOsalSelfTaskIdGet(pTaskId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalSelfTaskIdGet(pTaskId)
+    return clLib.libmw_so.clOsalSelfTaskIdGet(clUtils.byref(pTaskId))
 
 
 def clOsalTaskNameGet(taskId, ppTaskName):
@@ -208,18 +210,18 @@ def clOsalTaskNameGet(taskId, ppTaskName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalTaskNameGet(taskId, ppTaskName)
+    return clLib.libmw_so.clOsalTaskNameGet(taskId, clUtils.byref(ppTaskName))
 
 
 def clOsalTaskPriorityGet(taskId, pTaskPriority):
     """
-    arg types:
+    arg types:k
         ClOsalTaskIdT taskId,
         ClUint32T* pTaskPriority
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalTaskPriorityGet(taskId, pTaskPriority)
+    return clLib.libmw_so.clOsalTaskPriorityGet(taskId, clUtils.byref(pTaskPriority))
 
 
 def clOsalTaskPrioritySet(taskId, taskPriority):
@@ -252,7 +254,7 @@ def clOsalTimeOfDayGet(pTime):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalTimeOfDayGet(pTime)
+    return clLib.libmw_so.clOsalTimeOfDayGet(clUtils.byref(pTime))
 
 
 def clOsalNanoTimeGet(pTime):
@@ -262,7 +264,7 @@ def clOsalNanoTimeGet(pTime):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalNanoTimeGet(pTime)
+    return clLib.libmw_so.clOsalNanoTimeGet(clUtils.byref(pTime))
 
 
 def clOsalStopWatchTimeGet():
@@ -272,6 +274,7 @@ def clOsalStopWatchTimeGet():
     return type:
         ClTimeT
     """
+    clLib.libmw_so.clOsalStopWatchTimeGet.restype = clCommon.ClTimeT
     return clLib.libmw_so.clOsalStopWatchTimeGet()
 
 
@@ -284,7 +287,7 @@ def clOsalMutexInit(pMutex):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMutexInit(pMutex)
+    return clLib.libmw_so.clOsalMutexInit(clUtils.byref(pMutex))
 
 
 def clOsalMutexErrorCheckInit(pMutex):
@@ -294,7 +297,7 @@ def clOsalMutexErrorCheckInit(pMutex):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMutexErrorCheckInit(pMutex)
+    return clLib.libmw_so.clOsalMutexErrorCheckInit(clUtils.byref(pMutex))
 
 
 def clOsalMutexValueSet(mutexId, value):
@@ -316,7 +319,7 @@ def clOsalMutexValueGet(mutexId, pValue):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMutexValueGet(mutexId, pValue)
+    return clLib.libmw_so.clOsalMutexValueGet(mutexId, clUtils.byref(pValue))
 
 
 # --- Mutex Functions (Shared/Process Shared) ---
@@ -332,7 +335,7 @@ def clOsalProcessSharedMutexInit(pMutex, flags, pKey, keyLen, value):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalProcessSharedMutexInit(pMutex, flags, pKey, keyLen, value)
+    return clLib.libmw_so.clOsalProcessSharedMutexInit(clUtils.byref(pMutex), flags, clUtils.byref(pKey), keyLen, value)
 
 
 def clOsalSharedMutexCreate(pMutex, flags, pKey, keyLen, value):
@@ -346,7 +349,7 @@ def clOsalSharedMutexCreate(pMutex, flags, pKey, keyLen, value):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalSharedMutexCreate(pMutex, flags, pKey, keyLen, value)
+    return clLib.libmw_so.clOsalSharedMutexCreate(clUtils.byref(pMutex), flags, clUtils.byref(pKey), keyLen, value)
 
 
 def clOsalRecursiveMutexInit(pMutex):
@@ -356,7 +359,7 @@ def clOsalRecursiveMutexInit(pMutex):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalRecursiveMutexInit(pMutex)
+    return clLib.libmw_so.clOsalRecursiveMutexInit(clUtils.byref(pMutex))
 
 
 # --- Mutex ID Functions ---
@@ -368,7 +371,7 @@ def clOsalMutexCreate(pMutexId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMutexCreate(pMutexId)
+    return clLib.libmw_so.clOsalMutexCreate(clUtils.byref(pMutexId))
 
 
 def clOsalMutexErrorCheckCreate(pMutexId):
@@ -378,7 +381,7 @@ def clOsalMutexErrorCheckCreate(pMutexId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMutexErrorCheckCreate(pMutexId)
+    return clLib.libmw_so.clOsalMutexErrorCheckCreate(clUtils.byref(pMutexId))
 
 
 def clOsalMutexCreateAndLock(pMutexId):
@@ -388,7 +391,7 @@ def clOsalMutexCreateAndLock(pMutexId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMutexCreateAndLock(pMutexId)
+    return clLib.libmw_so.clOsalMutexCreateAndLock(clUtils.byref(pMutexId))
 
 
 def clOsalMutexLock(mutexId):
@@ -468,7 +471,7 @@ def clOsalMutexDestroy(pMutex):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMutexDestroy(pMutex)
+    return clLib.libmw_so.clOsalMutexDestroy(clUtils.byref(pMutex))
 
 
 # --- Condition Variable Functions ---
@@ -480,7 +483,7 @@ def clOsalCondInit(pCond):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalCondInit(pCond)
+    return clLib.libmw_so.clOsalCondInit(clUtils.byref(pCond))
 
 
 def clOsalProcessSharedCondInit(pCond):
@@ -490,7 +493,7 @@ def clOsalProcessSharedCondInit(pCond):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalProcessSharedCondInit(pCond)
+    return clLib.libmw_so.clOsalProcessSharedCondInit(clUtils.byref(pCond))
 
 
 def clOsalCondCreate(pConditionId):
@@ -500,7 +503,7 @@ def clOsalCondCreate(pConditionId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalCondCreate(pConditionId)
+    return clLib.libmw_so.clOsalCondCreate(clUtils.byref(pConditionId))
 
 
 def clOsalCondDelete(conditionId):
@@ -520,7 +523,7 @@ def clOsalCondDestroy(pCond):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalCondDestroy(pCond)
+    return clLib.libmw_so.clOsalCondDestroy(clUtils.byref(pCond))
 
 
 def clOsalCondWait(conditionId, mutexId, time):
@@ -564,7 +567,7 @@ def clOsalTaskKeyCreate(pKey, pCallbackFunc):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalTaskKeyCreate(pKey, pCallbackFunc)
+    return clLib.libmw_so.clOsalTaskKeyCreate(clUtils.byref(pKey), pCallbackFunc)
 
 
 def clOsalTaskKeyDelete(key):
@@ -596,7 +599,7 @@ def clOsalTaskDataGet(key, pThreadData):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalTaskDataGet(key, pThreadData)
+    return clLib.libmw_so.clOsalTaskDataGet(key, clUtils.byref(pThreadData))
 
 
 # --- Semaphore Functions ---
@@ -610,7 +613,7 @@ def clOsalSemCreate(pName, value, pSemId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalSemCreate(pName, value, pSemId)
+    return clLib.libmw_so.clOsalSemCreate(clUtils.toUint8P(pName), value, clUtils.byref(pSemId))
 
 
 def clOsalSemIdGet(pName, pSemId):
@@ -621,7 +624,7 @@ def clOsalSemIdGet(pName, pSemId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalSemIdGet(pName, pSemId)
+    return clLib.libmw_so.clOsalSemIdGet(clUtils.toUint8P(pName), clUtils.byref(pSemId))
 
 
 def clOsalSemLock(semId):
@@ -662,7 +665,7 @@ def clOsalSemValueGet(semId, pSemValue):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalSemValueGet(semId, pSemValue)
+    return clLib.libmw_so.clOsalSemValueGet(semId, clUtils.byref(pSemValue))
 
 
 def clOsalSemDelete(semId):
@@ -687,7 +690,7 @@ def clOsalProcessCreate(fpFunction, functionArg, creationFlags, pProcessId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalProcessCreate(fpFunction, functionArg, creationFlags, pProcessId)
+    return clLib.libmw_so.clOsalProcessCreate(fpFunction, functionArg, creationFlags, clUtils.byref(pProcessId))
 
 
 def clOsalProcessDelete(processId):
@@ -717,7 +720,7 @@ def clOsalProcessSelfIdGet(pProcessId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalProcessSelfIdGet(pProcessId)
+    return clLib.libmw_so.clOsalProcessSelfIdGet(clUtils.byref(pProcessId))
 
 
 # --- Shared Memory (SHM) ---
@@ -731,7 +734,7 @@ def clOsalShmCreate(pName, size, pShmId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmCreate(pName, size, pShmId)
+    return clLib.libmw_so.clOsalShmCreate(clUtils.toUint8P(pName), size, clUtils.byref(pShmId))
 
 
 def clOsalShmIdGet(pName, pShmId):
@@ -742,7 +745,7 @@ def clOsalShmIdGet(pName, pShmId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmIdGet(pName, pShmId)
+    return clLib.libmw_so.clOsalShmIdGet(clUtils.toUint8P(pName), clUtils.byref(pShmId))
 
 
 def clOsalShmDelete(shmId):
@@ -764,7 +767,7 @@ def clOsalShmAttach(shmId, pInMem, ppOutMem):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmAttach(shmId, pInMem, ppOutMem)
+    return clLib.libmw_so.clOsalShmAttach(shmId, pInMem, clUtils.byref(ppOutMem))
 
 
 def clOsalShmDetach(pMem):
@@ -796,7 +799,7 @@ def clOsalShmSecurityModeGet(shmId, pMode):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmSecurityModeGet(shmId, pMode)
+    return clLib.libmw_so.clOsalShmSecurityModeGet(shmId, clUtils.byref(pMode))
 
 
 def clOsalShmSizeGet(shmId, pSize):
@@ -807,7 +810,7 @@ def clOsalShmSizeGet(shmId, pSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmSizeGet(shmId, pSize)
+    return clLib.libmw_so.clOsalShmSizeGet(shmId, clUtils.byref(pSize))
 
 
 def clOsalMmap(start, length, prot, flags, fd, offset, mmapped):
@@ -823,7 +826,7 @@ def clOsalMmap(start, length, prot, flags, fd, offset, mmapped):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMmap(start, length, prot, flags, fd, offset, mmapped)
+    return clLib.libmw_so.clOsalMmap(start, length, prot, flags, fd, offset, clUtils.byref(mmapped))
 
 
 def clOsalMunmap(start, length):
@@ -870,7 +873,7 @@ def clOsalShmOpen(name, oflag, mode, fd):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmOpen(name, oflag, mode, fd)
+    return clLib.libmw_so.clOsalShmOpen(clUtils.toCharP(name), oflag, mode, clUtils.byref(fd))
 
 
 def clOsalShmClose(fd):
@@ -880,7 +883,7 @@ def clOsalShmClose(fd):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmClose(fd)
+    return clLib.libmw_so.clOsalShmClose(clUtils.byref(fd))
 
 
 def clOsalShmUnlink(name):
@@ -890,7 +893,7 @@ def clOsalShmUnlink(name):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalShmUnlink(name)
+    return clLib.libmw_so.clOsalShmUnlink(clUtils.toCharP(name))
 
 
 # --- Utility Functions ---
@@ -913,7 +916,7 @@ def clOsalMaxPathGet(path, pLength):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalMaxPathGet(path, pLength)
+    return clLib.libmw_so.clOsalMaxPathGet(clUtils.toCharP(path), clUtils.byref(pLength))
 
 
 def clOsalPageSizeGet(pSize):
@@ -923,7 +926,7 @@ def clOsalPageSizeGet(pSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clOsalPageSizeGet(pSize)
+    return clLib.libmw_so.clOsalPageSizeGet(clUtils.byref(pSize))
 
 def clOsalPrintf(fmt, *va_args):
     """

@@ -3,7 +3,7 @@ sys.path.append("..")
 
 from common import clCommon
 from ioc import clIocApi
-from utils import clHash, clList, clLib
+from utils import clHash, clList, clLib, clUtils
 
 import ctypes
 
@@ -209,7 +209,7 @@ def clIocHearBeatHealthCheckUpdate(nodeAddr, portId, message):
     arg types: ClIocNodeAddressT nodeAddr, ClUint32T portId, ClCharT *message
     return type: ClRcT
     """
-    return clLib.libmw_so.clIocHearBeatHealthCheckUpdate(nodeAddr, portId, message)
+    return clLib.libmw_so.clIocHearBeatHealthCheckUpdate(nodeAddr, portId, clUtils.toCharP(message))
 
 def clIocHeartBeatMessageReqRep(commPort, destAddress, reqRep, shutdown):
     """

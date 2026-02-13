@@ -118,7 +118,7 @@ def saCkptInitialize(ckptHandle, callbacks, version):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptInitialize(ckptHandle, callbacks, version)
+    return clLib.libmw_so.saCkptInitialize(clUtils.byref(ckptHandle), clUtils.byref(callbacks), clUtils.byref(version))
 
 def saCkptSelectionObjectGet(ckptHandle, selectionObject):
     """
@@ -129,7 +129,7 @@ def saCkptSelectionObjectGet(ckptHandle, selectionObject):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptSelectionObjectGet(ckptHandle, selectionObject)
+    return clLib.libmw_so.saCkptSelectionObjectGet(ckptHandle, clUtils.byref(selectionObject))
 
 def saCkptDispatch(ckptHandle, dispatchFlags):
     """
@@ -165,7 +165,7 @@ def saCkptCheckpointOpen(ckptHandle, ckeckpointName, checkpointCreationAttribute
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptCheckpointOpen(ckptHandle, ckeckpointName, checkpointCreationAttributes, checkpointOpenFlags, timeout, checkpointHandle)
+    return clLib.libmw_so.saCkptCheckpointOpen(ckptHandle, clUtils.byref(ckeckpointName), clUtils.byref(checkpointCreationAttributes), checkpointOpenFlags, timeout, clUtils.byref(checkpointHandle))
 
 def saCkptCheckpointOpenAsync(ckptHandle, invocation, ckeckpointName, checkpointCreationAttributes, checkpointOpenFlags):
     """
@@ -179,7 +179,7 @@ def saCkptCheckpointOpenAsync(ckptHandle, invocation, ckeckpointName, checkpoint
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptCheckpointOpenAsync(ckptHandle, invocation, ckeckpointName, checkpointCreationAttributes, checkpointOpenFlags)
+    return clLib.libmw_so.saCkptCheckpointOpenAsync(ckptHandle, invocation, clUtils.byref(ckeckpointName), clUtils.byref(checkpointCreationAttributes), checkpointOpenFlags)
 
 def saCkptCheckpointClose(checkpointHandle):
     """
@@ -200,7 +200,7 @@ def saCkptCheckpointUnlink(ckptHandle, checkpointName):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptCheckpointUnlink(ckptHandle, checkpointName)
+    return clLib.libmw_so.saCkptCheckpointUnlink(ckptHandle, clUtils.byref(checkpointName))
 
 def saCkptCheckpointRetentionDurationSet(checkpointHandle, retentionDuration):
     """
@@ -232,7 +232,7 @@ def saCkptCheckpointStatusGet(checkpointHandle, checkpointStatus):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptCheckpointStatusGet(checkpointHandle, checkpointStatus)
+    return clLib.libmw_so.saCkptCheckpointStatusGet(checkpointHandle, clUtils.byref(checkpointStatus))
 
 def saCkptSectionCreate(checkpointHandle, sectionCreationAttributes, initialData, initialDataSize):
     """
@@ -245,7 +245,7 @@ def saCkptSectionCreate(checkpointHandle, sectionCreationAttributes, initialData
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptSectionCreate(checkpointHandle, sectionCreationAttributes, initialData, initialDataSize)
+    return clLib.libmw_so.saCkptSectionCreate(checkpointHandle, clUtils.byref(sectionCreationAttributes), clUtils.byref(initialData), initialDataSize)
 
 def saCkptSectionDelete(checkpointHandle, sectionId):
     """
@@ -256,7 +256,7 @@ def saCkptSectionDelete(checkpointHandle, sectionId):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptSectionDelete(checkpointHandle, sectionId)
+    return clLib.libmw_so.saCkptSectionDelete(checkpointHandle, clUtils.byref(sectionId))
 
 def saCkptSectionExpirationTimeSet(checkpointHandle, sectionId, expirationTime):
     """
@@ -268,7 +268,7 @@ def saCkptSectionExpirationTimeSet(checkpointHandle, sectionId, expirationTime):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptSectionExpirationTimeSet(checkpointHandle, sectionId, expirationTime)
+    return clLib.libmw_so.saCkptSectionExpirationTimeSet(checkpointHandle, clUtils.byref(sectionId), expirationTime)
 
 def saCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expirationTime, sectionIterationHandle):
     """
@@ -281,7 +281,7 @@ def saCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expiratio
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expirationTime, sectionIterationHandle)
+    return clLib.libmw_so.saCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expirationTime, clUtils.byref(sectionIterationHandle))
 
 def saCkptSectionIterationNext(sectionIterationHandle, sectionDescriptor):
     """
@@ -292,7 +292,7 @@ def saCkptSectionIterationNext(sectionIterationHandle, sectionDescriptor):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptSectionIterationNext(sectionIterationHandle, sectionDescriptor)
+    return clLib.libmw_so.saCkptSectionIterationNext(sectionIterationHandle, clUtils.byref(sectionDescriptor))
 
 def saCkptSectionIterationFinalize(sectionIterationHandle):
     """
@@ -315,7 +315,7 @@ def saCkptCheckpointWrite(checkpointHandle, ioVector, numberOfElements, erroneou
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptCheckpointWrite(checkpointHandle, ioVector, numberOfElements, erroneousVectorIndex)
+    return clLib.libmw_so.saCkptCheckpointWrite(checkpointHandle, clUtils.byref(ioVector), numberOfElements, clUtils.byref(erroneousVectorIndex))
 
 def saCkptSectionOverwrite(checkpointHandle, sectionId, dataBuffer, dataSize):
     """
@@ -328,7 +328,7 @@ def saCkptSectionOverwrite(checkpointHandle, sectionId, dataBuffer, dataSize):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptSectionOverwrite(checkpointHandle, sectionId, dataBuffer, dataSize)
+    return clLib.libmw_so.saCkptSectionOverwrite(checkpointHandle, clUtils.byref(sectionId), dataBuffer, dataSize)
 
 def saCkptCheckpointRead(checkpointHandle, ioVector, numberOfElements, erroneousVectorIndex):
     """
@@ -341,7 +341,7 @@ def saCkptCheckpointRead(checkpointHandle, ioVector, numberOfElements, erroneous
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saCkptCheckpointRead(checkpointHandle, ioVector, numberOfElements, erroneousVectorIndex)
+    return clLib.libmw_so.saCkptCheckpointRead(checkpointHandle, clUtils.byref(ioVector), numberOfElements, clUtils.byref(erroneousVectorIndex))
 
 def saCkptCheckpointSynchronize(checkpointHandle, timeout):
     """

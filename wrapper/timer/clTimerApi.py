@@ -4,7 +4,7 @@ sys.path.append("..")
 import ctypes
 from common import clCommon
 from buffer import clBufferApi
-from utils import clUtils, clLib
+from utils import clUtils, clLib, clHeapApi
 
 ClTimerCallBackT = ctypes.CFUNCTYPE(clCommon.ClRcT, clCommon.ClPtrT)
 ClTimerReplicationCallbackT = ctypes.CFUNCTYPE(clCommon.ClRcT, clBufferApi.ClBufferHandleT)
@@ -99,7 +99,7 @@ def clTimerCreate(timeOut, timerType, timerTaskSpawn, fpAction, pActionArgument,
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerCreate(timeOut, timerType, timerTaskSpawn, fpAction, pActionArgument, pTimerHandle)
+    return clLib.libmw_so.clTimerCreate(timeOut, timerType, timerTaskSpawn, fpAction, pActionArgument, clUtils.byref(pTimerHandle))
 
 
 def clTimerDelete(pTimerHandle):
@@ -109,7 +109,7 @@ def clTimerDelete(pTimerHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerDelete(pTimerHandle)
+    return clLib.libmw_so.clTimerDelete(clUtils.byref(pTimerHandle))
 
 
 def clTimerDeleteAsync(pTimerHandle):
@@ -119,7 +119,7 @@ def clTimerDeleteAsync(pTimerHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerDeleteAsync(pTimerHandle)
+    return clLib.libmw_so.clTimerDeleteAsync(clUtils.byref(pTimerHandle))
 
 
 def clTimerStart(timerHandle):
@@ -154,7 +154,7 @@ def clTimerCreateAndStart(timeOut, timerType, timerTaskSpawn, fpAction, pActionA
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerCreateAndStart(timeOut, timerType, timerTaskSpawn, fpAction, pActionArgument, pTimerHandle)
+    return clLib.libmw_so.clTimerCreateAndStart(timeOut, timerType, timerTaskSpawn, fpAction, pActionArgument, clUtils.byref(pTimerHandle))
 
 
 def clTimerRestart(timerHandle):
@@ -185,7 +185,7 @@ def clTimerTypeGet(timerHandle, pTimerType):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerTypeGet(timerHandle, pTimerType)
+    return clLib.libmw_so.clTimerTypeGet(timerHandle, clUtils.byref(pTimerType))
 
 
 def clTimerIsRunning(timerHandle, pState):
@@ -196,7 +196,7 @@ def clTimerIsRunning(timerHandle, pState):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerIsRunning(timerHandle, pState)
+    return clLib.libmw_so.clTimerIsRunning(timerHandle, clUtils.byref(pState))
 
 
 def clTimerIsStopped(timerHandle, pState):
@@ -207,7 +207,7 @@ def clTimerIsStopped(timerHandle, pState):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerIsStopped(timerHandle, pState)
+    return clLib.libmw_so.clTimerIsStopped(timerHandle, clUtils.byref(pState))
 
 
 def clTimerStatsGet(ppStats, pNumTimers):
@@ -218,8 +218,12 @@ def clTimerStatsGet(ppStats, pNumTimers):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerStatsGet(ppStats, pNumTimers)
-
+    temp = ctypes.POINTER(ClTimerStatsT)()
+    rc = clLib.libmw_so.clTimerStatsGet(clUtils.byref(temp), clUtils.byref(pNumTimers))
+    if temp:
+        ctypes.memmove(clUtils.byref(ppStats), temp, ctypes.sizeof(ClTimerStatsT))
+        clHeapApi.clHeapFree(temp)
+    return rc
 
 def clTimerCheckAndDelete(pTimerHandle):
     """
@@ -228,7 +232,7 @@ def clTimerCheckAndDelete(pTimerHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerCheckAndDelete(pTimerHandle)
+    return clLib.libmw_so.clTimerCheckAndDelete(clUtils.byref(pTimerHandle))
 
 def clTimerClusterRegister(clusterCallback, replicationCallback):
     """
@@ -253,7 +257,7 @@ def clTimerCreateCluster(timeOut, timerType, timerContext, timerData, timerDataS
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerCreateCluster(timeOut, timerType, timerContext, timerData, timerDataSize, pTimerHandle)
+    return clLib.libmw_so.clTimerCreateCluster(timeOut, timerType, timerContext, timerData, timerDataSize, clUtils.byref(pTimerHandle))
 
 
 def clTimerCreateAndStartCluster(timeOut, timerType, timerContext, timerData, timerDataSize, pTimerHandle):
@@ -268,7 +272,7 @@ def clTimerCreateAndStartCluster(timeOut, timerType, timerContext, timerData, ti
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerCreateAndStartCluster(timeOut, timerType, timerContext, timerData, timerDataSize, pTimerHandle)
+    return clLib.libmw_so.clTimerCreateAndStartCluster(timeOut, timerType, timerContext, timerData, timerDataSize, clUtils.byref(pTimerHandle))
 
 
 def clTimerClusterPack(timer, msg):
@@ -300,7 +304,7 @@ def clTimerClusterUnpack(msg, pTimerHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerClusterUnpack(msg, pTimerHandle)
+    return clLib.libmw_so.clTimerClusterUnpack(msg, clUtils.byref(pTimerHandle))
 
 
 def clTimerClusterUnpackAll(msg):
@@ -320,7 +324,7 @@ def clTimerClusterFree(pTimerHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerClusterFree(pTimerHandle)
+    return clLib.libmw_so.clTimerClusterFree(clUtils.byref(pTimerHandle))
 
 
 def clTimerClusterConfigureAll():
@@ -340,7 +344,7 @@ def clTimerClusterConfigure(pTimerHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clTimerClusterConfigure(pTimerHandle)
+    return clLib.libmw_so.clTimerClusterConfigure(clUtils.byref(pTimerHandle))
 
 
 def clTimerClusterSync():

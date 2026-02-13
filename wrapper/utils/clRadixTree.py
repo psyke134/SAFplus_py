@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clLib
+from utils import clLib, clUtils
 
 ClRadixTreeHandleT = clCommon.ClPtrT
 
@@ -26,7 +26,7 @@ def clRadixTreeInsert(handle, index, item, lastItem):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRadixTreeInsert(handle, index, item, lastItem)
+    return clLib.libmw_so.clRadixTreeInsert(handle, index, item, clUtils.byref(lastItem))
 
 
 def clRadixTreeLookup(handle, index, item):
@@ -38,7 +38,7 @@ def clRadixTreeLookup(handle, index, item):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRadixTreeLookup(handle, index, item)
+    return clLib.libmw_so.clRadixTreeLookup(handle, index, clUtils.byref(item))
 
 
 def clRadixTreeDelete(handle, index, item):
@@ -50,4 +50,4 @@ def clRadixTreeDelete(handle, index, item):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRadixTreeDelete(handle, index, item)
+    return clLib.libmw_so.clRadixTreeDelete(handle, index, clUtils.byref(item))

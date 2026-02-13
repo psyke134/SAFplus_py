@@ -74,7 +74,7 @@ def clMemStatsInitialize(pConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clMemStatsInitialize(pConfig)
+    return clLib.libmw_so.clMemStatsInitialize(clUtils.byref(pConfig))
 
 def clMemStatsFinalize():
     """
@@ -92,7 +92,7 @@ def clMemStatsWaterMarksSet(pMemConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clMemStatsWaterMarksSet(pMemConfig)
+    return clLib.libmw_so.clMemStatsWaterMarksSet(clUtils.byref(pMemConfig))
 
 
 def clEoMemWaterMarksUpdate(memDir):
@@ -109,8 +109,9 @@ def clEoMemAdmitAllocate(size):
     arg types:
         ClUint32T size
     return type:
-        ClBoolT (True if allocation is admitted/allowed)
+        ClBoolT
     """
+    clLib.libmw_so.clEoMemAdmitAllocate.restype = clCommon.ClBoolT
     return clLib.libmw_so.clEoMemAdmitAllocate(size)
 
 

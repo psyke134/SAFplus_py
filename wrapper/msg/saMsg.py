@@ -112,7 +112,7 @@ def saMsgInitialize(msgHandle, msgCallbacks, version):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgInitialize(msgHandle, msgCallbacks, version)
+    return clLib.libmw_so.saMsgInitialize(clUtils.byref(msgHandle), clUtils.byref(msgCallbacks), clUtils.byref(version))
 
 def saMsgSelectionObjectGet(msgHandle, selectionObject):
     """
@@ -122,7 +122,7 @@ def saMsgSelectionObjectGet(msgHandle, selectionObject):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgSelectionObjectGet(msgHandle, selectionObject)
+    return clLib.libmw_so.saMsgSelectionObjectGet(msgHandle, clUtils.byref(selectionObject))
 
 def saMsgDispatch(msgHandle, dispatchFlags):
     """
@@ -155,7 +155,7 @@ def saMsgQueueOpen(msgHandle, queueName, creationAttributes, openFlags, timeout,
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueOpen(msgHandle, queueName, creationAttributes, openFlags, timeout, queueHandle)
+    return clLib.libmw_so.saMsgQueueOpen(msgHandle, clUtils.byref(queueName), clUtils.byref(creationAttributes), openFlags, timeout, clUtils.byref(queueHandle))
 
 def saMsgQueueOpenAsync(msgHandle, invocation, queueName, creationAttributes, openFlags):
     """
@@ -168,7 +168,7 @@ def saMsgQueueOpenAsync(msgHandle, invocation, queueName, creationAttributes, op
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueOpenAsync(msgHandle, invocation, queueName, creationAttributes, openFlags)
+    return clLib.libmw_so.saMsgQueueOpenAsync(msgHandle, invocation, clUtils.byref(queueName), clUtils.byref(creationAttributes), openFlags)
 
 def saMsgQueueClose(queueHandle):
     """
@@ -188,7 +188,7 @@ def saMsgQueueStatusGet(msgHandle, queueName, queueStatus):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueStatusGet(msgHandle, queueName, queueStatus)
+    return clLib.libmw_so.saMsgQueueStatusGet(msgHandle, clUtils.byref(queueName), clUtils.byref(queueStatus))
 
 def saMsgQueueRetentionTimeSet(queueHandle, retentionTime):
     """
@@ -198,7 +198,7 @@ def saMsgQueueRetentionTimeSet(queueHandle, retentionTime):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueRetentionTimeSet(queueHandle, retentionTime)
+    return clLib.libmw_so.saMsgQueueRetentionTimeSet(queueHandle, clUtils.byref(retentionTime))
 
 def saMsgQueueUnlink(msgHandle, queueName):
     """
@@ -208,7 +208,7 @@ def saMsgQueueUnlink(msgHandle, queueName):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueUnlink(msgHandle, queueName)
+    return clLib.libmw_so.saMsgQueueUnlink(msgHandle, clUtils.byref(queueName))
 
 def saMsgQueueGroupCreate(msgHandle, queueGroupName, queueGroupPolicy):
     """
@@ -219,7 +219,7 @@ def saMsgQueueGroupCreate(msgHandle, queueGroupName, queueGroupPolicy):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueGroupCreate(msgHandle, queueGroupName, queueGroupPolicy)
+    return clLib.libmw_so.saMsgQueueGroupCreate(msgHandle, clUtils.byref(queueGroupName), queueGroupPolicy)
 
 def saMsgQueueGroupInsert(msgHandle, queueGroupName, queueName):
     """
@@ -230,7 +230,7 @@ def saMsgQueueGroupInsert(msgHandle, queueGroupName, queueName):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueGroupInsert(msgHandle, queueGroupName, queueName)
+    return clLib.libmw_so.saMsgQueueGroupInsert(msgHandle, clUtils.byref(queueGroupName), clUtils.byref(queueName))
 
 def saMsgQueueGroupRemove(msgHandle, queueGroupName, queueName):
     """
@@ -241,7 +241,7 @@ def saMsgQueueGroupRemove(msgHandle, queueGroupName, queueName):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueGroupRemove(msgHandle, queueGroupName, queueName)
+    return clLib.libmw_so.saMsgQueueGroupRemove(msgHandle, clUtils.byref(queueGroupName), clUtils.byref(queueName))
 
 def saMsgQueueGroupDelete(msgHandle, queueGroupName):
     """
@@ -251,7 +251,7 @@ def saMsgQueueGroupDelete(msgHandle, queueGroupName):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueGroupDelete(msgHandle, queueGroupName)
+    return clLib.libmw_so.saMsgQueueGroupDelete(msgHandle, clUtils.byref(queueGroupName))
 
 def saMsgQueueGroupTrack(msgHandle, queueGroupName, trackFlags, notificationBuffer):
     """
@@ -263,7 +263,7 @@ def saMsgQueueGroupTrack(msgHandle, queueGroupName, trackFlags, notificationBuff
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueGroupTrack(msgHandle, queueGroupName, trackFlags, notificationBuffer)
+    return clLib.libmw_so.saMsgQueueGroupTrack(msgHandle, clUtils.byref(queueGroupName), trackFlags, clUtils.byref(notificationBuffer))
 
 def saMsgQueueGroupTrackStop(msgHandle, queueGroupName):
     """
@@ -273,7 +273,7 @@ def saMsgQueueGroupTrackStop(msgHandle, queueGroupName):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueGroupTrackStop(msgHandle, queueGroupName)
+    return clLib.libmw_so.saMsgQueueGroupTrackStop(msgHandle, clUtils.byref(queueGroupName))
 
 def saMsgQueueGroupNotificationFree(msgHandle, notification):
     """
@@ -283,7 +283,7 @@ def saMsgQueueGroupNotificationFree(msgHandle, notification):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgQueueGroupNotificationFree(msgHandle, notification)
+    return clLib.libmw_so.saMsgQueueGroupNotificationFree(msgHandle, clUtils.byref(notification))
 
 def saMsgMessageSend(msgHandle, destination, message, timeout):
     """
@@ -295,7 +295,7 @@ def saMsgMessageSend(msgHandle, destination, message, timeout):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgMessageSend(msgHandle, destination, message, timeout)
+    return clLib.libmw_so.saMsgMessageSend(msgHandle, clUtils.byref(destination), clUtils.byref(message), timeout)
 
 def saMsgMessageSendAsync(msgHandle, invocation, destination, message, ackFlags):
     """
@@ -308,7 +308,7 @@ def saMsgMessageSendAsync(msgHandle, invocation, destination, message, ackFlags)
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgMessageSendAsync(msgHandle, invocation, destination, message, ackFlags)
+    return clLib.libmw_so.saMsgMessageSendAsync(msgHandle, invocation, clUtils.byref(destination), clUtils.byref(message), ackFlags)
 
 def saMsgMessageGet(queueHandle, message, sendTime, senderId, timeout):
     """
@@ -321,7 +321,7 @@ def saMsgMessageGet(queueHandle, message, sendTime, senderId, timeout):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgMessageGet(queueHandle, message, sendTime, senderId, timeout)
+    return clLib.libmw_so.saMsgMessageGet(queueHandle, clUtils.byref(message), clUtils.byref(sendTime), clUtils.byref(senderId), timeout)
 
 def saMsgMessageDataFree(msgHandle, pData):
     """
@@ -354,7 +354,7 @@ def saMsgMessageSendReceive(msgHandle, destination, sendMessage, receiveMessage,
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgMessageSendReceive(msgHandle, destination, sendMessage, receiveMessage, replySendTime, timeout)
+    return clLib.libmw_so.saMsgMessageSendReceive(msgHandle, clUtils.byref(destination), clUtils.byref(sendMessage), clUtils.byref(receiveMessage), clUtils.byref(replySendTime), timeout)
 
 def saMsgMessageReply(msgHandle, replyMessage, senderId, timeout):
     """
@@ -366,7 +366,7 @@ def saMsgMessageReply(msgHandle, replyMessage, senderId, timeout):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgMessageReply(msgHandle, replyMessage, senderId, timeout)
+    return clLib.libmw_so.saMsgMessageReply(msgHandle, clUtils.byref(replyMessage), clUtils.byref(senderId), timeout)
 
 def saMsgMessageReplyAsync(msgHandle, invocation, replyMessage, senderId, ackFlags):
     """
@@ -379,4 +379,4 @@ def saMsgMessageReplyAsync(msgHandle, invocation, replyMessage, senderId, ackFla
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saMsgMessageReplyAsync(msgHandle, invocation, replyMessage, senderId, ackFlags)
+    return clLib.libmw_so.saMsgMessageReplyAsync(msgHandle, invocation, clUtils.byref(replyMessage), clUtils.byref(senderId), ackFlags)

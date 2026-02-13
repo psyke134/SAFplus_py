@@ -69,7 +69,7 @@ def clCpmComponentPIDGet(compName, pid):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentPIDGet(compName, pid)
+    return clLib.libmw_so.clCpmComponentPIDGet(clUtils.byref(compName), clUtils.byref(pid))
 
 
 def clCpmComponentPIDGetBySlot(slot, compName, pid):
@@ -81,7 +81,7 @@ def clCpmComponentPIDGetBySlot(slot, compName, pid):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentPIDGetBySlot(slot, compName, pid)
+    return clLib.libmw_so.clCpmComponentPIDGetBySlot(slot, clUtils.byref(compName), clUtils.byref(pid))
 
 
 def clCpmSlotInfoGet(flag, slotInfo):
@@ -92,7 +92,7 @@ def clCpmSlotInfoGet(flag, slotInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmSlotInfoGet(flag, slotInfo)
+    return clLib.libmw_so.clCpmSlotInfoGet(flag, clUtils.byref(slotInfo))
 
 
 def clCpmSlotGet(flag, slotInfo):
@@ -103,7 +103,7 @@ def clCpmSlotGet(flag, slotInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmSlotGet(flag, slotInfo)
+    return clLib.libmw_so.clCpmSlotGet(flag, clUtils.byref(slotInfo))
 
 
 def clCpmIocAddressForNodeGet(nodeName, pIocAddress):
@@ -114,7 +114,7 @@ def clCpmIocAddressForNodeGet(nodeName, pIocAddress):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmIocAddressForNodeGet(nodeName, pIocAddress)
+    return clLib.libmw_so.clCpmIocAddressForNodeGet(nodeName, clUtils.byref(pIocAddress))
 
 
 def clCpmIsCompRestarted(compName):
@@ -124,6 +124,7 @@ def clCpmIsCompRestarted(compName):
     return type:
         ClBoolT
     """
+    clLib.libmw_so.clCpmIsCompRestarted.restype = clCommon.ClBoolT
     return clLib.libmw_so.clCpmIsCompRestarted(compName)
 
 
@@ -134,7 +135,7 @@ def clCpmNodeConfigSet(nodeConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmNodeConfigSet(nodeConfig)
+    return clLib.libmw_so.clCpmNodeConfigSet(clUtils.byref(nodeConfig))
 
 
 def clCpmNodeConfigGet(nodeName, nodeConfig):
@@ -145,7 +146,7 @@ def clCpmNodeConfigGet(nodeName, nodeConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmNodeConfigGet(nodeName, nodeConfig)
+    return clLib.libmw_so.clCpmNodeConfigGet(clUtils.toCharP(nodeName), clUtils.byref(nodeConfig))
 
 
 def clCpmCompConfigSet(node, name, instantiateCommand, property, mask):
@@ -159,7 +160,7 @@ def clCpmCompConfigSet(node, name, instantiateCommand, property, mask):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmCompConfigSet(node, name, instantiateCommand, property, mask)
+    return clLib.libmw_so.clCpmCompConfigSet(node, clUtils.toCharP(name), clUtils.toCharP(instantiateCommand), property, mask)
 
 
 def clCpmComponentFailureReportWithCookie(cpmHandle, pCompName, instantiateCookie, errorDetectionTime, recommendedRecovery, alarmHandle):
@@ -174,7 +175,7 @@ def clCpmComponentFailureReportWithCookie(cpmHandle, pCompName, instantiateCooki
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmComponentFailureReportWithCookie(cpmHandle, pCompName, instantiateCookie, errorDetectionTime, recommendedRecovery, alarmHandle)
+    return clLib.libmw_so.clCpmComponentFailureReportWithCookie(cpmHandle, clUtils.byref(pCompName), instantiateCookie, errorDetectionTime, recommendedRecovery, alarmHandle)
 
 
 def clCpmTargetSlotInfoGet(name, addr, slotInfo):
@@ -186,7 +187,7 @@ def clCpmTargetSlotInfoGet(name, addr, slotInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmTargetSlotInfoGet(name, addr, slotInfo)
+    return clLib.libmw_so.clCpmTargetSlotInfoGet(clUtils.toCharP(name), addr, clUtils.byref(slotInfo))
 
 
 def clCpmTargetInfoGet(targetInfo):
@@ -196,7 +197,7 @@ def clCpmTargetInfoGet(targetInfo):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmTargetInfoGet(targetInfo)
+    return clLib.libmw_so.clCpmTargetInfoGet(clUtils.byref(targetInfo))
 
 
 def clCpmTargetSlotListGet(slotInfo, numSlots):
@@ -207,7 +208,7 @@ def clCpmTargetSlotListGet(slotInfo, numSlots):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmTargetSlotListGet(slotInfo, numSlots)
+    return clLib.libmw_so.clCpmTargetSlotListGet(clUtils.byref(slotInfo), clUtils.byref(numSlots))
 
 
 def clCpmTargetVersionGet(aspVersion, maxBytes):
@@ -218,7 +219,7 @@ def clCpmTargetVersionGet(aspVersion, maxBytes):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmTargetVersionGet(aspVersion, maxBytes)
+    return clLib.libmw_so.clCpmTargetVersionGet(clUtils.toCharP(aspVersion), maxBytes)
 
 
 def clCpmIsSCCapable():
@@ -228,4 +229,5 @@ def clCpmIsSCCapable():
     return type:
         ClBoolT
     """
+    clLib.libmw_so.clCpmIsSCCapable.restype = clCommon.ClBoolT
     return clLib.libmw_so.clCpmIsSCCapable()

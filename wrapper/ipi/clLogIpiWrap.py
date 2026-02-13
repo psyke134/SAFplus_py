@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from utils import clLib
+from utils import clLib, clUtils
 from common import clCommon
 from log import clLogApi
 from ioc import clIocApi
@@ -189,7 +189,7 @@ def clLogOpen(handle, fileConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogOpen(handle, fileConfig)
+    return clLib.libmw_so.clLogOpen(clUtils.byref(handle), fileConfig)
 
 
 def clLogClose(handle):
@@ -218,7 +218,7 @@ def clLogLevelGet(severity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clLogLevelGet(severity)
+    return clLib.libmw_so.clLogLevelGet(clUtils.byref(severity))
 
 
 # TODO: there're remaining codes in the original header file

@@ -3,7 +3,7 @@ sys.path.append("..")
 
 from common import clCommon
 from ckpt import clCkptApi
-from utils import clDifferenceVector, clLib
+from utils import clDifferenceVector, clLib, clUtils, libc, clHeapApi
 from ioc import clIocApi
 
 import ctypes
@@ -58,7 +58,7 @@ def clCkptLibraryInitialize(pCkptHdl):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryInitialize(pCkptHdl)
+    return clLib.libmw_so.clCkptLibraryInitialize(clUtils.byref(pCkptHdl))
 
 
 def clCkptLibraryInitializeDB(pCkptHdl, dbName):
@@ -69,7 +69,7 @@ def clCkptLibraryInitializeDB(pCkptHdl, dbName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryInitializeDB(pCkptHdl, dbName)
+    return clLib.libmw_so.clCkptLibraryInitializeDB(clUtils.byref(pCkptHdl), clUtils.toCharP(dbName))
 
 
 def clCkptLibraryFinalize(ckptHdl):
@@ -90,7 +90,7 @@ def clCkptLibraryCkptCreate(ckptHdl, pCkptName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptCreate(ckptHdl, pCkptName)
+    return clLib.libmw_so.clCkptLibraryCkptCreate(ckptHdl, clUtils.byref(pCkptName))
 
 
 def clCkptLibraryCkptDelete(ckptHdl, pCkptName):
@@ -101,7 +101,7 @@ def clCkptLibraryCkptDelete(ckptHdl, pCkptName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptDelete(ckptHdl, pCkptName)
+    return clLib.libmw_so.clCkptLibraryCkptDelete(ckptHdl, clUtils.byref(pCkptName))
 
 
 def clCkptLibraryCkptDataSetCreate(ckptHdl, pCkptName, dsId, grpId, order, dsSerialiser, dsDeserialiser):
@@ -117,7 +117,7 @@ def clCkptLibraryCkptDataSetCreate(ckptHdl, pCkptName, dsId, grpId, order, dsSer
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptDataSetCreate(ckptHdl, pCkptName, dsId, grpId, order, dsSerialiser, dsDeserialiser)
+    return clLib.libmw_so.clCkptLibraryCkptDataSetCreate(ckptHdl, clUtils.byref(pCkptName), dsId, grpId, order, dsSerialiser, dsDeserialiser)
 
 
 def clCkptLibraryCkptDataSetVersionCreate(ckptHdl, pCkptName, dsId, grpId, order, pTable, numTableEntries):
@@ -133,7 +133,7 @@ def clCkptLibraryCkptDataSetVersionCreate(ckptHdl, pCkptName, dsId, grpId, order
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptDataSetVersionCreate(ckptHdl, pCkptName, dsId, grpId, order, pTable, numTableEntries)
+    return clLib.libmw_so.clCkptLibraryCkptDataSetVersionCreate(ckptHdl, clUtils.byref(pCkptName), dsId, grpId, order, clUtils.byref(pTable), numTableEntries)
 
 
 def clCkptLibraryCkptDataSetDelete(ckptHdl, pCkptName, dsId):
@@ -145,7 +145,7 @@ def clCkptLibraryCkptDataSetDelete(ckptHdl, pCkptName, dsId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptDataSetDelete(ckptHdl, pCkptName, dsId)
+    return clLib.libmw_so.clCkptLibraryCkptDataSetDelete(ckptHdl, clUtils.byref(pCkptName), dsId)
 
 
 def clCkptLibraryCkptDataSetWrite(ckptHdl, pCkptName, dsId, cookie):
@@ -158,7 +158,7 @@ def clCkptLibraryCkptDataSetWrite(ckptHdl, pCkptName, dsId, cookie):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptDataSetWrite(ckptHdl, pCkptName, dsId, cookie)
+    return clLib.libmw_so.clCkptLibraryCkptDataSetWrite(ckptHdl, clUtils.byref(pCkptName), dsId, cookie)
 
 
 def clCkptLibraryCkptDataSetVersionWrite(ckptHdl, pCkptName, dsId, cookie, pVersion):
@@ -172,7 +172,7 @@ def clCkptLibraryCkptDataSetVersionWrite(ckptHdl, pCkptName, dsId, cookie, pVers
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptDataSetVersionWrite(ckptHdl, pCkptName, dsId, cookie, pVersion)
+    return clLib.libmw_so.clCkptLibraryCkptDataSetVersionWrite(ckptHdl, clUtils.byref(pCkptName), dsId, cookie, clUtils.byref(pVersion))
 
 
 def clCkptLibraryCkptDataSetRead(ckptHdl, pCkptName, dsId, cookie):
@@ -185,7 +185,7 @@ def clCkptLibraryCkptDataSetRead(ckptHdl, pCkptName, dsId, cookie):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptDataSetRead(ckptHdl, pCkptName, dsId, cookie)
+    return clLib.libmw_so.clCkptLibraryCkptDataSetRead(ckptHdl, clUtils.byref(pCkptName), dsId, cookie)
 
 
 def clCkptLibraryDoesCkptExist(ckptHdl, pCkptName, pRetVal):
@@ -197,7 +197,7 @@ def clCkptLibraryDoesCkptExist(ckptHdl, pCkptName, pRetVal):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryDoesCkptExist(ckptHdl, pCkptName, pRetVal)
+    return clLib.libmw_so.clCkptLibraryDoesCkptExist(ckptHdl, clUtils.byref(pCkptName), clUtils.byref(pRetVal))
 
 
 def clCkptLibraryDoesDatasetExist(ckptHdl, pCkptName, dsId, pRetVal):
@@ -210,7 +210,7 @@ def clCkptLibraryDoesDatasetExist(ckptHdl, pCkptName, dsId, pRetVal):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryDoesDatasetExist(ckptHdl, pCkptName, dsId, pRetVal)
+    return clLib.libmw_so.clCkptLibraryDoesDatasetExist(ckptHdl, clUtils.byref(pCkptName), dsId, clUtils.byref(pRetVal))
 
 
 def clCkptLibraryCkptElementCreate(ckptHdl, pCkptName, dsId, elemSerialiser, elemDeserialiser):
@@ -224,7 +224,7 @@ def clCkptLibraryCkptElementCreate(ckptHdl, pCkptName, dsId, elemSerialiser, ele
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptElementCreate(ckptHdl, pCkptName, dsId, elemSerialiser, elemDeserialiser)
+    return clLib.libmw_so.clCkptLibraryCkptElementCreate(ckptHdl, clUtils.byref(pCkptName), dsId, elemSerialiser, elemDeserialiser)
 
 
 def clCkptLibraryCkptElementVersionCreate(ckptHdl, pCkptName, dsId, pTable, numTableEntries):
@@ -238,7 +238,7 @@ def clCkptLibraryCkptElementVersionCreate(ckptHdl, pCkptName, dsId, pTable, numT
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptElementVersionCreate(ckptHdl, pCkptName, dsId, pTable, numTableEntries)
+    return clLib.libmw_so.clCkptLibraryCkptElementVersionCreate(ckptHdl, clUtils.byref(pCkptName), dsId, clUtils.byref(pTable), numTableEntries)
 
 
 def clCkptLibraryCkptElementWrite(ckptHdl, pCkptName, dsId, elemId, elemLen, cookie):
@@ -253,7 +253,7 @@ def clCkptLibraryCkptElementWrite(ckptHdl, pCkptName, dsId, elemId, elemLen, coo
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptElementWrite(ckptHdl, pCkptName, dsId, elemId, elemLen, cookie)
+    return clLib.libmw_so.clCkptLibraryCkptElementWrite(ckptHdl, clUtils.byref(pCkptName), dsId, elemId, elemLen, cookie)
 
 
 def clCkptLibraryCkptElementVersionWrite(ckptHdl, pCkptName, dsId, elemId, elemLen, cookie, pVersion):
@@ -269,7 +269,7 @@ def clCkptLibraryCkptElementVersionWrite(ckptHdl, pCkptName, dsId, elemId, elemL
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptElementVersionWrite(ckptHdl, pCkptName, dsId, elemId, elemLen, cookie, pVersion)
+    return clLib.libmw_so.clCkptLibraryCkptElementVersionWrite(ckptHdl, clUtils.byref(pCkptName), dsId, elemId, elemLen, cookie, clUtils.byref(pVersion))
 
 
 def clCkptLibraryCkptElementDelete(ckptHdl, pCkptName, dsId, elemId, elemLen):
@@ -283,13 +283,14 @@ def clCkptLibraryCkptElementDelete(ckptHdl, pCkptName, dsId, elemId, elemLen):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptLibraryCkptElementDelete(ckptHdl, pCkptName, dsId, elemId, elemLen)
+    return clLib.libmw_so.clCkptLibraryCkptElementDelete(ckptHdl, clUtils.byref(pCkptName), dsId, elemId, elemLen)
 
+CkptRelicaChangeCallbackT = ctypes.CFUNCTYPE(clCommon.ClRcT, ctypes.POINTER(clCommon.ClNameT), clIocApi.ClIocNodeAddressT)
 
 def clCkptReplicaChangeRegister(pCkptRelicaChangeCallback):
     """
     arg types:
-        ClRcT (*pCkptRelicaChangeCallback)(const ClNameT *pCkptName, ClIocNodeAddressT replicaAddr)
+        CkptRelicaChangeCallbackT pCkptRelicaChangeCallback
     return type:
         ClRcT
     """
@@ -316,7 +317,7 @@ def clCkptSectionOverwriteVector(ckptHdl, pSectionId, dataSize, differenceVector
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSectionOverwriteVector(ckptHdl, pSectionId, dataSize, differenceVector)
+    return clLib.libmw_so.clCkptSectionOverwriteVector(ckptHdl, clUtils.byref(pSectionId), dataSize, clUtils.byref(differenceVector))
 
 
 def clCkptCheckpointReadSections(ckptHdl, ppIOVecs, pNumVecs):
@@ -328,8 +329,13 @@ def clCkptCheckpointReadSections(ckptHdl, ppIOVecs, pNumVecs):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptCheckpointReadSections(ckptHdl, ppIOVecs, pNumVecs)
-
+    temp = ctypes.POINTER(libc.iovec)()
+    rc = clLib.libmw_so.clCkptCheckpointReadSections(ckptHdl, clUtils.byref(temp), clUtils.byref(pNumVecs))
+    if temp:
+        ctypes.memmove(clUtils.byref(ppIOVecs), temp, ctypes.sizeof(libc.iovec))
+        clCkptIOVectorFree(temp, clUtils.byref(pNumVecs))
+        clHeapApi.clHeapFree(temp)
+    return rc
 
 def clCkptIOVectorFree(pIOVec, numVecs):
     """

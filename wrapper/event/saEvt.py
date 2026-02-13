@@ -89,7 +89,7 @@ def saEvtInitialize(evtHandle, callbacks, version):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtInitialize(evtHandle, callbacks, version)
+    return clLib.libmw_so.saEvtInitialize(clUtils.byref(evtHandle), clUtils.byref(callbacks), clUtils.byref(version))
 
 
 def saEvtSelectionObjectGet(evtHandle, selectionObject):
@@ -100,7 +100,7 @@ def saEvtSelectionObjectGet(evtHandle, selectionObject):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtSelectionObjectGet(evtHandle, selectionObject)
+    return clLib.libmw_so.saEvtSelectionObjectGet(evtHandle, clUtils.byref(selectionObject))
 
 
 def saEvtDispatch(evtHandle, dispatchFlags):
@@ -134,7 +134,7 @@ def saEvtChannelOpen(evtHandle, channelName, channelOpenFlags, timeout, channelH
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtChannelOpen(evtHandle, channelName, channelOpenFlags, timeout, channelHandle)
+    return clLib.libmw_so.saEvtChannelOpen(evtHandle, clUtils.byref(channelName), channelOpenFlags, timeout, clUtils.byref(channelHandle))
 
 
 def saEvtChannelOpenAsync(evtHandle, invocation, channelName, channelOpenFlags):
@@ -147,7 +147,7 @@ def saEvtChannelOpenAsync(evtHandle, invocation, channelName, channelOpenFlags):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtChannelOpenAsync(evtHandle, invocation, channelName, channelOpenFlags)
+    return clLib.libmw_so.saEvtChannelOpenAsync(evtHandle, invocation, clUtils.byref(channelName), channelOpenFlags)
 
 
 def saEvtChannelClose(channelHandle):
@@ -168,7 +168,7 @@ def saEvtChannelUnlink(evtHandle, channelName):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtChannelUnlink(evtHandle, channelName)
+    return clLib.libmw_so.saEvtChannelUnlink(evtHandle, clUtils.byref(channelName))
 
 def saEvtEventAllocate(channelHandle, eventHandle):
     """
@@ -178,7 +178,7 @@ def saEvtEventAllocate(channelHandle, eventHandle):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtEventAllocate(channelHandle, eventHandle)
+    return clLib.libmw_so.saEvtEventAllocate(channelHandle, clUtils.byref(eventHandle))
 
 
 def saEvtEventFree(eventHandle):
@@ -202,7 +202,7 @@ def saEvtEventAttributesSet(eventHandle, patternArray, priority, retentionTime, 
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtEventAttributesSet(eventHandle, patternArray, priority, retentionTime, publisherName)
+    return clLib.libmw_so.saEvtEventAttributesSet(eventHandle, clUtils.byref(patternArray), priority, retentionTime, clUtils.byref(publisherName))
 
 
 def saEvtEventAttributesGet(eventHandle, patternArray, priority, retentionTime, publisherName, publishTime, eventId):
@@ -218,7 +218,14 @@ def saEvtEventAttributesGet(eventHandle, patternArray, priority, retentionTime, 
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtEventAttributesGet(eventHandle, patternArray, priority, retentionTime, publisherName, publishTime, eventId)
+    return clLib.libmw_so.saEvtEventAttributesGet(
+        eventHandle,
+        clUtils.byref(patternArray),
+        clUtils.byref(priority),
+        clUtils.byref(retentionTime),
+        clUtils.byref(publisherName),
+        clUtils.byref(publishTime),
+        clUtils.byref(eventId))
 
 
 def saEvtEventDataGet(eventHandle, eventData, eventDataSize):
@@ -230,7 +237,7 @@ def saEvtEventDataGet(eventHandle, eventData, eventDataSize):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtEventDataGet(eventHandle, eventData, eventDataSize)
+    return clLib.libmw_so.saEvtEventDataGet(eventHandle, eventData, clUtils.byref(eventDataSize))
 
 def saEvtEventPublish(eventHandle, eventData, eventDataSize, eventId):
     """
@@ -242,7 +249,7 @@ def saEvtEventPublish(eventHandle, eventData, eventDataSize, eventId):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtEventPublish(eventHandle, eventData, eventDataSize, eventId)
+    return clLib.libmw_so.saEvtEventPublish(eventHandle, eventData, eventDataSize, clUtils.byref(eventId))
 
 
 def saEvtEventSubscribe(channelHandle, filters, subscriptionId):
@@ -254,7 +261,7 @@ def saEvtEventSubscribe(channelHandle, filters, subscriptionId):
     return type:
         SaAisErrorT
     """
-    return clLib.libmw_so.saEvtEventSubscribe(channelHandle, filters, subscriptionId)
+    return clLib.libmw_so.saEvtEventSubscribe(channelHandle, clUtils.byref(filters), subscriptionId)
 
 
 def saEvtEventUnsubscribe(channelHandle, subscriptionId):

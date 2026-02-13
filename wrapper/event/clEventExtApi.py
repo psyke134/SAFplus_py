@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from utils import clLib
+from utils import clLib, clUtils
 
 def clEventExtSubscribe(channelHandle, eventType, subscriptionId, pCookie):
     """
@@ -25,19 +25,20 @@ def clEventExtWithRbeSubscribe(channelHandle, pRbeExpr, subscriptionId, pCookie)
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEventExtWithRbeSubscribe(channelHandle, pRbeExpr, subscriptionId, pCookie)
+    return clLib.libmw_so.clEventExtWithRbeSubscribe(channelHandle, clUtils.byref(pRbeExpr), subscriptionId, pCookie)
 
 def clEventExtAttributesSet(eventHandle, eventType, priority, retentionTime, pPublisherName):
     """
     arg types:
-        const ClEventChannelHandleT channelHandle,
-        ClRuleExprT *pRbeExpr,
-        ClEventSubscriptionIdT subscriptionID,
-        void *pCookie
+        ClEventHandleT eventHandle,
+        ClUint32T eventType,
+        ClEventPriorityT priority,
+        ClTimeT retentionTime,
+        ClNameT *pPublisherName
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEventExtAttributesSet(eventHandle, eventType, priority, retentionTime, pPublisherName)
+    return clLib.libmw_so.clEventExtAttributesSet(eventHandle, eventType, priority, retentionTime, clUtils.byref(pPublisherName))
 
 def clEventExtAttributesGet(eventHandle, pEventType, pPriority, pRetentionTime, pPublisherName, pPublishTime, pEventId):
     """
@@ -52,4 +53,11 @@ def clEventExtAttributesGet(eventHandle, pEventType, pPriority, pRetentionTime, 
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEventExtAttributesGet(eventHandle, pEventType, pPriority, pRetentionTime, pPublisherName, pPublishTime, pEventId)
+    return clLib.libmw_so.clEventExtAttributesGet(
+        eventHandle,
+        clUtils.byref(pEventType),
+        clUtils.byref(pPriority),
+        clUtils.byref(pRetentionTime),
+        clUtils.byref(pPublisherName),
+        clUtils.byref(pPublishTime),
+        clUtils.byref(pEventId))

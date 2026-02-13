@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clUtils, clLib, libc
+from utils import clUtils, clLib, libc, clHeapApi
 from ipi import clPoolIpi
 
 import ctypes
@@ -37,7 +37,7 @@ def clBufferInitialize(pConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferInitialize(pConfig)
+    return clLib.libmw_so.clBufferInitialize(clUtils.byref(pConfig))
 
 
 def clBufferFinalize():
@@ -57,7 +57,7 @@ def clBufferCreate(pMessageHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferCreate(pMessageHandle)
+    return clLib.libmw_so.clBufferCreate(clUtils.byref(pMessageHandle))
 
 
 def clBufferCreateAndAllocate(size, pMessageHandle):
@@ -68,7 +68,7 @@ def clBufferCreateAndAllocate(size, pMessageHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferCreateAndAllocate(size, pMessageHandle)
+    return clLib.libmw_so.clBufferCreateAndAllocate(size, clUtils.byref(pMessageHandle))
 
 
 def clBufferDelete(pMessageHandle):
@@ -78,7 +78,7 @@ def clBufferDelete(pMessageHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferDelete(pMessageHandle)
+    return clLib.libmw_so.clBufferDelete(clUtils.byref(pMessageHandle))
 
 
 def clBufferClear(messageHandle):
@@ -99,7 +99,7 @@ def clBufferLengthGet(messageHandle, pMessageLength):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferLengthGet(messageHandle, pMessageLength)
+    return clLib.libmw_so.clBufferLengthGet(messageHandle, clUtils.byref(pMessageLength))
 
 
 def clBufferLengthCalc(bufferHandle):
@@ -121,7 +121,7 @@ def clBufferNBytesRead(messageHandle, pByteBuffer, pNumberOfBytesToRead):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferNBytesRead(messageHandle, pByteBuffer, pNumberOfBytesToRead)
+    return clLib.libmw_so.clBufferNBytesRead(messageHandle, clUtils.byref(pByteBuffer), clUtils.byref(pNumberOfBytesToRead))
 
 
 def clBufferNBytesWrite(messageHandle, pByteBuffer, numberOfBytesToWrite):
@@ -133,7 +133,7 @@ def clBufferNBytesWrite(messageHandle, pByteBuffer, numberOfBytesToWrite):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferNBytesWrite(messageHandle, pByteBuffer, numberOfBytesToWrite)
+    return clLib.libmw_so.clBufferNBytesWrite(messageHandle, clUtils.byref(pByteBuffer), numberOfBytesToWrite)
 
 
 def clBufferChecksum16Compute(messageHandle, startOffset, length, pChecksum):
@@ -146,7 +146,7 @@ def clBufferChecksum16Compute(messageHandle, startOffset, length, pChecksum):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferChecksum16Compute(messageHandle, startOffset, length, pChecksum)
+    return clLib.libmw_so.clBufferChecksum16Compute(messageHandle, startOffset, length, clUtils.byref(pChecksum))
 
 
 def clBufferChecksum32Compute(messageHandle, startOffset, length, pChecksum):
@@ -159,7 +159,7 @@ def clBufferChecksum32Compute(messageHandle, startOffset, length, pChecksum):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferChecksum32Compute(messageHandle, startOffset, length, pChecksum)
+    return clLib.libmw_so.clBufferChecksum32Compute(messageHandle, startOffset, length, clUtils.byref(pChecksum))
 
 
 def clBufferDataPrepend(messageHandle, pByteBuffer, numberOfBytesToWrite):
@@ -171,7 +171,7 @@ def clBufferDataPrepend(messageHandle, pByteBuffer, numberOfBytesToWrite):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferDataPrepend(messageHandle, pByteBuffer, numberOfBytesToWrite)
+    return clLib.libmw_so.clBufferDataPrepend(messageHandle, clUtils.byref(pByteBuffer), numberOfBytesToWrite)
 
 
 def clBufferConcatenate(destination, pSource):
@@ -182,7 +182,7 @@ def clBufferConcatenate(destination, pSource):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferConcatenate(destination, pSource)
+    return clLib.libmw_so.clBufferConcatenate(destination, clUtils.byref(pSource))
 
 
 def clBufferReadOffsetGet(messageHandle, pReadOffset):
@@ -193,7 +193,7 @@ def clBufferReadOffsetGet(messageHandle, pReadOffset):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferReadOffsetGet(messageHandle, pReadOffset)
+    return clLib.libmw_so.clBufferReadOffsetGet(messageHandle, clUtils.byref(pReadOffset))
 
 
 def clBufferWriteOffsetGet(messageHandle, pWriteOffset):
@@ -204,7 +204,7 @@ def clBufferWriteOffsetGet(messageHandle, pWriteOffset):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferWriteOffsetGet(messageHandle, pWriteOffset)
+    return clLib.libmw_so.clBufferWriteOffsetGet(messageHandle, clUtils.byref(pWriteOffset))
 
 
 def clBufferReadOffsetSet(messageHandle, newReadOffset, seekType):
@@ -274,7 +274,7 @@ def clBufferDuplicate(messageHandle, pDuplicatedMessage):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferDuplicate(messageHandle, pDuplicatedMessage)
+    return clLib.libmw_so.clBufferDuplicate(messageHandle, clUtils.byref(pDuplicatedMessage))
 
 
 def clBufferClone(source, pClone):
@@ -285,7 +285,7 @@ def clBufferClone(source, pClone):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferClone(source, pClone)
+    return clLib.libmw_so.clBufferClone(source, clUtils.byref(pClone))
 
 
 def clBufferAppendHeap(source, buffer, size):
@@ -297,7 +297,7 @@ def clBufferAppendHeap(source, buffer, size):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferAppendHeap(source, buffer, size)
+    return clLib.libmw_so.clBufferAppendHeap(source, clUtils.byref(buffer), size)
 
 
 def clBufferFlatten(messageHandle, ppFlattenBuffer):
@@ -308,7 +308,7 @@ def clBufferFlatten(messageHandle, ppFlattenBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferFlatten(messageHandle, ppFlattenBuffer)
+    return clLib.libmw_so.clBufferFlatten(messageHandle, clUtils.byref(ppFlattenBuffer))
 
 
 def clBufferUserToKernelCopy(userMessageHandle, pKernelMessageHandle):
@@ -319,7 +319,7 @@ def clBufferUserToKernelCopy(userMessageHandle, pKernelMessageHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferUserToKernelCopy(userMessageHandle, pKernelMessageHandle)
+    return clLib.libmw_so.clBufferUserToKernelCopy(userMessageHandle, clUtils.byref(pKernelMessageHandle))
 
 
 def clBufferKernelToUserCopy(kernelMessageHandle, userMessageHandle):
@@ -340,7 +340,7 @@ def clBufferShrink(pShrinkOptions):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferShrink(pShrinkOptions)
+    return clLib.libmw_so.clBufferShrink(clUtils.byref(pShrinkOptions))
 
 
 def clDbgBufferPrint(buffer):
@@ -360,7 +360,7 @@ def clBufferStatsGet(pBufferStats):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferStatsGet(pBufferStats)
+    return clLib.libmw_so.clBufferStatsGet(clUtils.byref(pBufferStats))
 
 
 def clBufferPoolStatsGet(numPools, pPoolSize, pBufferPoolStats):
@@ -372,7 +372,7 @@ def clBufferPoolStatsGet(numPools, pPoolSize, pBufferPoolStats):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferPoolStatsGet(numPools, pPoolSize, pBufferPoolStats)
+    return clLib.libmw_so.clBufferPoolStatsGet(numPools, clUtils.byref(pPoolSize), clUtils.byref(pBufferPoolStats))
 
 
 def clBufferVectorize(buffer, ppIOVector, pNumVectors):
@@ -384,5 +384,10 @@ def clBufferVectorize(buffer, ppIOVector, pNumVectors):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clBufferVectorize(buffer, ppIOVector, pNumVectors)
+    temp = ctypes.POINTER(libc.iovec)()
+    rc = clLib.libmw_so.clBufferVectorize(buffer, clUtils.byref(temp), clUtils.byref(pNumVectors))
+    if temp:
+        ctypes.memmove(ctypes.byref(ppIOVector), temp, ctypes.sizeof(libc.iovec))
+        clHeapApi.clHeapFree(temp)
+    return rc
 

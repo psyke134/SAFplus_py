@@ -57,7 +57,7 @@ def clPoolCreate(pHandle, flags, pPoolConfig):
     return type:
         ClRcT
     """
-    clLib.libmw_so.clPoolCreate(pHandle, flags, pPoolConfig)
+    clLib.libmw_so.clPoolCreate(pHandle, clUtils.byref(flags), clUtils.byref(pPoolConfig))
 
 def clPoolDestroy(poolHandle):
     """
@@ -77,7 +77,7 @@ def clPoolShrink(poolHandle, pShrinkOptions):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clPoolShrink(poolHandle, pShrinkOptions)
+    return clLib.libmw_so.clPoolShrink(poolHandle, clUtils.byref(pShrinkOptions))
 
 
 def clPoolAllocate(poolHandle, ppChunk, ppCookie):
@@ -89,7 +89,7 @@ def clPoolAllocate(poolHandle, ppChunk, ppCookie):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clPoolAllocate(poolHandle, ppChunk, ppCookie)
+    return clLib.libmw_so.clPoolAllocate(poolHandle, clUtils.byref(ppChunk), clUtils.byref(ppCookie))
 
 
 def clPoolFree(pChunk, pCookie):
@@ -111,7 +111,7 @@ def clPoolStatsGet(pool, pPoolStats):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clPoolStatsGet(pool, pPoolStats)
+    return clLib.libmw_so.clPoolStatsGet(pool, clUtils.byref(pPoolStats))
 
 
 def clPoolChunkSizeGet(pCookie, pSize):
@@ -122,7 +122,7 @@ def clPoolChunkSizeGet(pCookie, pSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clPoolChunkSizeGet(pCookie, pSize)
+    return clLib.libmw_so.clPoolChunkSizeGet(pCookie, clUtils.byref(pSize))
 
 
 def clPoolStartGet(pCookie, ppAddress):
@@ -133,7 +133,7 @@ def clPoolStartGet(pCookie, ppAddress):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clPoolStartGet(pCookie, ppAddress)
+    return clLib.libmw_so.clPoolStartGet(pCookie, clUtils.byref(ppAddress))
 
 
 def clPoolDestroyForce(poolHandle):

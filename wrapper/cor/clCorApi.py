@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from utils import clLib
+from utils import clLib, clUtils
 
 def clCorClientInitialize():
     """
@@ -103,7 +103,7 @@ def clCorClassAttributeUserFlagsGet(classId, attrId, flags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorClassAttributeUserFlagsGet(classId, attrId, flags)
+    return clLib.libmw_so.clCorClassAttributeUserFlagsGet(classId, attrId, clUtils.byref(flags))
 
 
 def clCorClassAttributeTypeGet(classId, attrId, pAttrType):
@@ -115,7 +115,7 @@ def clCorClassAttributeTypeGet(classId, attrId, pAttrType):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorClassAttributeTypeGet(classId, attrId, pAttrType)
+    return clLib.libmw_so.clCorClassAttributeTypeGet(classId, attrId, clUtils.byref(pAttrType))
 
 
 def clCorClassAssociationCreate(classId, attrId, associatedClass, max_val):
@@ -163,7 +163,7 @@ def clCorClassNameSet(classId, name):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorClassNameSet(classId, name)
+    return clLib.libmw_so.clCorClassNameSet(classId, clUtils.toCharP(name))
 
 
 def clCorClassNameGet(classId, name, size):
@@ -175,7 +175,7 @@ def clCorClassNameGet(classId, name, size):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorClassNameGet(classId, name, size)
+    return clLib.libmw_so.clCorClassNameGet(classId, clUtils.toCharP(name), clUtils.byref(size))
 
 
 def clCorClassTypeFromNameGet(name, classId):
@@ -186,7 +186,7 @@ def clCorClassTypeFromNameGet(name, classId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorClassTypeFromNameGet(name, classId)
+    return clLib.libmw_so.clCorClassTypeFromNameGet(clUtils.toCharP(name), clUtils.byref(classId))
 
 
 def clCorClassAttributeNameGet(classId, attrId, name, size):
@@ -199,7 +199,7 @@ def clCorClassAttributeNameGet(classId, attrId, name, size):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorClassAttributeNameGet(classId, attrId, name, size)
+    return clLib.libmw_so.clCorClassAttributeNameGet(classId, attrId, clUtils.toCharP(name), clUtils.byref(size))
 
 
 def clCorClassAttributeNameSet(classId, attrId, name):
@@ -211,7 +211,7 @@ def clCorClassAttributeNameSet(classId, attrId, name):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorClassAttributeNameSet(classId, attrId, name)
+    return clLib.libmw_so.clCorClassAttributeNameSet(classId, attrId, clUtils.toCharP(name))
 
 def clCorMOClassCreate(moPath, maxInstances):
     """
@@ -287,7 +287,7 @@ def clCorMOPathToClassIdGet(pPath, svcId, pClassId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorMOPathToClassIdGet(pPath, svcId, pClassId)
+    return clLib.libmw_so.clCorMOPathToClassIdGet(pPath, svcId, clUtils.byref(pClassId))
 
 def clCorSubTreeDelete(moId):
     """
@@ -318,7 +318,7 @@ def clCorObjectFlagsGet(moh, pFlags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectFlagsGet(moh, pFlags)
+    return clLib.libmw_so.clCorObjectFlagsGet(moh, clUtils.byref(pFlags))
 
 def clCorServiceAdd(id, mspName, comm):
     """
@@ -329,7 +329,7 @@ def clCorServiceAdd(id, mspName, comm):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorServiceAdd(id, mspName, comm)
+    return clLib.libmw_so.clCorServiceAdd(id, clUtils.toCharP(mspName), comm)
 
 
 def clCorMoIdToComponentAddressGet(moh, addr):
@@ -340,7 +340,7 @@ def clCorMoIdToComponentAddressGet(moh, addr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorMoIdToComponentAddressGet(moh, addr)
+    return clLib.libmw_so.clCorMoIdToComponentAddressGet(moh, clUtils.byref(addr))
 
 def clCorServiceRuleDisable(moId, addr):
     """
@@ -362,7 +362,7 @@ def clCorServiceRuleStatusGet(moId, addr, status):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorServiceRuleStatusGet(moId, addr, status)
+    return clLib.libmw_so.clCorServiceRuleStatusGet(moId, addr, clUtils.byref(status))
 
 
 def clCorServiceRuleDeleteAll(srvcId, addr):
@@ -399,7 +399,7 @@ def clCorObjAttrInfoGet(objH, pAttrPath, attrId, attrType, arrDataType, attrSize
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjAttrInfoGet(objH, pAttrPath, attrId, attrType, arrDataType, attrSize, userFlags)
+    return clLib.libmw_so.clCorObjAttrInfoGet(objH, pAttrPath, attrId, clUtils.byref(attrType), clUtils.byref(arrDataType), clUtils.byref(attrSize), clUtils.byref(userFlags))
 
 
 def clCorObjectCreate(txnSessionId, moId, handle):
@@ -411,7 +411,7 @@ def clCorObjectCreate(txnSessionId, moId, handle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectCreate(txnSessionId, moId, handle)
+    return clLib.libmw_so.clCorObjectCreate(clUtils.byref(txnSessionId), moId, clUtils.byref(handle))
 
 
 def clCorObjectAttributeSet(txnSessionId, pHandle, contAttrPath, attrId, index, value, size):
@@ -427,7 +427,7 @@ def clCorObjectAttributeSet(txnSessionId, pHandle, contAttrPath, attrId, index, 
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectAttributeSet(txnSessionId, pHandle, contAttrPath, attrId, index, value, size)
+    return clLib.libmw_so.clCorObjectAttributeSet(clUtils.byref(txnSessionId), pHandle, contAttrPath, attrId, index, value, size)
 
 def clCorObjectDelete(txnSessionId, handle):
     """
@@ -437,7 +437,7 @@ def clCorObjectDelete(txnSessionId, handle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectDelete(txnSessionId, handle)
+    return clLib.libmw_so.clCorObjectDelete(clUtils.byref(txnSessionId), handle)
 
 
 def clCorObjectAttributeGet(pHandle, contAttrPath, attrId, index, value, size):
@@ -451,7 +451,7 @@ def clCorObjectAttributeGet(pHandle, contAttrPath, attrId, index, value, size):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectAttributeGet(pHandle, contAttrPath, attrId, index, value, size)
+    return clLib.libmw_so.clCorObjectAttributeGet(pHandle, contAttrPath, attrId, index, value, clUtils.byref(size))
 
 
 def clCorObjectCreateAndSet(tid, pMoId, attrList, pHandle):
@@ -464,7 +464,7 @@ def clCorObjectCreateAndSet(tid, pMoId, attrList, pHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectCreateAndSet(tid, pMoId, attrList, pHandle)
+    return clLib.libmw_so.clCorObjectCreateAndSet(clUtils.byref(tid), pMoId, attrList, clUtils.byref(pHandle))
 
 
 def clCorObjectHandleGet(pMoId, objHandle):
@@ -475,7 +475,7 @@ def clCorObjectHandleGet(pMoId, objHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectHandleGet(pMoId, objHandle)
+    return clLib.libmw_so.clCorObjectHandleGet(pMoId, clUtils.byref(objHandle))
 
 
 def clCorObjectHandleFree(pObjH):
@@ -484,7 +484,7 @@ def clCorObjectHandleFree(pObjH):
         ClCorObjectHandleT* pObjH
     return type: void
     """
-    return clLib.libmw_so.clCorObjectHandleFree(pObjH)
+    return clLib.libmw_so.clCorObjectHandleFree(clUtils.byref(pObjH))
 
 
 def clCorObjectHandleSizeGet(objH, pSize):
@@ -495,7 +495,7 @@ def clCorObjectHandleSizeGet(objH, pSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectHandleSizeGet(objH, pSize)
+    return clLib.libmw_so.clCorObjectHandleSizeGet(objH, clUtils.byref(pSize))
 
 def clCorObjectWalk(moIdRoot, moIdFilter, fp, flags, cookie):
     """
@@ -521,7 +521,7 @@ def clCorObjectAttributeWalk(objH, pFilter, fp, cookie):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectAttributeWalk(objH, pFilter, fp, cookie)
+    return clLib.libmw_so.clCorObjectAttributeWalk(objH, clUtils.byref(pFilter), fp, cookie)
 
 
 def clCorObjectHandleToTypeGet(pHandle, type_out):
@@ -532,7 +532,7 @@ def clCorObjectHandleToTypeGet(pHandle, type_out):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectHandleToTypeGet(pHandle, type_out)
+    return clLib.libmw_so.clCorObjectHandleToTypeGet(pHandle, clUtils.byref(type_out))
 
 
 def clCorObjectHandleServiceSet(objH, svcId):
@@ -555,7 +555,7 @@ def clCorObjectHandleToMoIdGet(objHandle, moId, srvcId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorObjectHandleToMoIdGet(objHandle, moId, srvcId)
+    return clLib.libmw_so.clCorObjectHandleToMoIdGet(objHandle, moId, clUtils.byref(srvcId))
 
 
 def clCorMoIdToObjectHandleGet(pMoId, pObjH):
@@ -566,7 +566,7 @@ def clCorMoIdToObjectHandleGet(pMoId, pObjH):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorMoIdToObjectHandleGet(pMoId, pObjH)
+    return clLib.libmw_so.clCorMoIdToObjectHandleGet(pMoId, clUtils.byref(pObjH))
 
 def clCorMoIdToLogicalSlotGet(pMoId, logicalSlot):
     """
@@ -576,7 +576,7 @@ def clCorMoIdToLogicalSlotGet(pMoId, logicalSlot):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorMoIdToLogicalSlotGet(pMoId, logicalSlot)
+    return clLib.libmw_so.clCorMoIdToLogicalSlotGet(pMoId, clUtils.byref(logicalSlot))
 
 
 def clCorLogicalSlotToMoIdGet(logicalSlot, pMoId):
@@ -598,7 +598,7 @@ def clCorMoIdToNodeNameGet(pMoId, nodeName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorMoIdToNodeNameGet(pMoId, nodeName)
+    return clLib.libmw_so.clCorMoIdToNodeNameGet(pMoId, clUtils.byref(nodeName))
 
 
 def clCorNodeNameToMoIdGet(nodeName, pMoId):
@@ -673,7 +673,7 @@ def clCorNIPrimaryOISet(pResource):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorNIPrimaryOISet(pResource)
+    return clLib.libmw_so.clCorNIPrimaryOISet(clUtils.byref(pResource))
 
 
 def clCorPrimaryOIClear(pMoId, pCompAddr):
@@ -694,7 +694,7 @@ def clCorNIPrimaryOIClear(pResource):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorNIPrimaryOIClear(pResource)
+    return clLib.libmw_so.clCorNIPrimaryOIClear(clUtils.toCharP(pResource))
 
 
 def clCorPrimaryOIGet(pMoId, pCompAddr):
@@ -769,7 +769,7 @@ def clCorBundleAttrValueSet(txnId, jobId, pValue):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorBundleAttrValueSet(txnId, jobId, pValue)
+    return clLib.libmw_so.clCorBundleAttrValueSet(txnId, jobId, clUtils.byref(pValue))
 
 
 def clCorBundleObjectGet(bundleHandle, pObjectHandle, pAttrList):
@@ -781,7 +781,7 @@ def clCorBundleObjectGet(bundleHandle, pObjectHandle, pAttrList):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorBundleObjectGet(bundleHandle, pObjectHandle, pAttrList)
+    return clLib.libmw_so.clCorBundleObjectGet(bundleHandle, clUtils.byref(pObjectHandle), pAttrList)
 
 def clCorVersionCheck(version):
     """
@@ -790,7 +790,7 @@ def clCorVersionCheck(version):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorVersionCheck(version)
+    return clLib.libmw_so.clCorVersionCheck(clUtils.byref(version))
 
 
 def clCorNIAttrIdGet(classId, name, attrId):
@@ -802,4 +802,4 @@ def clCorNIAttrIdGet(classId, name, attrId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCorNIAttrIdGet(classId, name, attrId)
+    return clLib.libmw_so.clCorNIAttrIdGet(classId, clUtils.toCharP(name), clUtils.byref(attrId))

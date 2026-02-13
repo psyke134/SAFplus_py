@@ -28,6 +28,7 @@ def clHeapAllocate(size):
     return type:
         ClPtrT
     """
+    clLib.libmw_so.clHeapAllocate.restype = clCommon.ClPtrT
     return clLib.libmw_so.clHeapAllocate(size)
 
 
@@ -49,6 +50,7 @@ def clHeapCalloc(numChunks, chunkSize):
     return type:
         ClPtrT
     """
+    clLib.libmw_so.clHeapCalloc.restype = clCommon.ClPtrT
     return clLib.libmw_so.clHeapCalloc(numChunks, chunkSize)
 
 
@@ -59,7 +61,7 @@ def clHeapLibInitialize(pHeapConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHeapLibInitialize(pHeapConfig)
+    return clLib.libmw_so.clHeapLibInitialize(clUtils.byref(pHeapConfig))
 
 
 def clHeapLibFinalize():
@@ -100,6 +102,7 @@ def clHeapRealloc(pAddress, size):
     return type:
         ClPtrT
     """
+    clLib.libmw_so.clHeapRealloc.restype = clCommon.ClPtrT
     return clLib.libmw_so.clHeapRealloc(pAddress, size)
 
 
@@ -110,7 +113,7 @@ def clHeapShrink(pShrinkOptions):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHeapShrink(pShrinkOptions)
+    return clLib.libmw_so.clHeapShrink(clUtils.byref(pShrinkOptions))
 
 
 def clHeapModeGet(pMode):
@@ -120,7 +123,7 @@ def clHeapModeGet(pMode):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHeapModeGet(pMode)
+    return clLib.libmw_so.clHeapModeGet(clUtils.byref(pMode))
 
 
 def clHeapStatsGet(pHeapStats):
@@ -130,7 +133,7 @@ def clHeapStatsGet(pHeapStats):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHeapStatsGet(pHeapStats)
+    return clLib.libmw_so.clHeapStatsGet(clUtils.byref(pHeapStats))
 
 
 def clHeapPoolStatsGet(numPools, pPoolSize, pHeapPoolStats):
@@ -142,7 +145,7 @@ def clHeapPoolStatsGet(numPools, pPoolSize, pHeapPoolStats):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHeapPoolStatsGet(numPools, pPoolSize, pHeapPoolStats)
+    return clLib.libmw_so.clHeapPoolStatsGet(numPools, clUtils.byref(pPoolSize), clUtils.byref(pHeapPoolStats))
 
 
 def clHeapLibCustomInitialize(pHeapConfig):
@@ -152,7 +155,7 @@ def clHeapLibCustomInitialize(pHeapConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHeapLibCustomInitialize(pHeapConfig)
+    return clLib.libmw_so.clHeapLibCustomInitialize(clUtils.byref(pHeapConfig))
 
 
 def clHeapLibCustomFinalize():

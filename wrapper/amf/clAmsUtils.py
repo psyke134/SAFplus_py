@@ -22,6 +22,7 @@ def clAmsFormatMsg(fmt, *va_args):
     c_fmt = clUtils.toCharP(fmt)
     cVaArgs, argTypes = clUtils.handleVarArgs(*va_args)
     clLib.libmw_so.clLogWriteAsync.argtypes = [ctypes.c_char_p] + argTypes
+    clLib.libmw_so.clLogWriteAsync.restype = ctypes.c_char_p
     return clLib.libmw_so.clLogWriteAsync(c_fmt, *cVaArgs)
 
 def clAmsLogMsgClient(level, buffer):
@@ -30,7 +31,7 @@ def clAmsLogMsgClient(level, buffer):
         ClUint32T level
         char *buffer
     """
-    clLib.libmw_so.clAmsLogMsgClient(level, buffer)
+    clLib.libmw_so.clAmsLogMsgClient(level, clUtils.toCharP(buffer))
 
 def AMS_CHECK_BAD_CLNAME(name):
     if name.length > clCommon.CL_MAX_NAME_LENGTH:

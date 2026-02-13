@@ -21,7 +21,7 @@ def FD_ZERO(fdset):
         fdset.fds_bits[i] = 0
 
 def FD_SET(fd, fdset):
-    fdset.fds_bits[fd // NFDBITS] |= (1  << (fd % NFDBITS))
+    fdset.fds_bits[fd.value // NFDBITS] |= (1  << (fd.value % NFDBITS))
 
 def errno():
     return ctypes.get_errno()
@@ -38,7 +38,9 @@ def strlen(cArray):
     pTemp = ctypes.cast(cArray, ctypes.c_char_p)
     return libc.strlen(pTemp)
 
-select = libc.select
+def select(nfds, readfds, writefds, exceptfds, timeout):
+    return libc.select(nfds, clUtils.byref(readfds), clUtils.byref(writefds), clUtils.byref(exceptfds), clUtils.byref(timeout))
+
 getpid = libc.getpid
 memcpy = libc.memcpy
 

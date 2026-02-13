@@ -1,7 +1,7 @@
 import sys
 sys.path.append("..")
 
-from utils import clLib
+from utils import clLib, clUtils
 
 def clCksm16bitCompute(pData, length, pCheckSum):
     """
@@ -12,7 +12,7 @@ def clCksm16bitCompute(pData, length, pCheckSum):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCksm16bitCompute(pData, length, pCheckSum)
+    return clLib.libmw_so.clCksm16bitCompute(pData, length, clUtils.byref(pCheckSum))
 
 def clCksm32bitCompute(pData, length, pCheckSum):
     """
@@ -23,7 +23,7 @@ def clCksm32bitCompute(pData, length, pCheckSum):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCksm32bitCompute(pData, length, pCheckSum)
+    return clLib.libmw_so.clCksm32bitCompute(pData, length, clUtils.byref(pCheckSum))
 
 def clCrc32bitCompute(buf, nr, cval, clen):
     """
@@ -35,4 +35,4 @@ def clCrc32bitCompute(buf, nr, cval, clen):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCrc32bitCompute(buf, nr, cval, clen)
+    return clLib.libmw_so.clCrc32bitCompute(buf, nr, clUtils.byref(cval), clUtils.byref(clen))

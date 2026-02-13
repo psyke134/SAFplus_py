@@ -1,7 +1,9 @@
 import sys
 sys.path.append("..")
 
-from utils import libc, clLib
+from utils import libc, clLib, clUtils, clHeapApi
+from amf import clAmsEntities
+from common import clCommonErrors
 
 import ctypes
 
@@ -25,7 +27,7 @@ def clAmsMgmtInitialize(amsHandle, amsMgmtCallbacks, version):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtInitialize(amsHandle, amsMgmtCallbacks, version)
+    return clLib.libmw_so.clAmsMgmtInitialize(clUtils.byref(amsHandle), clUtils.byref(amsMgmtCallbacks), clUtils.byref(version))
 
 def clAmsMgmtFinalize(amsHandle):
     """
@@ -44,7 +46,7 @@ def clAmsMgmtEntityLockAssignment(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityLockAssignment(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityLockAssignment(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityLockAssignmentExtended(amsHandle, entity, retry):
     """
@@ -55,7 +57,7 @@ def clAmsMgmtEntityLockAssignmentExtended(amsHandle, entity, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityLockAssignmentExtended(amsHandle, entity, retry)
+    return clLib.libmw_so.clAmsMgmtEntityLockAssignmentExtended(amsHandle, entity, clUtils.byref(retry))
 
 def clAmsMgmtEntityLockInstantiation(amsHandle, entity):
     """
@@ -65,7 +67,7 @@ def clAmsMgmtEntityLockInstantiation(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityLockInstantiation(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityLockInstantiation(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityLockInstantiationExtended(amsHandle, entity, retry):
     """
@@ -76,7 +78,7 @@ def clAmsMgmtEntityLockInstantiationExtended(amsHandle, entity, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityLockInstantiationExtended(amsHandle, entity, retry)
+    return clLib.libmw_so.clAmsMgmtEntityLockInstantiationExtended(amsHandle, entity, clUtils.byref(retry))
 
 def clAmsMgmtEntityForceLockInstantiation(amsHandle, entity):
     """
@@ -86,7 +88,7 @@ def clAmsMgmtEntityForceLockInstantiation(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityForceLockInstantiation(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityForceLockInstantiation(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityForceLockInstantiationExtended(amsHandle, entity, retry):
     """
@@ -97,7 +99,7 @@ def clAmsMgmtEntityForceLockInstantiationExtended(amsHandle, entity, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityForceLockInstantiationExtended(amsHandle, entity, retry)
+    return clLib.libmw_so.clAmsMgmtEntityForceLockInstantiationExtended(amsHandle, clUtils.byref(entity), retry)
 
 def clAmsMgmtEntityUnlock(amsHandle, entity):
     """
@@ -107,7 +109,7 @@ def clAmsMgmtEntityUnlock(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityUnlock(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityUnlock(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityUnlockExtended(amsHandle, entity, retry):
     """
@@ -118,7 +120,7 @@ def clAmsMgmtEntityUnlockExtended(amsHandle, entity, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityUnlockExtended(amsHandle, entity, retry)
+    return clLib.libmw_so.clAmsMgmtEntityUnlockExtended(amsHandle, entity, clUtils.byref(retry))
 
 def clAmsMgmtEntityShutdown(amsHandle, entity):
     """
@@ -128,7 +130,7 @@ def clAmsMgmtEntityShutdown(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityShutdown(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityShutdown(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityShutdownExtended(amsHandle, entity, retry):
     """
@@ -139,7 +141,7 @@ def clAmsMgmtEntityShutdownExtended(amsHandle, entity, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityShutdownExtended(amsHandle, entity, retry)
+    return clLib.libmw_so.clAmsMgmtEntityShutdownExtended(amsHandle, clUtils.byref(entity), retry)
 
 def clAmsMgmtEntityRestart(amsHandle, entity):
     """
@@ -149,7 +151,7 @@ def clAmsMgmtEntityRestart(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityRestart(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityRestart(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityRestartExtended(amsHandle, entity, retry):
     """
@@ -160,7 +162,7 @@ def clAmsMgmtEntityRestartExtended(amsHandle, entity, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityRestartExtended(amsHandle, entity, retry)
+    return clLib.libmw_so.clAmsMgmtEntityRestartExtended(amsHandle, clUtils.byref(entity), retry)
 
 def clAmsMgmtEntityRepaired(amsHandle, entity):
     """
@@ -170,7 +172,7 @@ def clAmsMgmtEntityRepaired(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityRepaired(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityRepaired(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityRepairedExtended(amsHandle, entity, retry):
     """
@@ -181,7 +183,7 @@ def clAmsMgmtEntityRepairedExtended(amsHandle, entity, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityRepairedExtended(amsHandle, entity, retry)
+    return clLib.libmw_so.clAmsMgmtEntityRepairedExtended(amsHandle, clUtils.byref(entity), retry)
 
 def clAmsMgmtSISwap(amsHandle, si):
     """
@@ -191,7 +193,7 @@ def clAmsMgmtSISwap(amsHandle, si):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtSISwap(amsHandle, si)
+    return clLib.libmw_so.clAmsMgmtSISwap(amsHandle, clUtils.toCharP(si))
 
 def clAmsMgmtSISwapExtended(amsHandle, si, retry):
     """
@@ -202,7 +204,7 @@ def clAmsMgmtSISwapExtended(amsHandle, si, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtSISwapExtended(amsHandle, si, retry)
+    return clLib.libmw_so.clAmsMgmtSISwapExtended(amsHandle, clUtils.toCharP(si), retry)
 
 def clAmsMgmtSGAdjust(amsHandle, sg, enable):
     """
@@ -213,7 +215,7 @@ def clAmsMgmtSGAdjust(amsHandle, sg, enable):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtSGAdjust(amsHandle, sg, enable)
+    return clLib.libmw_so.clAmsMgmtSGAdjust(amsHandle, clUtils.toCharP(sg), enable)
 
 def clAmsMgmtSGAdjustExtended(amsHandle, sg, enable, retry):
     """
@@ -225,7 +227,7 @@ def clAmsMgmtSGAdjustExtended(amsHandle, sg, enable, retry):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtSGAdjustExtended(amsHandle, sg, enable, retry)
+    return clLib.libmw_so.clAmsMgmtSGAdjustExtended(amsHandle, clUtils.toCharP(sg), enable, retry)
 
 def clAmsMgmtDebugEnable(amsHandle, entity, debugFlags):
     """
@@ -236,7 +238,7 @@ def clAmsMgmtDebugEnable(amsHandle, entity, debugFlags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDebugEnable(amsHandle, entity, debugFlags)
+    return clLib.libmw_so.clAmsMgmtDebugEnable(amsHandle, clUtils.byref(entity), debugFlags)
 
 def clAmsMgmtDebugDisable(amsHandle, entity, debugFlags):
     """
@@ -247,7 +249,7 @@ def clAmsMgmtDebugDisable(amsHandle, entity, debugFlags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDebugDisable(amsHandle, entity, debugFlags)
+    return clLib.libmw_so.clAmsMgmtDebugDisable(amsHandle, clUtils.byref(entity), debugFlags)
 
 def clAmsMgmtDebugGet(amsHandle, entity, debugFlags):
     """
@@ -258,7 +260,7 @@ def clAmsMgmtDebugGet(amsHandle, entity, debugFlags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDebugGet(amsHandle, entity, debugFlags)
+    return clLib.libmw_so.clAmsMgmtDebugGet(amsHandle, clUtils.byref(entity), clUtils.byref(debugFlags))
 
 def clAmsMgmtDebugEnableLogToConsole(amsHandle):
     """
@@ -287,7 +289,7 @@ def clAmsMgmtEntitySetAlphaFactor(amsHandle, entity, alphaFactor):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntitySetAlphaFactor(amsHandle, entity, alphaFactor)
+    return clLib.libmw_so.clAmsMgmtEntitySetAlphaFactor(amsHandle, clUtils.byref(entity), alphaFactor)
 
 def clAmsMgmtEntitySetBetaFactor(amsHandle, entity, betaFactor):
     """
@@ -298,7 +300,7 @@ def clAmsMgmtEntitySetBetaFactor(amsHandle, entity, betaFactor):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntitySetBetaFactor(amsHandle, entity, betaFactor)
+    return clLib.libmw_so.clAmsMgmtEntitySetBetaFactor(amsHandle, clUtils.byref(entity), betaFactor)
 
 def clAmsMgmtCCBInitialize(amlHandle, ccbHandle):
     """
@@ -308,7 +310,7 @@ def clAmsMgmtCCBInitialize(amlHandle, ccbHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBInitialize(amlHandle, ccbHandle)
+    return clLib.libmw_so.clAmsMgmtCCBInitialize(amlHandle, clUtils.byref(ccbHandle))
 
 def clAmsMgmtCCBFinalize(ccbHandle):
     """
@@ -336,7 +338,7 @@ def clAmsMgmtCCBEntityCreate(handle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBEntityCreate(handle, entity)
+    return clLib.libmw_so.clAmsMgmtCCBEntityCreate(handle, clUtils.byref(entity))
 
 def clAmsMgmtCCBEntityDelete(handle, entity):
     """
@@ -346,7 +348,7 @@ def clAmsMgmtCCBEntityDelete(handle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBEntityDelete(handle, entity)
+    return clLib.libmw_so.clAmsMgmtCCBEntityDelete(handle, clUtils.byref(entity))
 
 def clAmsMgmtCCBEntitySetConfig(handle, entityConfig, bitMask):
     """
@@ -357,7 +359,7 @@ def clAmsMgmtCCBEntitySetConfig(handle, entityConfig, bitMask):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBEntitySetConfig(handle, entityConfig, bitMask)
+    return clLib.libmw_so.clAmsMgmtCCBEntitySetConfig(handle, clUtils.byref(entityConfig), bitMask)
 
 def clAmsMgmtCCBCSISetNVP(handle, csiName, nvp):
     """
@@ -368,7 +370,7 @@ def clAmsMgmtCCBCSISetNVP(handle, csiName, nvp):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBCSISetNVP(handle, csiName, nvp)
+    return clLib.libmw_so.clAmsMgmtCCBCSISetNVP(handle, clUtils.byref(csiName), clUtils.byref(nvp))
 
 def clAmsMgmtCCBCSIDeleteNVP(handle, csiName, nvp):
     """
@@ -379,7 +381,7 @@ def clAmsMgmtCCBCSIDeleteNVP(handle, csiName, nvp):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBCSIDeleteNVP(handle, csiName, nvp)
+    return clLib.libmw_so.clAmsMgmtCCBCSIDeleteNVP(handle, clUtils.byref(csiName), clUtils.byref(nvp))
 
 def clAmsMgmtCCBSetNodeDependency(handle, nodeName, dependencyNodeName):
     """
@@ -390,7 +392,7 @@ def clAmsMgmtCCBSetNodeDependency(handle, nodeName, dependencyNodeName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetNodeDependency(handle, nodeName, dependencyNodeName)
+    return clLib.libmw_so.clAmsMgmtCCBSetNodeDependency(handle, clUtils.byref(nodeName), clUtils.byref(dependencyNodeName))
 
 def clAmsMgmtCCBDeleteNodeDependency(handle, nodeName, dependencyNodeName):
     """
@@ -401,7 +403,7 @@ def clAmsMgmtCCBDeleteNodeDependency(handle, nodeName, dependencyNodeName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteNodeDependency(handle, nodeName, dependencyNodeName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteNodeDependency(handle, clUtils.byref(nodeName), clUtils.byref(dependencyNodeName))
 
 def clAmsMgmtCCBSetNodeSUList(handle, nodeName, suName):
     """
@@ -412,7 +414,7 @@ def clAmsMgmtCCBSetNodeSUList(handle, nodeName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetNodeSUList(handle, nodeName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBSetNodeSUList(handle, clUtils.byref(nodeName), clUtils.byref(suName))
 
 def clAmsMgmtCCBDeleteNodeSUList(handle, nodeName, suName):
     """
@@ -423,7 +425,7 @@ def clAmsMgmtCCBDeleteNodeSUList(handle, nodeName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteNodeSUList(handle, nodeName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteNodeSUList(handle, clUtils.byref(nodeName), clUtils.byref(suName))
 
 def clAmsMgmtCCBSetSGSUList(handle, sgName, suName):
     """
@@ -434,7 +436,7 @@ def clAmsMgmtCCBSetSGSUList(handle, sgName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetSGSUList(handle, sgName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBSetSGSUList(handle, clUtils.byref(sgName), clUtils.byref(suName))
 
 def clAmsMgmtCCBDeleteSGSUList(handle, sgName, suName):
     """
@@ -445,7 +447,7 @@ def clAmsMgmtCCBDeleteSGSUList(handle, sgName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteSGSUList(handle, sgName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteSGSUList(handle, clUtils.byref(sgName), clUtils.byref(suName))
 
 def clAmsMgmtCCBSetSGSIList(handle, sgName, siName):
     """
@@ -456,7 +458,7 @@ def clAmsMgmtCCBSetSGSIList(handle, sgName, siName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetSGSIList(handle, sgName, siName)
+    return clLib.libmw_so.clAmsMgmtCCBSetSGSIList(handle, clUtils.byref(sgName), clUtils.byref(siName))
 
 def clAmsMgmtCCBDeleteSGSIList(handle, sgName, siName):
     """
@@ -467,7 +469,7 @@ def clAmsMgmtCCBDeleteSGSIList(handle, sgName, siName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteSGSIList(handle, sgName, siName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteSGSIList(handle, clUtils.byref(sgName), clUtils.byref(siName))
 
 def clAmsMgmtCCBSetSUCompList(handle, suName, compName):
     """
@@ -478,7 +480,7 @@ def clAmsMgmtCCBSetSUCompList(handle, suName, compName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetSUCompList(handle, suName, compName)
+    return clLib.libmw_so.clAmsMgmtCCBSetSUCompList(handle, clUtils.byref(suName), clUtils.byref(compName))
 
 def clAmsMgmtCCBDeleteSUCompList(handle, suName, compName):
     """
@@ -489,7 +491,7 @@ def clAmsMgmtCCBDeleteSUCompList(handle, suName, compName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteSUCompList(handle, suName, compName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteSUCompList(handle, clUtils.byref(suName), clUtils.byref(compName))
 
 def clAmsMgmtCCBSetSISURankList(handle, siName, suName):
     """
@@ -500,7 +502,7 @@ def clAmsMgmtCCBSetSISURankList(handle, siName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetSISURankList(handle, siName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBSetSISURankList(handle, clUtils.byref(siName), clUtils.byref(suName))
 
 def clAmsMgmtCCBDeleteSISURankList(handle, siName, suName):
     """
@@ -511,7 +513,7 @@ def clAmsMgmtCCBDeleteSISURankList(handle, siName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteSISURankList(handle, siName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteSISURankList(handle, clUtils.byref(siName), clUtils.byref(suName))
 
 def clAmsMgmtCCBSetSIDependency(handle, siName, dependencySIName):
     """
@@ -522,7 +524,7 @@ def clAmsMgmtCCBSetSIDependency(handle, siName, dependencySIName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetSIDependency(handle, siName, dependencySIName)
+    return clLib.libmw_so.clAmsMgmtCCBSetSIDependency(handle, clUtils.byref(siName), clUtils.byref(dependencySIName))
 
 def clAmsMgmtCCBDeleteSIDependency(handle, siName, dependencySIName):
     """
@@ -533,7 +535,7 @@ def clAmsMgmtCCBDeleteSIDependency(handle, siName, dependencySIName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteSIDependency(handle, siName, dependencySIName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteSIDependency(handle, clUtils.byref(siName), clUtils.byref(dependencySIName))
 
 def clAmsMgmtCCBSetCSIDependency(handle, csiName, dependencyCSIName):
     """
@@ -544,7 +546,7 @@ def clAmsMgmtCCBSetCSIDependency(handle, csiName, dependencyCSIName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetCSIDependency(handle, csiName, dependencyCSIName)
+    return clLib.libmw_so.clAmsMgmtCCBSetCSIDependency(handle, clUtils.byref(csiName), clUtils.byref(dependencyCSIName))
 
 def clAmsMgmtCCBDeleteCSIDependency(handle, csiName, dependencyCSIName):
     """
@@ -555,7 +557,7 @@ def clAmsMgmtCCBDeleteCSIDependency(handle, csiName, dependencyCSIName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteCSIDependency(handle, csiName, dependencyCSIName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteCSIDependency(handle, clUtils.byref(csiName), clUtils.byref(dependencyCSIName))
 
 def clAmsMgmtCCBSetSICSIList(handle, siName, csiName):
     """
@@ -566,7 +568,7 @@ def clAmsMgmtCCBSetSICSIList(handle, siName, csiName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBSetSICSIList(handle, siName, csiName)
+    return clLib.libmw_so.clAmsMgmtCCBSetSICSIList(handle, clUtils.byref(siName), clUtils.byref(csiName))
 
 def clAmsMgmtCCBDeleteSICSIList(handle, siName, csiName):
     """
@@ -577,7 +579,7 @@ def clAmsMgmtCCBDeleteSICSIList(handle, siName, csiName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBDeleteSICSIList(handle, siName, csiName)
+    return clLib.libmw_so.clAmsMgmtCCBDeleteSICSIList(handle, clUtils.byref(siName), clUtils.byref(csiName))
 
 def clAmsMgmtEntityGet(handle, entityRef):
     """
@@ -587,7 +589,7 @@ def clAmsMgmtEntityGet(handle, entityRef):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityGet(handle, entityRef)
+    return clLib.libmw_so.clAmsMgmtEntityGet(handle, clUtils.byref(entityRef))
 
 def clAmsMgmtEntityGetConfig(handle, entity, entityConfig):
     """
@@ -598,7 +600,25 @@ def clAmsMgmtEntityGetConfig(handle, entity, entityConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityGetConfig(handle, entity, entityConfig)
+    typeClassLut = {
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_NODE: clAmsEntities.ClAmsNodeConfigT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_SG: clAmsEntities.ClAmsSGConfigT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_SU: clAmsEntities.ClAmsSUConfigT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_SI: clAmsEntities.ClAmsSIConfigT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_CSI: clAmsEntities.ClAmsCSIConfigT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_COMP: clAmsEntities.ClAmsCompConfigT
+    }
+
+    expectedType = typeClassLut[entity.type.value]
+    if not isinstance(entityConfig, expectedType):
+        return clCommonErrors.CL_ERR_INVALID_PARAMETER
+
+    pTemp = ctypes.POINTER(clAmsEntities.ClAmsEntityConfigT)()
+    rc = clLib.libmw_so.clAmsMgmtEntityGetConfig(handle, clUtils.byref(entity), clUtils.byref(pTemp))
+    if pTemp:
+        ctypes.memmove(ctypes.byref(entityConfig), pTemp, ctypes.sizeof(expectedType))
+        clHeapApi.clHeapFree(pTemp)
+    return rc
 
 def clAmsMgmtNodeGetConfig(handle, entName):
     """
@@ -608,7 +628,8 @@ def clAmsMgmtNodeGetConfig(handle, entName):
     return type:
         ClAmsNodeConfigT*
     """
-    return clLib.libmw_so.clAmsMgmtNodeGetConfig(handle, entName)
+    clLib.libmw_so.clAmsMgmtNodeGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsNodeConfigT)
+    return clLib.libmw_so.clAmsMgmtNodeGetConfig(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtServiceGroupGetConfig(handle, entName):
     """
@@ -618,7 +639,8 @@ def clAmsMgmtServiceGroupGetConfig(handle, entName):
     return type:
         ClAmsSGConfigT*
     """
-    return clLib.libmw_so.clAmsMgmtServiceGroupGetConfig(handle, entName)
+    clLib.libmw_so.clAmsMgmtServiceGroupGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsSGConfigT)
+    return clLib.libmw_so.clAmsMgmtServiceGroupGetConfig(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtServiceUnitGetConfig(handle, entName):
     """
@@ -628,7 +650,8 @@ def clAmsMgmtServiceUnitGetConfig(handle, entName):
     return type:
         ClAmsSUConfigT*
     """
-    return clLib.libmw_so.clAmsMgmtServiceUnitGetConfig(handle, entName)
+    clLib.libmw_so.clAmsMgmtServiceUnitGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsSUConfigT)
+    return clLib.libmw_so.clAmsMgmtServiceUnitGetConfig(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtServiceInstanceGetConfig(handle, entName):
     """
@@ -638,7 +661,8 @@ def clAmsMgmtServiceInstanceGetConfig(handle, entName):
     return type:
         ClAmsSIConfigT*
     """
-    return clLib.libmw_so.clAmsMgmtServiceInstanceGetConfig(handle, entName)
+    clLib.libmw_so.clAmsMgmtServiceInstanceGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsSIConfigT)
+    return clLib.libmw_so.clAmsMgmtServiceInstanceGetConfig(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtCompServiceInstanceGetConfig(handle, entName):
     """
@@ -648,7 +672,8 @@ def clAmsMgmtCompServiceInstanceGetConfig(handle, entName):
     return type:
         ClAmsCSIConfigT*
     """
-    return clLib.libmw_so.clAmsMgmtCompServiceInstanceGetConfig(handle, entName)
+    clLib.libmw_so.clAmsMgmtCompServiceInstanceGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsCSIConfigT)
+    return clLib.libmw_so.clAmsMgmtCompServiceInstanceGetConfig(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtCompGetConfig(handle, entName):
     """
@@ -658,7 +683,8 @@ def clAmsMgmtCompGetConfig(handle, entName):
     return type:
         ClAmsCompConfigT*
     """
-    return clLib.libmw_so.clAmsMgmtCompGetConfig(handle, entName)
+    clLib.libmw_so.clAmsMgmtCompGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsCompConfigT)
+    return clLib.libmw_so.clAmsMgmtCompGetConfig(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtEntityGetStatus(handle, entity, entityStatus):
     """
@@ -669,7 +695,12 @@ def clAmsMgmtEntityGetStatus(handle, entity, entityStatus):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityGetStatus(handle, entity, entityStatus)
+    pTemp = ctypes.POINTER(clAmsEntities.ClAmsEntityStatusT)()
+    rc = clLib.libmw_so.clAmsMgmtEntityGetStatus(handle, clUtils.byref(entity), clUtils.byref(pTemp))
+    if pTemp:
+        ctypes.memmove(ctypes.byref(entityStatus), pTemp, ctypes.sizeof(clAmsEntities.ClAmsEntityStatusT))
+        clHeapApi.clHeapFree(pTemp)
+    return rc
 
 def clAmsMgmtNodeGetStatus(handle, entName):
     """
@@ -679,7 +710,8 @@ def clAmsMgmtNodeGetStatus(handle, entName):
     return type:
         ClAmsNodeStatusT*
     """
-    return clLib.libmw_so.clAmsMgmtNodeGetStatus(handle, entName)
+    clLib.libmw_so.clAmsMgmtNodeGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsNodeStatusT)
+    return clLib.libmw_so.clAmsMgmtNodeGetStatus(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtServiceGroupGetStatus(handle, entName):
     """
@@ -689,7 +721,8 @@ def clAmsMgmtServiceGroupGetStatus(handle, entName):
     return type:
         ClAmsSGStatusT*
     """
-    return clLib.libmw_so.clAmsMgmtServiceGroupGetStatus(handle, entName)
+    clLib.libmw_so.clAmsMgmtServiceGroupGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsSGStatusT)
+    return clLib.libmw_so.clAmsMgmtServiceGroupGetStatus(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtServiceUnitGetStatus(handle, entName):
     """
@@ -699,7 +732,8 @@ def clAmsMgmtServiceUnitGetStatus(handle, entName):
     return type:
         ClAmsSUStatusT*
     """
-    return clLib.libmw_so.clAmsMgmtServiceUnitGetStatus(handle, entName)
+    clLib.libmw_so.clAmsMgmtServiceUnitGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsSUStatusT)
+    return clLib.libmw_so.clAmsMgmtServiceUnitGetStatus(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtServiceInstanceGetStatus(handle, entName):
     """
@@ -709,7 +743,8 @@ def clAmsMgmtServiceInstanceGetStatus(handle, entName):
     return type:
         ClAmsSIStatusT*
     """
-    return clLib.libmw_so.clAmsMgmtServiceInstanceGetStatus(handle, entName)
+    clLib.libmw_so.clAmsMgmtServiceInstanceGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsSIStatusT)
+    return clLib.libmw_so.clAmsMgmtServiceInstanceGetStatus(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtCompServiceInstanceGetStatus(handle, entName):
     """
@@ -719,7 +754,8 @@ def clAmsMgmtCompServiceInstanceGetStatus(handle, entName):
     return type:
         ClAmsCSIStatusT*
     """
-    return clLib.libmw_so.clAmsMgmtCompServiceInstanceGetStatus(handle, entName)
+    clLib.libmw_so.clAmsMgmtCompServiceInstanceGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsCSIStatusT)
+    return clLib.libmw_so.clAmsMgmtCompServiceInstanceGetStatus(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtCompGetStatus(handle, entName):
     """
@@ -729,7 +765,8 @@ def clAmsMgmtCompGetStatus(handle, entName):
     return type:
         ClAmsCompStatusT*
     """
-    return clLib.libmw_so.clAmsMgmtCompGetStatus(handle, entName)
+    clLib.libmw_so.clAmsMgmtCompGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsCompStatusT)
+    return clLib.libmw_so.clAmsMgmtCompGetStatus(handle, clUtils.toCharP(entName))
 
 def clAmsMgmtGetList(handle, listName, buffer):
     """
@@ -740,7 +777,7 @@ def clAmsMgmtGetList(handle, listName, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetList(handle, listName, buffer)
+    return clLib.libmw_so.clAmsMgmtGetList(handle, listName, clUtils.byref(buffer))
 
 def clAmsMgmtGetCSINVPList(handle, csi, nvpBuffer):
     """
@@ -751,7 +788,7 @@ def clAmsMgmtGetCSINVPList(handle, csi, nvpBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetCSINVPList(handle, csi, nvpBuffer)
+    return clLib.libmw_so.clAmsMgmtGetCSINVPList(handle, clUtils.byref(csi), clUtils.byref(nvpBuffer))
 
 def clAmsMgmtGetCSIDependenciesList(handle, csi, dependenciesCSIBuffer):
     """
@@ -762,7 +799,7 @@ def clAmsMgmtGetCSIDependenciesList(handle, csi, dependenciesCSIBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetCSIDependenciesList(handle, csi, dependenciesCSIBuffer)
+    return clLib.libmw_so.clAmsMgmtGetCSIDependenciesList(handle, clUtils.byref(csi), clUtils.byref(dependenciesCSIBuffer))
 
 def clAmsMgmtGetSGList(handle, entityBuffer):
     """
@@ -772,7 +809,7 @@ def clAmsMgmtGetSGList(handle, entityBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGList(handle, entityBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGList(handle, clUtils.byref(entityBuffer))
 
 def clAmsMgmtGetSIList(handle, entityBuffer):
     """
@@ -782,7 +819,7 @@ def clAmsMgmtGetSIList(handle, entityBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSIList(handle, entityBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSIList(handle, clUtils.byref(entityBuffer))
 
 def clAmsMgmtGetCSIList(handle, entityBuffer):
     """
@@ -792,7 +829,7 @@ def clAmsMgmtGetCSIList(handle, entityBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetCSIList(handle, entityBuffer)
+    return clLib.libmw_so.clAmsMgmtGetCSIList(handle, clUtils.byref(entityBuffer))
 
 def clAmsMgmtGetNodeList(handle, entityBuffer):
     """
@@ -802,7 +839,7 @@ def clAmsMgmtGetNodeList(handle, entityBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetNodeList(handle, entityBuffer)
+    return clLib.libmw_so.clAmsMgmtGetNodeList(handle, clUtils.byref(entityBuffer))
 
 def clAmsMgmtGetSUList(handle, entityBuffer):
     """
@@ -812,7 +849,7 @@ def clAmsMgmtGetSUList(handle, entityBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSUList(handle, entityBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSUList(handle, clUtils.byref(entityBuffer))
 
 def clAmsMgmtGetCompList(handle, entityBuffer):
     """
@@ -822,7 +859,7 @@ def clAmsMgmtGetCompList(handle, entityBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetCompList(handle, entityBuffer)
+    return clLib.libmw_so.clAmsMgmtGetCompList(handle, clUtils.byref(entityBuffer))
 
 def clAmsMgmtGetNodeDependenciesList(handle, node, dependencyBuffer):
     """
@@ -833,7 +870,7 @@ def clAmsMgmtGetNodeDependenciesList(handle, node, dependencyBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetNodeDependenciesList(handle, node, dependencyBuffer)
+    return clLib.libmw_so.clAmsMgmtGetNodeDependenciesList(handle, clUtils.byref(node), clUtils.byref(dependencyBuffer))
 
 def clAmsMgmtGetNodeSUList(handle, node, suBuffer):
     """
@@ -844,7 +881,7 @@ def clAmsMgmtGetNodeSUList(handle, node, suBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetNodeSUList(handle, node, suBuffer)
+    return clLib.libmw_so.clAmsMgmtGetNodeSUList(handle, clUtils.byref(node), clUtils.byref(suBuffer))
 
 def clAmsMgmtGetSGSUList(handle, sg, suBuffer):
     """
@@ -855,7 +892,7 @@ def clAmsMgmtGetSGSUList(handle, sg, suBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGSUList(handle, sg, suBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGSUList(handle, clUtils.byref(sg), clUtils.byref(suBuffer))
 
 def clAmsMgmtGetSGSIList(handle, sg, siBuffer):
     """
@@ -866,7 +903,7 @@ def clAmsMgmtGetSGSIList(handle, sg, siBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGSIList(handle, sg, siBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGSIList(handle, clUtils.byref(sg), clUtils.byref(siBuffer))
 
 def clAmsMgmtGetSUCompList(handle, su, compBuffer):
     """
@@ -877,7 +914,7 @@ def clAmsMgmtGetSUCompList(handle, su, compBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSUCompList(handle, su, compBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSUCompList(handle, clUtils.byref(su), clUtils.byref(compBuffer))
 
 def clAmsMgmtGetSISURankList(handle, si, suBuffer):
     """
@@ -888,7 +925,7 @@ def clAmsMgmtGetSISURankList(handle, si, suBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSISURankList(handle, si, suBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSISURankList(handle, clUtils.byref(si), clUtils.byref(suBuffer))
 
 def clAmsMgmtGetSIDependenciesList(handle, si, dependenciesSIBuffer):
     """
@@ -899,7 +936,7 @@ def clAmsMgmtGetSIDependenciesList(handle, si, dependenciesSIBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSIDependenciesList(handle, si, dependenciesSIBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSIDependenciesList(handle, clUtils.byref(si), clUtils.byref(dependenciesSIBuffer))
 
 def clAmsMgmtGetSICSIList(handle, si, csiBuffer):
     """
@@ -910,7 +947,7 @@ def clAmsMgmtGetSICSIList(handle, si, csiBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSICSIList(handle, si, csiBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSICSIList(handle, clUtils.byref(si), clUtils.byref(csiBuffer))
 
 def clAmsMgmtGetSGInstantiableSUList(handle, sg, instantiableSUBuffer):
     """
@@ -921,7 +958,7 @@ def clAmsMgmtGetSGInstantiableSUList(handle, sg, instantiableSUBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGInstantiableSUList(handle, sg, instantiableSUBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGInstantiableSUList(handle, clUtils.byref(sg), clUtils.byref(instantiableSUBuffer))
 
 def clAmsMgmtGetSGInstantiatedSUList(handle, sg, instantiatedSUBuffer):
     """
@@ -932,7 +969,7 @@ def clAmsMgmtGetSGInstantiatedSUList(handle, sg, instantiatedSUBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGInstantiatedSUList(handle, sg, instantiatedSUBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGInstantiatedSUList(handle, clUtils.byref(sg), clUtils.byref(instantiatedSUBuffer))
 
 def clAmsMgmtGetSGInServiceSpareSUList(handle, sg, inserviceSpareSUBuffer):
     """
@@ -943,7 +980,7 @@ def clAmsMgmtGetSGInServiceSpareSUList(handle, sg, inserviceSpareSUBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGInServiceSpareSUList(handle, sg, inserviceSpareSUBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGInServiceSpareSUList(handle, clUtils.byref(sg), clUtils.byref(inserviceSpareSUBuffer))
 
 def clAmsMgmtGetSGAssignedSUList(handle, sg, assignedSUBuffer):
     """
@@ -954,7 +991,7 @@ def clAmsMgmtGetSGAssignedSUList(handle, sg, assignedSUBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGAssignedSUList(handle, sg, assignedSUBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGAssignedSUList(handle, clUtils.byref(sg), clUtils.byref(assignedSUBuffer))
 
 def clAmsMgmtGetSGFaultySUList(handle, sg, faultySUBuffer):
     """
@@ -965,7 +1002,7 @@ def clAmsMgmtGetSGFaultySUList(handle, sg, faultySUBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSGFaultySUList(handle, sg, faultySUBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSGFaultySUList(handle, clUtils.byref(sg), clUtils.byref(faultySUBuffer))
 
 def clAmsMgmtGetSUAssignedSIsList(handle, su, siBuffer):
     """
@@ -976,7 +1013,7 @@ def clAmsMgmtGetSUAssignedSIsList(handle, su, siBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSUAssignedSIsList(handle, su, siBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSUAssignedSIsList(handle, clUtils.byref(su), clUtils.byref(siBuffer))
 
 def clAmsMgmtGetSUAssignedSIsExtendedList(handle, su, siBuffer):
     """
@@ -987,7 +1024,7 @@ def clAmsMgmtGetSUAssignedSIsExtendedList(handle, su, siBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSUAssignedSIsExtendedList(handle, su, siBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSUAssignedSIsExtendedList(handle, clUtils.byref(su), clUtils.byref(siBuffer))
 
 def clAmsMgmtGetSISUList(handle, si, suBuffer):
     """
@@ -998,7 +1035,7 @@ def clAmsMgmtGetSISUList(handle, si, suBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSISUList(handle, si, suBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSISUList(handle, clUtils.byref(si), clUtils.byref(suBuffer))
 
 def clAmsMgmtGetSISUExtendedList(handle, si, suBuffer):
     """
@@ -1009,7 +1046,7 @@ def clAmsMgmtGetSISUExtendedList(handle, si, suBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSISUExtendedList(handle, si, suBuffer)
+    return clLib.libmw_so.clAmsMgmtGetSISUExtendedList(handle, clUtils.byref(si), clUtils.byref(suBuffer))
 
 def clAmsMgmtGetCompCSIList(handle, comp, csiBuffer):
     """
@@ -1020,7 +1057,7 @@ def clAmsMgmtGetCompCSIList(handle, comp, csiBuffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetCompCSIList(handle, comp, csiBuffer)
+    return clLib.libmw_so.clAmsMgmtGetCompCSIList(handle, clUtils.byref(comp), clUtils.byref(csiBuffer))
 
 def clAmsMgmtGetSIHAState(handle, si, su, haState, fullyAssigned):
     """
@@ -1033,7 +1070,7 @@ def clAmsMgmtGetSIHAState(handle, si, su, haState, fullyAssigned):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSIHAState(handle, si, su, haState, fullyAssigned)
+    return clLib.libmw_so.clAmsMgmtGetSIHAState(handle, clUtils.toCharP(si), clUtils.toCharP(su), haState, clUtils.byref(fullyAssigned))
 
 def clAmsMgmtGetSUHAState(handle, su, checkAllSIs, haState, fullyAssigned):
     """
@@ -1046,7 +1083,7 @@ def clAmsMgmtGetSUHAState(handle, su, checkAllSIs, haState, fullyAssigned):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetSUHAState(handle, su, checkAllSIs, haState, fullyAssigned)
+    return clLib.libmw_so.clAmsMgmtGetSUHAState(handle, clUtils.toCharP(su), checkAllSIs, clUtils.byref(haState), clUtils.byref(fullyAssigned))
 
 def clAmsMgmtMigrateSG(handle, sg, prefix, activeSUs, standbySUs, migrateList):
     """
@@ -1060,7 +1097,7 @@ def clAmsMgmtMigrateSG(handle, sg, prefix, activeSUs, standbySUs, migrateList):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtMigrateSG(handle, sg, prefix, activeSUs, standbySUs, migrateList)
+    return clLib.libmw_so.clAmsMgmtMigrateSG(handle, clUtils.toCharP(sg), clUtils.toCharP(prefix), activeSUs, standbySUs, clUtils.byref(migrateList))
 
 def clAmsMgmtEntityUserDataSet(handle, entity, data, len):
     """
@@ -1072,7 +1109,7 @@ def clAmsMgmtEntityUserDataSet(handle, entity, data, len):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityUserDataSet(handle, entity, data, len)
+    return clLib.libmw_so.clAmsMgmtEntityUserDataSet(handle, clUtils.byref(entity), clUtils.toCharP(data), len)
 
 def clAmsMgmtEntityUserDataSetKey(handle, entity, key, data, len):
     """
@@ -1085,7 +1122,7 @@ def clAmsMgmtEntityUserDataSetKey(handle, entity, key, data, len):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityUserDataSetKey(handle, entity, key, data, len)
+    return clLib.libmw_so.clAmsMgmtEntityUserDataSetKey(handle, clUtils.byref(entity), clUtils.byref(key), clUtils.toCharP(data), len)
 
 def clAmsMgmtEntityUserDataGet(handle, entity, data, len):
     """
@@ -1096,8 +1133,9 @@ def clAmsMgmtEntityUserDataGet(handle, entity, data, len):
         ClUint32T *len
     return type:
         ClRcT
+    Note: free data later using clHeapFree()
     """
-    return clLib.libmw_so.clAmsMgmtEntityUserDataGet(handle, entity, data, len)
+    return clLib.libmw_so.clAmsMgmtEntityUserDataGet(handle, clUtils.byref(entity), clUtils.byref(data), clUtils.byref(len))
 
 def clAmsMgmtEntityUserDataGetKey(handle, entity, key, data, len):
     """
@@ -1109,8 +1147,9 @@ def clAmsMgmtEntityUserDataGetKey(handle, entity, key, data, len):
         ClUint32T *len
     return type:
         ClRcT
+    Note: free data later using clHeapFree()
     """
-    return clLib.libmw_so.clAmsMgmtEntityUserDataGetKey(handle, entity, key, data, len)
+    return clLib.libmw_so.clAmsMgmtEntityUserDataGetKey(handle, clUtils.byref(entity), clUtils.byref(key), clUtils.byref(data), clUtils.byref(len))
 
 def clAmsMgmtEntityUserDataDelete(handle, entity):
     """
@@ -1120,7 +1159,7 @@ def clAmsMgmtEntityUserDataDelete(handle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityUserDataDelete(handle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityUserDataDelete(handle, clUtils.byref(entity))
 
 def clAmsMgmtEntityUserDataDeleteKey(handle, entity, key):
     """
@@ -1131,7 +1170,7 @@ def clAmsMgmtEntityUserDataDeleteKey(handle, entity, key):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityUserDataDeleteKey(handle, entity, key)
+    return clLib.libmw_so.clAmsMgmtEntityUserDataDeleteKey(handle, clUtils.byref(entity), clUtils.byref(key))
 
 def clAmsMgmtEntityUserDataDeleteAll(handle, entity):
     """
@@ -1141,7 +1180,7 @@ def clAmsMgmtEntityUserDataDeleteAll(handle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityUserDataDeleteAll(handle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityUserDataDeleteAll(handle, clUtils.byref(entity))
 
 def clAmsMgmtSetActive(handle, entity, activeSU):
     """
@@ -1152,7 +1191,7 @@ def clAmsMgmtSetActive(handle, entity, activeSU):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtSetActive(handle, entity, activeSU)
+    return clLib.libmw_so.clAmsMgmtSetActive(handle, clUtils.byref(entity), clUtils.byref(activeSU))
 
 def clAmsMgmtSIAssignSU(si, activeSU, standbySU):
     """
@@ -1163,7 +1202,7 @@ def clAmsMgmtSIAssignSU(si, activeSU, standbySU):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtSIAssignSU(si, activeSU, standbySU)
+    return clLib.libmw_so.clAmsMgmtSIAssignSU(clUtils.toCharP(si), clUtils.toCharP(activeSU), clUtils.toCharP(standbySU))
 
 
 def clAmsMgmtGetAspInstallInfo(handle, nodeName, aspInstallInfo, len):
@@ -1176,7 +1215,7 @@ def clAmsMgmtGetAspInstallInfo(handle, nodeName, aspInstallInfo, len):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtGetAspInstallInfo(handle, nodeName, aspInstallInfo, len)
+    return clLib.libmw_so.clAmsMgmtGetAspInstallInfo(handle, clUtils.toCharP(nodeName), clUtils.toCharP(aspInstallInfo), len)
 
 
 def clAmsMgmtFreeCompCSIRefBuffer(buffer):
@@ -1186,7 +1225,7 @@ def clAmsMgmtFreeCompCSIRefBuffer(buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtFreeCompCSIRefBuffer(buffer)
+    return clLib.libmw_so.clAmsMgmtFreeCompCSIRefBuffer(clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGet(db):
@@ -1196,7 +1235,7 @@ def clAmsMgmtDBGet(db):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGet(db)
+    return clLib.libmw_so.clAmsMgmtDBGet(clUtils.byref(db))
 
 
 def clAmsMgmtDBGetNodeList(db, buffer):
@@ -1207,7 +1246,7 @@ def clAmsMgmtDBGetNodeList(db, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetNodeList(db, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetNodeList(db, clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSUList(db, buffer):
@@ -1218,7 +1257,7 @@ def clAmsMgmtDBGetSUList(db, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSUList(db, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSUList(db, clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSGList(db, buffer):
@@ -1229,7 +1268,7 @@ def clAmsMgmtDBGetSGList(db, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSGList(db, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSGList(db, clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSIList(db, buffer):
@@ -1240,7 +1279,7 @@ def clAmsMgmtDBGetSIList(db, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSIList(db, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSIList(db, clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetCSIList(db, buffer):
@@ -1251,7 +1290,7 @@ def clAmsMgmtDBGetCSIList(db, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetCSIList(db, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetCSIList(db, clUtils.byref(buffer))
 
 def clAmsMgmtDBGetCompList(db, buffer):
     """
@@ -1261,7 +1300,7 @@ def clAmsMgmtDBGetCompList(db, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetCompList(db, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetCompList(db, clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetEntityConfig(db, entity, entityConfig):
@@ -1273,7 +1312,12 @@ def clAmsMgmtDBGetEntityConfig(db, entity, entityConfig):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetEntityConfig(db, entity, entityConfig)
+    pTemp = ctypes.POINTER(clAmsEntities.ClAmsEntityConfigT)()
+    rc = clLib.libmw_so.clAmsMgmtDBGetEntityConfig(db, clUtils.byref(entity), clUtils.byref(pTemp))
+    if pTemp:
+        ctypes.memmove(ctypes.byref(entityConfig), pTemp, ctypes.sizeof(clAmsEntities.ClAmsEntityConfigT))
+        clHeapApi.clHeapFree(pTemp)
+    return rc
 
 
 def clAmsMgmtDBGetEntityStatus(db, entity, entityStatus):
@@ -1285,7 +1329,12 @@ def clAmsMgmtDBGetEntityStatus(db, entity, entityStatus):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetEntityStatus(db, entity, entityStatus)
+    pTemp = ctypes.POINTER(clAmsEntities.ClAmsEntityStatusT)()
+    rc = clLib.libmw_so.clAmsMgmtDBGetEntityStatus(db, clUtils.byref(entity), clUtils.byref(pTemp))
+    if pTemp:
+        ctypes.memmove(ctypes.byref(entityStatus), pTemp, ctypes.sizeof(clAmsEntities.ClAmsEntityStatusT))
+        clHeapApi.clHeapFree(pTemp)
+    return rc
 
 
 def clAmsMgmtDBGetNodeSUList(db, entity, buffer):
@@ -1297,7 +1346,7 @@ def clAmsMgmtDBGetNodeSUList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetNodeSUList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetNodeSUList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSGSUList(db, entity, buffer):
@@ -1309,7 +1358,7 @@ def clAmsMgmtDBGetSGSUList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSGSUList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSGSUList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSGSIList(db, entity, buffer):
@@ -1321,7 +1370,7 @@ def clAmsMgmtDBGetSGSIList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSGSIList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSGSIList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSICSIList(db, entity, buffer):
@@ -1333,7 +1382,7 @@ def clAmsMgmtDBGetSICSIList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSICSIList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSICSIList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 def clAmsMgmtDBGetSUCompList(db, entity, buffer):
     """
@@ -1344,7 +1393,7 @@ def clAmsMgmtDBGetSUCompList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSUCompList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSUCompList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSUAssignedSIsList(db, entity, buffer):
@@ -1356,7 +1405,7 @@ def clAmsMgmtDBGetSUAssignedSIsList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSUAssignedSIsList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSUAssignedSIsList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetSISUList(db, entity, buffer):
@@ -1368,7 +1417,7 @@ def clAmsMgmtDBGetSISUList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetSISUList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetSISUList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetCompCSIList(db, entity, buffer):
@@ -1380,7 +1429,7 @@ def clAmsMgmtDBGetCompCSIList(db, entity, buffer):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetCompCSIList(db, entity, buffer)
+    return clLib.libmw_so.clAmsMgmtDBGetCompCSIList(db, clUtils.byref(entity), clUtils.byref(buffer))
 
 
 def clAmsMgmtDBGetNodeCompList(cache, nodeName, compList):
@@ -1392,7 +1441,7 @@ def clAmsMgmtDBGetNodeCompList(cache, nodeName, compList):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBGetNodeCompList(cache, nodeName, compList)
+    return clLib.libmw_so.clAmsMgmtDBGetNodeCompList(cache, clUtils.byref(nodeName), clUtils.byref(compList))
 
 
 def clAmsMgmtDBCacheDump(db):
@@ -1412,7 +1461,7 @@ def clAmsMgmtDBFinalize(db):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtDBFinalize(db)
+    return clLib.libmw_so.clAmsMgmtDBFinalize(clUtils.byref(db))
 
 
 def clAmsMgmtComputedAdminStateGet(handle, entity, adminState):
@@ -1424,7 +1473,7 @@ def clAmsMgmtComputedAdminStateGet(handle, entity, adminState):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtComputedAdminStateGet(handle, entity, adminState)
+    return clLib.libmw_so.clAmsMgmtComputedAdminStateGet(handle, clUtils.byref(entity), clUtils.byref(adminState))
 
 def clAmsMgmtCCBBatchInitialize(mgmtHandle, batchHandle):
     """
@@ -1434,7 +1483,7 @@ def clAmsMgmtCCBBatchInitialize(mgmtHandle, batchHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchInitialize(mgmtHandle, batchHandle)
+    return clLib.libmw_so.clAmsMgmtCCBBatchInitialize(mgmtHandle, clUtils.byref(batchHandle))
 
 
 def clAmsMgmtCCBBatchFinalize(batchHandle):
@@ -1444,7 +1493,7 @@ def clAmsMgmtCCBBatchFinalize(batchHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchFinalize(batchHandle)
+    return clLib.libmw_so.clAmsMgmtCCBBatchFinalize(clUtils.byref(batchHandle))
 
 
 def clAmsMgmtCCBBatchEntityCreate(batchHandle, entity):
@@ -1455,7 +1504,7 @@ def clAmsMgmtCCBBatchEntityCreate(batchHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchEntityCreate(batchHandle, entity)
+    return clLib.libmw_so.clAmsMgmtCCBBatchEntityCreate(batchHandle, clUtils.byref(entity))
 
 
 def clAmsMgmtCCBBatchEntityDelete(batchHandle, entity):
@@ -1466,7 +1515,7 @@ def clAmsMgmtCCBBatchEntityDelete(batchHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchEntityDelete(batchHandle, entity)
+    return clLib.libmw_so.clAmsMgmtCCBBatchEntityDelete(batchHandle, clUtils.byref(entity))
 
 
 def clAmsMgmtCCBBatchEntitySetConfig(batchHandle, entityConfig, bitmask):
@@ -1478,7 +1527,7 @@ def clAmsMgmtCCBBatchEntitySetConfig(batchHandle, entityConfig, bitmask):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchEntitySetConfig(batchHandle, entityConfig, bitmask)
+    return clLib.libmw_so.clAmsMgmtCCBBatchEntitySetConfig(batchHandle, clUtils.byref(entityConfig), bitmask)
 
 
 def clAmsMgmtCCBBatchCSISetNVP(batchHandle, csiName, nvp):
@@ -1490,7 +1539,7 @@ def clAmsMgmtCCBBatchCSISetNVP(batchHandle, csiName, nvp):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchCSISetNVP(batchHandle, csiName, nvp)
+    return clLib.libmw_so.clAmsMgmtCCBBatchCSISetNVP(batchHandle, clUtils.byref(csiName), clUtils.byref(nvp))
 
 
 def clAmsMgmtCCBBatchCSIDeleteNVP(batchHandle, csiName, nvp):
@@ -1502,7 +1551,7 @@ def clAmsMgmtCCBBatchCSIDeleteNVP(batchHandle, csiName, nvp):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchCSIDeleteNVP(batchHandle, csiName, nvp)
+    return clLib.libmw_so.clAmsMgmtCCBBatchCSIDeleteNVP(batchHandle, clUtils.byref(csiName), clUtils.byref(nvp))
 
 
 def clAmsMgmtCCBBatchSetNodeDependency(batchHandle, nodeName, dependencyNodeName):
@@ -1514,7 +1563,7 @@ def clAmsMgmtCCBBatchSetNodeDependency(batchHandle, nodeName, dependencyNodeName
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetNodeDependency(batchHandle, nodeName, dependencyNodeName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetNodeDependency(batchHandle, clUtils.byref(nodeName), clUtils.byref(dependencyNodeName))
 
 
 def clAmsMgmtCCBBatchDeleteNodeDependency(batchHandle, nodeName, dependencyNodeName):
@@ -1526,7 +1575,7 @@ def clAmsMgmtCCBBatchDeleteNodeDependency(batchHandle, nodeName, dependencyNodeN
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteNodeDependency(batchHandle, nodeName, dependencyNodeName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteNodeDependency(batchHandle, clUtils.byref(nodeName), clUtils.byref(dependencyNodeName))
 
 
 def clAmsMgmtCCBBatchSetNodeSUList(batchHandle, nodeName, suName):
@@ -1538,7 +1587,7 @@ def clAmsMgmtCCBBatchSetNodeSUList(batchHandle, nodeName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetNodeSUList(batchHandle, nodeName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetNodeSUList(batchHandle, clUtils.byref(nodeName), clUtils.byref(suName))
 
 
 def clAmsMgmtCCBBatchDeleteNodeSUList(batchHandle, nodeName, suName):
@@ -1550,7 +1599,7 @@ def clAmsMgmtCCBBatchDeleteNodeSUList(batchHandle, nodeName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteNodeSUList(batchHandle, nodeName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteNodeSUList(batchHandle, clUtils.byref(nodeName), clUtils.byref(suName))
 
 
 def clAmsMgmtCCBBatchSetSGSUList(batchHandle, sgName, suName):
@@ -1562,7 +1611,7 @@ def clAmsMgmtCCBBatchSetSGSUList(batchHandle, sgName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetSGSUList(batchHandle, sgName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetSGSUList(batchHandle, clUtils.byref(sgName), clUtils.byref(suName))
 
 
 def clAmsMgmtCCBBatchDeleteSGSUList(batchHandle, sgName, suName):
@@ -1574,7 +1623,7 @@ def clAmsMgmtCCBBatchDeleteSGSUList(batchHandle, sgName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSGSUList(batchHandle, sgName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSGSUList(batchHandle, clUtils.byref(sgName), clUtils.byref(suName))
 
 
 def clAmsMgmtCCBBatchSetSGSIList(batchHandle, sgName, siName):
@@ -1586,7 +1635,7 @@ def clAmsMgmtCCBBatchSetSGSIList(batchHandle, sgName, siName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetSGSIList(batchHandle, sgName, siName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetSGSIList(batchHandle, clUtils.byref(sgName), clUtils.byref(siName))
 
 
 def clAmsMgmtCCBBatchDeleteSGSIList(batchHandle, sgName, siName):
@@ -1598,7 +1647,7 @@ def clAmsMgmtCCBBatchDeleteSGSIList(batchHandle, sgName, siName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSGSIList(batchHandle, sgName, siName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSGSIList(batchHandle, clUtils.byref(sgName), clUtils.byref(siName))
 
 
 def clAmsMgmtCCBBatchSetSUCompList(batchHandle, suName, compName):
@@ -1610,7 +1659,7 @@ def clAmsMgmtCCBBatchSetSUCompList(batchHandle, suName, compName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetSUCompList(batchHandle, suName, compName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetSUCompList(batchHandle, clUtils.byref(suName), clUtils.byref(compName))
 
 
 def clAmsMgmtCCBBatchDeleteSUCompList(batchHandle, suName, compName):
@@ -1622,7 +1671,7 @@ def clAmsMgmtCCBBatchDeleteSUCompList(batchHandle, suName, compName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSUCompList(batchHandle, suName, compName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSUCompList(batchHandle, clUtils.byref(suName), clUtils.byref(compName))
 
 
 def clAmsMgmtCCBBatchSetSISURankList(batchHandle, siName, suName):
@@ -1634,7 +1683,7 @@ def clAmsMgmtCCBBatchSetSISURankList(batchHandle, siName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetSISURankList(batchHandle, siName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetSISURankList(batchHandle, clUtils.byref(siName), clUtils.byref(suName))
 
 
 def clAmsMgmtCCBBatchDeleteSISURankList(batchHandle, siName, suName):
@@ -1646,7 +1695,7 @@ def clAmsMgmtCCBBatchDeleteSISURankList(batchHandle, siName, suName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSISURankList(batchHandle, siName, suName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSISURankList(batchHandle, clUtils.byref(siName), clUtils.byref(suName))
 
 
 def clAmsMgmtCCBBatchSetSIDependency(batchHandle, siName, dependencySIName):
@@ -1658,7 +1707,7 @@ def clAmsMgmtCCBBatchSetSIDependency(batchHandle, siName, dependencySIName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetSIDependency(batchHandle, siName, dependencySIName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetSIDependency(batchHandle, clUtils.byref(siName), clUtils.byref(dependencySIName))
 
 
 def clAmsMgmtCCBBatchDeleteSIDependency(batchHandle, siName, dependencySIName):
@@ -1670,7 +1719,7 @@ def clAmsMgmtCCBBatchDeleteSIDependency(batchHandle, siName, dependencySIName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSIDependency(batchHandle, siName, dependencySIName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSIDependency(batchHandle, clUtils.byref(siName), clUtils.byref(dependencySIName))
 
 
 def clAmsMgmtCCBBatchSetCSIDependency(batchHandle, csiName, dependencyCSIName):
@@ -1682,7 +1731,7 @@ def clAmsMgmtCCBBatchSetCSIDependency(batchHandle, csiName, dependencyCSIName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetCSIDependency(batchHandle, csiName, dependencyCSIName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetCSIDependency(batchHandle, clUtils.byref(csiName), clUtils.byref(dependencyCSIName))
 
 
 def clAmsMgmtCCBBatchDeleteCSIDependency(batchHandle, csiName, dependencyCSIName):
@@ -1694,7 +1743,7 @@ def clAmsMgmtCCBBatchDeleteCSIDependency(batchHandle, csiName, dependencyCSIName
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteCSIDependency(batchHandle, csiName, dependencyCSIName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteCSIDependency(batchHandle, clUtils.byref(csiName), clUtils.byref(dependencyCSIName))
 
 
 def clAmsMgmtCCBBatchSetSICSIList(batchHandle, siName, csiName):
@@ -1706,7 +1755,7 @@ def clAmsMgmtCCBBatchSetSICSIList(batchHandle, siName, csiName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchSetSICSIList(batchHandle, siName, csiName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchSetSICSIList(batchHandle, clUtils.byref(siName), clUtils.byref(csiName))
 
 
 def clAmsMgmtCCBBatchDeleteSICSIList(batchHandle, siName, csiName):
@@ -1718,7 +1767,7 @@ def clAmsMgmtCCBBatchDeleteSICSIList(batchHandle, siName, csiName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSICSIList(batchHandle, siName, csiName)
+    return clLib.libmw_so.clAmsMgmtCCBBatchDeleteSICSIList(batchHandle, clUtils.byref(siName), clUtils.byref(csiName))
 
 
 def clAmsMgmtCCBBatchCommit(batchHandle):

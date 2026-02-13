@@ -35,7 +35,7 @@ def clAmsMgmtEntityForceLock(amsHandle, entity):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityForceLock(amsHandle, entity)
+    return clLib.libmw_so.clAmsMgmtEntityForceLock(amsHandle, clUtils.byref(entity))
 
 def clAmsMgmtEntityForceLockExtended(amsHandle, entity, lockFlags):
     """
@@ -46,4 +46,4 @@ def clAmsMgmtEntityForceLockExtended(amsHandle, entity, lockFlags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clAmsMgmtEntityForceLockExtended(amsHandle, entity, lockFlags)
+    return clLib.libmw_so.clAmsMgmtEntityForceLockExtended(amsHandle, clUtils.byref(entity), lockFlags)

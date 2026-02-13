@@ -2,8 +2,8 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clUtils, clLib
-from amf import clAmsTypes, clCpmConfigApi, clCpmApi, clAmsEntities
+from utils import clUtils, clLib, clHeapApi
+from amf import clAmsTypes, clCpmConfigApi, clCpmApi, clAmsEntities, clAmsInvocation, clCpmAms
 from ioc import clIocApi
 from ipi import clCpmIpi
 from ckpt import clCkptApi
@@ -317,7 +317,7 @@ def cpmInvocationAdd(cbType, data, invocationId, flags):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.cpmInvocationAdd(cbType, data, invocationId, flags)
+    return clLib.libmw_so.cpmInvocationAdd(cbType, data, clUtils.byref(invocationId), flags)
 
 
 def cpmInvocationAddKey(cbType, data, invocationId, flags):
@@ -342,7 +342,7 @@ def cpmInvocationGet(invocationId, cbType, data):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.cpmInvocationGet(invocationId, cbType, data)
+    return clLib.libmw_so.cpmInvocationGet(invocationId, clUtils.byref(cbType), clUtils.byref(data))
 
 
 def cpmHBInvocationGet(compName, invocation, createdTime, eoPort):
@@ -355,7 +355,7 @@ def cpmHBInvocationGet(compName, invocation, createdTime, eoPort):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.cpmHBInvocationGet(compName, invocation, createdTime, eoPort)
+    return clLib.libmw_so.cpmHBInvocationGet(clUtils.byref(compName), clUtils.byref(invocation), clUtils.byref(createdTime), clUtils.byref(eoPort))
 
 
 def cpmInvocationGetWithLock(invocationId, cbType, data):
@@ -367,7 +367,7 @@ def cpmInvocationGetWithLock(invocationId, cbType, data):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.cpmInvocationGetWithLock(invocationId, cbType, data)
+    return clLib.libmw_so.cpmInvocationGetWithLock(invocationId, clUtils.byref(cbType), clUtils.byref(data))
 
 
 def cpmInvocationClearCompInvocation(compName):
@@ -377,7 +377,7 @@ def cpmInvocationClearCompInvocation(compName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.cpmInvocationClearCompInvocation(compName)
+    return clLib.libmw_so.cpmInvocationClearCompInvocation(clUtils.byref(compName))
 
 
 def cpmInvocationDeleteInvocation(invocationId):
@@ -400,7 +400,7 @@ def cpmReplayInvocationAdd(cbType, pComp, pNode, pResponsePending):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.cpmReplayInvocationAdd(cbType, pComp, pNode, pResponsePending)
+    return clLib.libmw_so.cpmReplayInvocationAdd(cbType, clUtils.toCharP(pComp), clUtils.toCharP(pNode), clUtils.byref(pResponsePending))
 
 
 def cpmReplayInvocationsGet(ppInvocations, pNumInvocations, canDelete):
@@ -412,7 +412,18 @@ def cpmReplayInvocationsGet(ppInvocations, pNumInvocations, canDelete):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.cpmReplayInvocationsGet(ppInvocations, pNumInvocations, canDelete)
+    temp = ctypes.POINTER(ctypes.POINTER(clAmsInvocation.ClAmsInvocationT))()
+    rc = clLib.libmw_so.cpmReplayInvocationsGet(ctypes.byref(temp), clUtils.byref(pNumInvocations), canDelete)
+
+    ppInvocations.clear()
+    for i in range(0, pNumInvocations.value):
+        ele = clAmsInvocation.ClAmsInvocationT()
+        ctypes.memmove(clUtils.byref(ele), temp[i], ctypes.sizeof(clAmsInvocation.ClAmsInvocationT))
+        ppInvocations.append(ele)
+        clHeapApi.clHeapFree(temp[i])
+
+    clHeapApi.clHeapFree(temp)
+    return rc
 
 
 def cpmReplayInvocations(canDelete):
@@ -437,7 +448,7 @@ def _cpmComponentCSIRmv(compName, proxyCompName, nodeName, invocation, csiName, 
     return type:
         ClRcT
     """
-    return clLib.libmw_so._cpmComponentCSIRmv(compName, proxyCompName, nodeName, invocation, csiName, csiFlags)
+    return clLib.libmw_so._cpmComponentCSIRmv(clUtils.toCharP(compName), clUtils.toCharP(proxyCompName), clUtils.toCharP(nodeName), invocation, clUtils.byref(csiName), csiFlags)
 
 
 def _cpmComponentCSISet(compName, proxyCompName, nodeName, invocation, haState, csiDescriptor):
@@ -452,7 +463,7 @@ def _cpmComponentCSISet(compName, proxyCompName, nodeName, invocation, haState, 
     return type:
         ClRcT
     """
-    return clLib.libmw_so._cpmComponentCSISet(compName, proxyCompName, nodeName, invocation, haState, csiDescriptor)
+    return clLib.libmw_so._cpmComponentCSISet(clUtils.toCharP(compName), clUtils.toCharP(proxyCompName), clUtils.toCharP(nodeName), invocation, haState, csiDescriptor)
 
 
 def clCpmAmsToCpmInitialize(callback):
@@ -462,7 +473,12 @@ def clCpmAmsToCpmInitialize(callback):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCpmAmsToCpmInitialize(callback)
+    temp = ctypes.POINTER(clCpmAms.ClCpmAmsToCpmCallT)()
+    rc = clLib.libmw_so.clCpmAmsToCpmInitialize(clUtils.byref(temp))
+    if temp:
+        ctypes.memmove(clUtils.byref(callback), temp, ctypes.sizeof(clCpmAms.ClCpmAmsToCpmCallT))
+        clCpmAmsToCpmFree(temp)
+    return rc
 
 
 def clCpmAmsToCpmFree(callback):
@@ -471,5 +487,7 @@ def clCpmAmsToCpmFree(callback):
         ClCpmAmsToCpmCallT *callback
     return type:
         void
+    Note:
+        not meant to be used
     """
     return clLib.libmw_so.clCpmAmsToCpmFree(callback)

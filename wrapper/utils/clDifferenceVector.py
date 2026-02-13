@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clHash, clMD5Api, clLib
+from utils import clHash, clMD5Api, clLib, clUtils
 
 import ctypes
 
@@ -53,7 +53,7 @@ def clDifferenceVectorGet(key, data, offset, size, copyData, vector):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clDifferenceVectorGet(key, data, offset, size, copyData, vector)
+    return clLib.libmw_so.clDifferenceVectorGet(clUtils.byref(key), data, offset, size, copyData, clUtils.byref(vector))
 
 
 def clDifferenceVectorGetWithReset(key, data, offset, size, copyData, vector):
@@ -68,7 +68,7 @@ def clDifferenceVectorGetWithReset(key, data, offset, size, copyData, vector):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clDifferenceVectorGetWithReset(key, data, offset, size, copyData, vector)
+    return clLib.libmw_so.clDifferenceVectorGetWithReset(clUtils.byref(key), data, offset, size, copyData, clUtils.byref(vector))
 
 
 def clDifferenceVectorMergeWithData(lastData, lastDataSize, vector, offset, size):
@@ -82,7 +82,8 @@ def clDifferenceVectorMergeWithData(lastData, lastDataSize, vector, offset, size
     return type:
         ClUint8T *
     """
-    return clLib.libmw_so.clDifferenceVectorMergeWithData(lastData, lastDataSize, vector, offset, size)
+    clLib.libmw_so.clDifferenceVectorMergeWithData.restype = ctypes.POINTER(clCommon.ClUint8T)
+    return clLib.libmw_so.clDifferenceVectorMergeWithData(lastData, lastDataSize, clUtils.byref(vector), offset, size)
 
 
 def clDifferenceVectorMerge(key, vector, offset, size):
@@ -95,7 +96,8 @@ def clDifferenceVectorMerge(key, vector, offset, size):
     return type:
         ClUint8T *
     """
-    return clLib.libmw_so.clDifferenceVectorMerge(key, vector, offset, size)
+    clLib.libmw_so.clDifferenceVectorMerge.restype = ctypes.POINTER(clCommon.ClUint8T)
+    return clLib.libmw_so.clDifferenceVectorMerge(clUtils.byref(key), clUtils.byref(vector), offset, size)
 
 
 def clDifferenceVectorMergeWithReset(key, vector, offset, size):
@@ -108,7 +110,8 @@ def clDifferenceVectorMergeWithReset(key, vector, offset, size):
     return type:
         ClUint8T *
     """
-    return clLib.libmw_so.clDifferenceVectorMergeWithReset(key, vector, offset, size)
+    clLib.libmw_so.clDifferenceVectorMergeWithReset.restype = ctypes.POINTER(clCommon.ClUint8T)
+    return clLib.libmw_so.clDifferenceVectorMergeWithReset(clUtils.byref(key), clUtils.byref(vector), offset, size)
 
 
 def clDifferenceVectorCopy(dest, src):
@@ -116,10 +119,8 @@ def clDifferenceVectorCopy(dest, src):
     arg types:
         ClDifferenceVectorT *dest,
         ClDifferenceVectorT *src
-    return type:
-        void
     """
-    return clLib.libmw_so.clDifferenceVectorCopy(dest, src)
+    clLib.libmw_so.clDifferenceVectorCopy(clUtils.byref(dest), clUtils.byref(src))
 
 
 def clDifferenceVectorDelete(key):
@@ -129,27 +130,23 @@ def clDifferenceVectorDelete(key):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clDifferenceVectorDelete(key)
+    return clLib.libmw_so.clDifferenceVectorDelete(clUtils.byref(key))
 
 
 def clDifferenceVectorDestroy():
     """
     arg types:
         void
-    return type:
-        void
     """
-    return clLib.libmw_so.clDifferenceVectorDestroy()
+    clLib.libmw_so.clDifferenceVectorDestroy()
 
 
 def clDifferenceVectorKeyFree(key):
     """
     arg types:
         ClDifferenceVectorKeyT *key
-    return type:
-        void
     """
-    return clLib.libmw_so.clDifferenceVectorKeyFree(key)
+    clLib.libmw_so.clDifferenceVectorKeyFree(clUtils.byref(key))
 
 
 def clDifferenceVectorFree(differenceVector, freeDataVector):
@@ -157,15 +154,11 @@ def clDifferenceVectorFree(differenceVector, freeDataVector):
     arg types:
         ClDifferenceVectorT *differenceVector,
         ClBoolT freeDataVector
-    return type:
-        void
     """
-    return clLib.libmw_so.clDifferenceVectorFree(differenceVector, freeDataVector)
+    clLib.libmw_so.clDifferenceVectorFree(clUtils.byref(differenceVector), freeDataVector)
 
 
-# Note: The C prototype uses a variadic argument list (printf style) for sectionFmt,
-# which is represented simply as positional arguments in the Python wrapper.
-def clDifferenceVectorKeyMake(key, groupKey, sectionFmt, *args):
+def clDifferenceVectorKeyMake(key, groupKey, sectionFmt, *va_args):
     """
     arg types:
         ClDifferenceVectorKeyT *key,
@@ -175,9 +168,10 @@ def clDifferenceVectorKeyMake(key, groupKey, sectionFmt, *args):
     return type:
         ClDifferenceVectorKeyT *
     """
-    # In a real implementation, you'd need ctypes/cffi to handle the variadic arguments.
-    # Here, we pass the format string and potential extra arguments (if any).
-    return clLib.libmw_so.clDifferenceVectorKeyMake(key, groupKey, sectionFmt, *args)
+    cVaArgs, argTypes = clUtils.handleVarArgs(*va_args)
+    clLib.libmw_so.clDifferenceVectorKeyMake.argtypes = [ctypes.POINTER(ClDifferenceVectorKeyT), ctypes.POINTER(clCommon.ClNameT), ctypes.c_char_p] + argTypes
+    clLib.libmw_so.clDifferenceVectorKeyMake.restype = ctypes.pointer(ClDifferenceVectorKeyT)
+    return clLib.libmw_so.clDifferenceVectorKeyMake(clUtils.byref(key), clUtils.byref(groupKey), clUtils.toCharP(sectionFmt), *cVaArgs)
 
 
 def clDifferenceVectorKeyCheck(key):
@@ -187,7 +181,8 @@ def clDifferenceVectorKeyCheck(key):
     return type:
         ClBoolT
     """
-    return clLib.libmw_so.clDifferenceVectorKeyCheck(key)
+    clLib.libmw_so.clDifferenceVectorKeyCheck.restype = clCommon.ClBoolT
+    return clLib.libmw_so.clDifferenceVectorKeyCheck(clUtils.byref(key))
 
 
 def clDifferenceVectorKeyCheckAndAdd(key):
@@ -197,4 +192,5 @@ def clDifferenceVectorKeyCheckAndAdd(key):
     return type:
         ClBoolT
     """
-    return clLib.libmw_so.clDifferenceVectorKeyCheckAndAdd(key)
+    clLib.libmw_so.clDifferenceVectorKeyCheckAndAdd.restype = clCommon.ClBoolT
+    return clLib.libmw_so.clDifferenceVectorKeyCheckAndAdd(clUtils.byref(key))

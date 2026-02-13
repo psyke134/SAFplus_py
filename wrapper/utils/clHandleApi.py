@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clLib
+from utils import clLib, clUtils
 
 import ctypes
 
@@ -35,7 +35,7 @@ def clHandleDatabaseCreate(destructor, databaseHandle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHandleDatabaseCreate(destructor, databaseHandle)
+    return clLib.libmw_so.clHandleDatabaseCreate(destructor, clUtils.byref(databaseHandle))
 
 def clHandleDatabaseDestroy(databaseHandle):
     """
@@ -55,7 +55,7 @@ def clHandleCreate(databaseHandle, instanceSize, handle):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHandleCreate(databaseHandle, instanceSize, handle)
+    return clLib.libmw_so.clHandleCreate(databaseHandle, instanceSize, clUtils.byref(handle))
 
 def clHandleWithAddressCreate(databaseHandle, instance_size, compAddr, handle_out):
     """
@@ -67,7 +67,7 @@ def clHandleWithAddressCreate(databaseHandle, instance_size, compAddr, handle_ou
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHandleWithAddressCreate(databaseHandle, instance_size, compAddr, handle_out)
+    return clLib.libmw_so.clHandleWithAddressCreate(databaseHandle, instance_size, compAddr, clUtils.byref(handle_out))
 
 def clHandleDestroy(databaseHandle, handle):
     """
@@ -88,7 +88,7 @@ def clHandleCheckout(databaseHandle, handle, instance):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clHandleCheckout(databaseHandle, handle, instance)
+    return clLib.libmw_so.clHandleCheckout(databaseHandle, handle, clUtils.byref(instance))
 
 def clHandleCheckin(databaseHandle, handle):
     """
@@ -119,4 +119,5 @@ def clHandleGetDatabaseId(databaseHandle):
     return type:
         ClWordT
     """
-    return clLib.libmw_so.clHandleGetDatabaseId(databaseHandle)
+    clLib.libmw_so.clHandleGetDatabaseId.restype = clCommon.ClWordT
+    return clLib.libmw_so.clHandleGetDatabaseId(clUtils.byref(databaseHandle))

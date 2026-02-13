@@ -21,7 +21,13 @@ SaTimeT = SaInt64T
 SaInvocationT = SaUint64T
 SaSizeT = SaUint64T
 SaOffsetT = SaUint64T
-SaSelectionObjectT = SaUint64T
+
+class SaSelectionObjectT(SaUint64T):
+    def __add__(self, o):
+        return SaSelectionObjectT(self.value + o)
+    def __iadd__(self, o):
+        self.value += o
+        return self
 
 SA_TIME_END = 0x7FFFFFFFFFFFFFFF
 SA_TIME_BEGIN = 0x0

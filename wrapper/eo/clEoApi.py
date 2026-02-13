@@ -206,7 +206,7 @@ def clEoClientInstallTables(pThis, table):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientInstallTables(pThis, table)
+    return clLib.libmw_so.clEoClientInstallTables(clUtils.byref(pThis), clUtils.byref(table))
 
 
 def clEoClientInstallTablesWithCookie(pThis, table, data):
@@ -218,7 +218,7 @@ def clEoClientInstallTablesWithCookie(pThis, table, data):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientInstallTablesWithCookie(pThis, table, data)
+    return clLib.libmw_so.clEoClientInstallTablesWithCookie(clUtils.byref(pThis), clUtils.byref(table), data)
 
 
 def clEoClientUninstallTables(pThis, table):
@@ -229,7 +229,7 @@ def clEoClientUninstallTables(pThis, table):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientUninstallTables(pThis, table)
+    return clLib.libmw_so.clEoClientUninstallTables(clUtils.byref(pThis), clUtils.byref(table))
 
 
 def clEoClientTableFilter(eoPort, clientID):
@@ -240,6 +240,7 @@ def clEoClientTableFilter(eoPort, clientID):
     return type:
         ClBoolT
     """
+    clLib.libmw_so.clEoClientTableFilter.restype = clCommon.ClBoolT
     return clLib.libmw_so.clEoClientTableFilter(eoPort, clientID)
 
 
@@ -251,7 +252,7 @@ def clEoClientTableRegister(clientTable, clientPort):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientTableRegister(clientTable, clientPort)
+    return clLib.libmw_so.clEoClientTableRegister(clUtils.byref(clientTable), clientPort)
 
 def clEoRefDec(eo):
     """
@@ -261,7 +262,7 @@ def clEoRefDec(eo):
     return type:
         void
     """
-    clLib.libmw_so.clEoRefDec(eo)
+    clLib.libmw_so.clEoRefDec(clUtils.byref(eo))
 
 
 def clEoProtoInstall(def_ptr):
@@ -271,7 +272,7 @@ def clEoProtoInstall(def_ptr):
     return type:
         void
     """
-    clLib.libmw_so.clEoProtoInstall(def_ptr)
+    clLib.libmw_so.clEoProtoInstall(clUtils.byref(def_ptr))
 
 
 def clEoProtoUninstall(id):
@@ -291,7 +292,7 @@ def clEoProtoSwitch(def_ptr):
     return type:
         void
     """
-    clLib.libmw_so.clEoProtoSwitch(def_ptr)
+    clLib.libmw_so.clEoProtoSwitch(clUtils.byref(def_ptr))
 
 
 # --- Execution and Traversal (Walk) ---
@@ -308,7 +309,7 @@ def clEoWalk(pThis, func, pFuncCallout, inMsgHdl, outMsgHdl):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoWalk(pThis, func, pFuncCallout, inMsgHdl, outMsgHdl)
+    return clLib.libmw_so.clEoWalk(clUtils.byref(pThis), func, pFuncCallout, inMsgHdl, outMsgHdl)
 
 
 def clEoWalkWithVersion(pThis, func, version, pFuncCallout, inMsgHdl, outMsgHdl):
@@ -323,7 +324,7 @@ def clEoWalkWithVersion(pThis, func, version, pFuncCallout, inMsgHdl, outMsgHdl)
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoWalkWithVersion(pThis, func, version, pFuncCallout, inMsgHdl, outMsgHdl)
+    return clLib.libmw_so.clEoWalkWithVersion(clUtils.byref(pThis), func, clUtils.byref(version), pFuncCallout, inMsgHdl, outMsgHdl)
 
 
 # --- Client/Service Installation ---
@@ -336,7 +337,7 @@ def clEoServiceValidate(pThis, func):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoServiceValidate(pThis, func)
+    return clLib.libmw_so.clEoServiceValidate(clUtils.byref(pThis), func)
 
 
 def clEoClientInstall(pThis, clientId, pFuncs, data, nFuncs):
@@ -350,7 +351,7 @@ def clEoClientInstall(pThis, clientId, pFuncs, data, nFuncs):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientInstall(pThis, clientId, pFuncs, data, nFuncs)
+    return clLib.libmw_so.clEoClientInstall(clUtils.byref(pThis), clientId, clUtils.byref(pFuncs), data, nFuncs)
 
 
 def clEoClientInstallTable(pThis, clientId, data, pFuncs, nFuncs):
@@ -364,7 +365,7 @@ def clEoClientInstallTable(pThis, clientId, data, pFuncs, nFuncs):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientInstallTable(pThis, clientId, data, pFuncs, nFuncs)
+    return clLib.libmw_so.clEoClientInstallTable(clUtils.byref(pThis), clientId, data, clUtils.byref(pFuncs), nFuncs)
 
 
 def clEoClientUninstall(pThis, clientId):
@@ -375,7 +376,7 @@ def clEoClientUninstall(pThis, clientId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientUninstall(pThis, clientId)
+    return clLib.libmw_so.clEoClientUninstall(clUtils.byref(pThis), clientId)
 
 
 def clEoClientUninstallTable(pThis, clientID, pfunTable, nentries):
@@ -388,7 +389,7 @@ def clEoClientUninstallTable(pThis, clientID, pfunTable, nentries):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientUninstallTable(pThis, clientID, pfunTable, nentries)
+    return clLib.libmw_so.clEoClientUninstallTable(clUtils.byref(pThis), clientID, clUtils.byref(pfunTable), nentries)
 
 
 def clEoServiceInstall(pThis, pFunction, iFuncNum, order):
@@ -401,7 +402,7 @@ def clEoServiceInstall(pThis, pFunction, iFuncNum, order):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoServiceInstall(pThis, pFunction, iFuncNum, order)
+    return clLib.libmw_so.clEoServiceInstall(clUtils.byref(pThis), pFunction, iFuncNum, order)
 
 
 def clEoServiceUninstall(pThis, pFunction, iFuncNum):
@@ -413,7 +414,7 @@ def clEoServiceUninstall(pThis, pFunction, iFuncNum):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoServiceUninstall(pThis, pFunction, iFuncNum)
+    return clLib.libmw_so.clEoServiceUninstall(clUtils.byref(pThis), pFunction, iFuncNum)
 
 
 # --- Data and Port Management ---
@@ -427,7 +428,7 @@ def clEoClientDataSet(pThis, clientId, data):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientDataSet(pThis, clientId, data)
+    return clLib.libmw_so.clEoClientDataSet(clUtils.byref(pThis), clientId, data)
 
 
 def clEoClientDataGet(pThis, clientId, pData):
@@ -439,7 +440,7 @@ def clEoClientDataGet(pThis, clientId, pData):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoClientDataGet(pThis, clientId, pData)
+    return clLib.libmw_so.clEoClientDataGet(clUtils.byref(pThis), clientId, clUtils.byref(pData))
 
 
 def clEoPrivateDataSet(pThis, type_id, pData):
@@ -451,7 +452,7 @@ def clEoPrivateDataSet(pThis, type_id, pData):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoPrivateDataSet(pThis, type_id, pData)
+    return clLib.libmw_so.clEoPrivateDataSet(clUtils.byref(pThis), type_id, pData)
 
 
 def clEoPrivateDataGet(pThis, type_id, data):
@@ -463,7 +464,7 @@ def clEoPrivateDataGet(pThis, type_id, data):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoPrivateDataGet(pThis, type_id, data)
+    return clLib.libmw_so.clEoPrivateDataGet(clUtils.byref(pThis), type_id, clUtils.byref(data))
 
 
 def clEoMyEoIocPortSet(iocPort):
@@ -483,7 +484,7 @@ def clEoMyEoIocPortGet(pIocPort):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoMyEoIocPortGet(pIocPort)
+    return clLib.libmw_so.clEoMyEoIocPortGet(clUtils.byref(pIocPort))
 
 
 def clEoMyEoObjectSet(eoObj):
@@ -493,7 +494,7 @@ def clEoMyEoObjectSet(eoObj):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoMyEoObjectSet(eoObj)
+    return clLib.libmw_so.clEoMyEoObjectSet(clUtils.byref(eoObj))
 
 
 def clEoMyEoObjectGet(pEOObj):
@@ -503,7 +504,7 @@ def clEoMyEoObjectGet(pEOObj):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoMyEoObjectGet(pEOObj)
+    return clLib.libmw_so.clEoMyEoObjectGet(clUtils.byref(pEOObj))
 
 
 def clEoReceiveStart(pThis):
@@ -513,7 +514,7 @@ def clEoReceiveStart(pThis):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clEoReceiveStart(pThis)
+    return clLib.libmw_so.clEoReceiveStart(clUtils.byref(pThis))
 
 ClEoCrashReasonT = clCommon.ClInt32T
 class eClEoCrashReasonT(clUtils.Enum):

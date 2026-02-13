@@ -123,7 +123,7 @@ def clCkptInitialize(ckptSvcHandle, callbacks, version):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptInitialize(ckptSvcHandle, callbacks, version)
+    return clLib.libmw_so.clCkptInitialize(clUtils.byref(ckptSvcHandle), clUtils.byref(callbacks), clUtils.byref(version))
 
 
 def clCkptFinalize(ckptHandle):
@@ -148,7 +148,7 @@ def clCkptCheckpointOpen(ckptHandle, ckeckpointName, checkpointCreationAttribute
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptCheckpointOpen(ckptHandle, ckeckpointName, checkpointCreationAttributes, checkpointOpenFlags, timeout, checkpointHandle)
+    return clLib.libmw_so.clCkptCheckpointOpen(ckptHandle, clUtils.byref(ckeckpointName), clUtils.byref(checkpointCreationAttributes), checkpointOpenFlags, timeout, clUtils.byref(checkpointHandle))
 
 
 def clCkptCheckpointOpenAsync(ckptHandle, invocation, checkpointName, checkpoiNtCreationAttributes, checkpointOpenFlags):
@@ -162,7 +162,7 @@ def clCkptCheckpointOpenAsync(ckptHandle, invocation, checkpointName, checkpoiNt
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptCheckpointOpenAsync(ckptHandle, invocation, checkpointName, checkpoiNtCreationAttributes, checkpointOpenFlags)
+    return clLib.libmw_so.clCkptCheckpointOpenAsync(ckptHandle, invocation, clUtils.byref(checkpointName), clUtils.byref(checkpoiNtCreationAttributes), checkpointOpenFlags)
 
 
 def clCkptCheckpointClose(checkpointHandle):
@@ -183,7 +183,7 @@ def clCkptCheckpointDelete(ckptHandle, checkpointName):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptCheckpointDelete(ckptHandle, checkpointName)
+    return clLib.libmw_so.clCkptCheckpointDelete(ckptHandle, clUtils.byref(checkpointName))
 
 
 def clCkptCheckpointRetentionDurationSet(checkpointHandle, retentionDuration):
@@ -215,7 +215,7 @@ def clCkptCheckpointStatusGet(checkpointHandle, checkpointStatus):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptCheckpointStatusGet(checkpointHandle, checkpointStatus)
+    return clLib.libmw_so.clCkptCheckpointStatusGet(checkpointHandle, clUtils.byref(checkpointStatus))
 
 
 def clCkptSectionCreate(checkpointHandle, sectionCreationAttributes, initialData, initialDataSize):
@@ -228,7 +228,7 @@ def clCkptSectionCreate(checkpointHandle, sectionCreationAttributes, initialData
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSectionCreate(checkpointHandle, sectionCreationAttributes, initialData, initialDataSize)
+    return clLib.libmw_so.clCkptSectionCreate(checkpointHandle, clUtils.byref(sectionCreationAttributes), clUtils.byref(initialData), initialDataSize)
 
 
 def clCkptSectionDelete(checkpointHandle, sectionId):
@@ -239,7 +239,7 @@ def clCkptSectionDelete(checkpointHandle, sectionId):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSectionDelete(checkpointHandle, sectionId)
+    return clLib.libmw_so.clCkptSectionDelete(checkpointHandle, clUtils.byref(sectionId))
 
 
 def clCkptSectionExpirationTimeSet(checkpointHandle, sectionId, expirationTime):
@@ -251,7 +251,7 @@ def clCkptSectionExpirationTimeSet(checkpointHandle, sectionId, expirationTime):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSectionExpirationTimeSet(checkpointHandle, sectionId, expirationTime)
+    return clLib.libmw_so.clCkptSectionExpirationTimeSet(checkpointHandle, clUtils.byref(sectionId), expirationTime)
 
 
 def clCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expirationTime, sectionIterationHandle):
@@ -264,7 +264,7 @@ def clCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expiratio
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expirationTime, sectionIterationHandle)
+    return clLib.libmw_so.clCkptSectionIterationInitialize(checkpointHandle, sectionsChosen, expirationTime, clUtils.byref(sectionIterationHandle))
 
 
 def clCkptSectionIterationNext(sectionIterationHandle, sectionDescriptor):
@@ -275,7 +275,7 @@ def clCkptSectionIterationNext(sectionIterationHandle, sectionDescriptor):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSectionIterationNext(sectionIterationHandle, sectionDescriptor)
+    return clLib.libmw_so.clCkptSectionIterationNext(sectionIterationHandle, clUtils.byref(sectionDescriptor))
 
 
 def clCkptSectionIterationFinalize(sectionIterationHandle):
@@ -298,7 +298,7 @@ def clCkptCheckpointWrite(checkpointHandle, ioVector, numberOfElements, erroneou
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptCheckpointWrite(checkpointHandle, ioVector, numberOfElements, erroneousVectorIndex)
+    return clLib.libmw_so.clCkptCheckpointWrite(checkpointHandle, clUtils.byref(ioVector), numberOfElements, clUtils.byref(erroneousVectorIndex))
 
 
 def clCkptSectionOverwrite(checkpointHandle, sectionId, dataBuffer, dataSize):
@@ -311,7 +311,7 @@ def clCkptSectionOverwrite(checkpointHandle, sectionId, dataBuffer, dataSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSectionOverwrite(checkpointHandle, sectionId, dataBuffer, dataSize)
+    return clLib.libmw_so.clCkptSectionOverwrite(checkpointHandle, clUtils.byref(sectionId), dataBuffer, dataSize)
 
 
 def clCkptCheckpointRead(checkpointHandle, ioVector, numberOfElements, erroneousVectorIndex):
@@ -324,7 +324,7 @@ def clCkptCheckpointRead(checkpointHandle, ioVector, numberOfElements, erroneous
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptCheckpointRead(checkpointHandle, ioVector, numberOfElements, erroneousVectorIndex)
+    return clLib.libmw_so.clCkptCheckpointRead(checkpointHandle, clUtils.byref(ioVector), numberOfElements, clUtils.byref(erroneousVectorIndex))
 
 
 def clCkptCheckpointSynchronize(ckeckpointHandle, timeout):
@@ -369,7 +369,7 @@ def clCkptSelectionObjectGet(ckptHandle, selectionObject):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clCkptSelectionObjectGet(ckptHandle, selectionObject)
+    return clLib.libmw_so.clCkptSelectionObjectGet(ckptHandle, clUtils.byref(selectionObject))
 
 
 def clCkptDispatch(ckptHandle, dispatchFlags):

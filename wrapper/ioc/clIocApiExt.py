@@ -84,7 +84,7 @@ def clIocMaxPayloadSizeGet(pSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocMaxPayloadSizeGet(pSize)
+    return clLib.libmw_so.clIocMaxPayloadSizeGet(clUtils.byref(pSize))
 
 def clIocTotalNeighborEntryGet(pNumberOfEntries):
     """
@@ -93,7 +93,7 @@ def clIocTotalNeighborEntryGet(pNumberOfEntries):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocTotalNeighborEntryGet(pNumberOfEntries)
+    return clLib.libmw_so.clIocTotalNeighborEntryGet(clUtils.byref(pNumberOfEntries))
 
 
 def clIocNeighborListGet(pNumberOfEntries, pAddrList):
@@ -104,7 +104,7 @@ def clIocNeighborListGet(pNumberOfEntries, pAddrList):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clIocNeighborListGet(pNumberOfEntries, pAddrList)
+    return clLib.libmw_so.clIocNeighborListGet(clUtils.byref(pNumberOfEntries), clUtils.byref(pAddrList))
 
 def clConfigChange(requestType):
     """

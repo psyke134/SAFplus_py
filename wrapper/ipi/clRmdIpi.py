@@ -2,7 +2,7 @@ import sys
 sys.path.append("..")
 
 from common import clCommon
-from utils import clLib
+from utils import clLib, clUtils
 
 import ctypes
 
@@ -42,7 +42,7 @@ def clRmdVersionVerify(pVersion):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdVersionVerify(pVersion)
+    return clLib.libmw_so.clRmdVersionVerify(clUtils.byref(pVersion))
 
 
 def clRmdObjInit(p):
@@ -52,7 +52,7 @@ def clRmdObjInit(p):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdObjInit(p)
+    return clLib.libmw_so.clRmdObjInit(clUtils.byref(p))
 
 
 def clRmdObjClose(p):
@@ -71,7 +71,7 @@ def clRmdResponseDefer(pResponseCntxtHdl):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdResponseDefer(pResponseCntxtHdl)
+    return clLib.libmw_so.clRmdResponseDefer(clUtils.byref(pResponseCntxtHdl))
 
 
 def clRmdSyncResponseSend(syncSendCtnxtHdl, replyMsg, rc):
@@ -92,7 +92,7 @@ def clRmdSourceAddressGet(pSrcAddr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdSourceAddressGet(pSrcAddr)
+    return clLib.libmw_so.clRmdSourceAddressGet(clUtils.byref(pSrcAddr))
 
 def clRmdReceiveReply(pThis, eoRecvMsg, priority, protoType, length, srcAddr):
     """
@@ -106,7 +106,7 @@ def clRmdReceiveReply(pThis, eoRecvMsg, priority, protoType, length, srcAddr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdReceiveReply(pThis, eoRecvMsg, priority, protoType, length, srcAddr)
+    return clLib.libmw_so.clRmdReceiveReply(clUtils.byref(pThis), eoRecvMsg, priority, protoType, length, srcAddr)
 
 
 def clRmdReceiveRequest(pThis, eoRecvMsg, priority, protoType, length, srcAddr):
@@ -121,7 +121,7 @@ def clRmdReceiveRequest(pThis, eoRecvMsg, priority, protoType, length, srcAddr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdReceiveRequest(pThis, eoRecvMsg, priority, protoType, length, srcAddr)
+    return clLib.libmw_so.clRmdReceiveRequest(clUtils.byref(pThis), eoRecvMsg, priority, protoType, length, srcAddr)
 
 
 def clRmdReceiveAsyncRequest(pThis, eoRecvMsg, priority, protoType, length, srcAddr):
@@ -136,7 +136,7 @@ def clRmdReceiveAsyncRequest(pThis, eoRecvMsg, priority, protoType, length, srcA
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdReceiveAsyncRequest(pThis, eoRecvMsg, priority, protoType, length, srcAddr)
+    return clLib.libmw_so.clRmdReceiveAsyncRequest(clUtils.byref(pThis), eoRecvMsg, priority, protoType, length, srcAddr)
 
 
 def clRmdReceiveAsyncReply(pThis, rmdRecvMsg, priority, protoType, length, srcAddr):
@@ -151,7 +151,7 @@ def clRmdReceiveAsyncReply(pThis, rmdRecvMsg, priority, protoType, length, srcAd
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdReceiveAsyncReply(pThis, rmdRecvMsg, priority, protoType, length, srcAddr)
+    return clLib.libmw_so.clRmdReceiveAsyncReply(clUtils.byref(pThis), rmdRecvMsg, priority, protoType, length, srcAddr)
 
 
 def clRmdReceiveOrderedRequest(pThis, eoRecvMsg, priority, protoType, length, srcAddr):
@@ -166,7 +166,7 @@ def clRmdReceiveOrderedRequest(pThis, eoRecvMsg, priority, protoType, length, sr
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdReceiveOrderedRequest(pThis, eoRecvMsg, priority, protoType, length, srcAddr)
+    return clLib.libmw_so.clRmdReceiveOrderedRequest(clUtils.byref(pThis), eoRecvMsg, priority, protoType, length, srcAddr)
 
 def clRmdLibInitialize(config):
     """
@@ -195,7 +195,7 @@ def clRmdMaxPayloadSizeGet(pSize):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdMaxPayloadSizeGet(pSize)
+    return clLib.libmw_so.clRmdMaxPayloadSizeGet(clUtils.byref(pSize))
 
 
 def clRmdMaxNumbOfRetriesGet(pNumbOfRetries):
@@ -205,7 +205,7 @@ def clRmdMaxNumbOfRetriesGet(pNumbOfRetries):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdMaxNumbOfRetriesGet(pNumbOfRetries)
+    return clLib.libmw_so.clRmdMaxNumbOfRetriesGet(clUtils.byref(pNumbOfRetries))
 
 
 def clRmdDumpPacketStatus(isEnable):
@@ -232,7 +232,7 @@ def clRmdStatsGet(pStats):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdStatsGet(pStats)
+    return clLib.libmw_so.clRmdStatsGet(clUtils.byref(pStats))
 
 def clRmdAckReply(pThis, rmdRecvMsg, priority, protoType, length, srcAddr):
     """
@@ -246,7 +246,7 @@ def clRmdAckReply(pThis, rmdRecvMsg, priority, protoType, length, srcAddr):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdAckReply(pThis, rmdRecvMsg, priority, protoType, length, srcAddr)
+    return clLib.libmw_so.clRmdAckReply(clUtils.byref(pThis), rmdRecvMsg, priority, protoType, length, srcAddr)
 
 
 def clRmdDatabaseCleanup(rmdObj, notification):
@@ -257,7 +257,7 @@ def clRmdDatabaseCleanup(rmdObj, notification):
     return type:
         ClRcT
     """
-    return clLib.libmw_so.clRmdDatabaseCleanup(rmdObj, notification)
+    return clLib.libmw_so.clRmdDatabaseCleanup(rmdObj, clUtils.byref(notification))
 
 def rmdMetricInitialize():
     """

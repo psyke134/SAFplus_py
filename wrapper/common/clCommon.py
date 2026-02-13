@@ -5,7 +5,6 @@ from utils import clUtils, clLib
 from common import saAis
 
 import ctypes
-import enum
 
 CL_TRUE = 1
 CL_FALSE = 0
@@ -108,7 +107,7 @@ def clNameSet(name, str):
         const char* str
     """
     pStr = clUtils.toCharP(str)
-    clLib.libmw_so.clNameSet(name, pStr)
+    clLib.libmw_so.clNameSet(clUtils.byref(name), pStr)
 
 def clNameCopy(nameOut, nameIn):
     """
@@ -116,7 +115,7 @@ def clNameCopy(nameOut, nameIn):
         ClNameT* nameOut,
         const ClNameT *nameIn
     """
-    clLib.libmw_so.clNameCopy(nameOut, nameIn)
+    clLib.libmw_so.clNameCopy(clUtils.byref(nameOut), clUtils.byref(nameIn))
 
 def clNameConcat(nameOut, prefix, separator, suffix):
     """
@@ -128,10 +127,10 @@ def clNameConcat(nameOut, prefix, separator, suffix):
     """
     pSeparator = clUtils.toCharP(separator)
     clLib.libmw_so.clNameConcat(
-        nameOut,
-        prefix,
+        clUtils.byref(nameOut),
+        clUtils.byref(prefix),
         pSeparator,
-        suffix
+        clUtils.byref(suffix)
     )
 
 def clStrdup(str):
@@ -139,22 +138,23 @@ def clStrdup(str):
     arg types:
         const ClCharT *str
     """
-    clLib.libmw_so.clStrdup(str)
+    clLib.libmw_so.clStrdup.restype = ctypes.POINTER(ClCharT)
+    return clLib.libmw_so.clStrdup(str)
 
 def clParseEnvBoolean(envvar):
     """
     arg types:
         ClCharT *envvar
     """
-    clLib.libmw_so.clParseEnvBoolean(envvar)
+    return clLib.libmw_so.clParseEnvBoolean(clUtils.toCharP(envvar))
 
 def clParseEnvStr(envvar):
     """
     arg types:
         const ClCharT *envvar
     """
-    clLib.libmw_so.clParseEnvStr(
-        envvar
+    return clLib.libmw_so.clParseEnvStr(
+        clUtils.toCharP(envvar)
     )
 
 def clCreatePipe(fds, numMsgs, msgSize):
@@ -435,7 +435,8 @@ def clStringDup(str):
     return type:
         ClStringT *
     """
-    return clLib.libmw_so.clStringDup(str)
+    clLib.libmw_so.clStringDup.restype = ctypes.POINTER(ClStringT)
+    return clLib.libmw_so.clStringDup(clUtils.byref(str))
 
 # def clNamePrintf(name, *va_args):
 #     """
