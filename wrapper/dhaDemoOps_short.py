@@ -472,20 +472,17 @@ def dhaSuSetComp(mgmtHandle, ccbHandle, suConfig, bitMask, suIdx):
 def dhaSuConfigFill(mgmtHandle, ccbHandle):
     pBaseName = BASE_NAME
     entity = ClAmsEntityT()
-    entityConfig = ClAmsEntityConfigT()
 
     suConfig = ClAmsSUConfigT()
     bitMask = ClUint64T()
     entity.type = eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_SU
     clNameSet(entity.name, "{0}SU0".format(pBaseName))
     dhaInfoPrint("SU config get [%s]", entity.name.value)
-    rc = clAmsMgmtEntityGetConfig(mgmtHandle, entity, entityConfig)
+    rc = clAmsMgmtEntityGetConfig(mgmtHandle, entity, suConfig)
     if rc != clCommonErrors.CL_OK:
         dhaErrorPrint("SU config get returned [%#x]", rc)
         out2(ccbHandle, mgmtHandle, pBaseName, rc)
         return rc
-
-    libc.memcpy(suConfig, entityConfig, ctypes.sizeof(suConfig))
 
     suConfig.numComponents = 1
     bitMask.value |= clAmsMgmtCommon.SU_CONFIG_NUM_COMPONENTS
