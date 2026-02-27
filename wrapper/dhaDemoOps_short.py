@@ -509,6 +509,7 @@ def dhaCompSetConfig(mgmtHandle, ccbHandle, compConfig, bitMask, compIdx):
 def dhaCompConfigFill(mgmtHandle, ccbHandle):
     pBaseName = BASE_NAME
     entity = ClAmsEntityT()
+    supportedCSIType = ClNameT("")
 
     compConfig = ClAmsCompConfigT()
     bitMask = ClUint64T()
@@ -539,8 +540,9 @@ def dhaCompConfigFill(mgmtHandle, ccbHandle):
     bitMask.value |= clAmsMgmtCommon.COMP_CONFIG_SUPPORTED_CSI_TYPE
 
     compConfig.numSupportedCSITypes = 1
+    compConfig.pSupportedCSITypes = ctypes.pointer(supportedCSIType)
 
-    clNameSet(compConfig.pSupportedCSITypes, "{0}CSIType".format(pBaseName))
+    clNameSet(supportedCSIType, "{0}CSIType".format(pBaseName))
 
     bitMask.value |= clAmsMgmtCommon.COMP_CONFIG_INSTANTIATE_COMMAND
     compConfig.instantiateCommand = b"dummyComp"

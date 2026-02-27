@@ -8,13 +8,19 @@ from amf.saAmf import eSaAmfHAStateT, SaAmfHandleT, SaAmfCallbacksT, SaAmfHealth
     saAmfInitialize, saAmfSelectionObjectGet, saAmfComponentNameGet, saAmfComponentRegister, saAmfDispatch, saAmfFinalize,\
     saAmfComponentUnregister, saAmfResponse, saAmfCSIQuiescingComplete
 from amf.clAmsUtils import CL_AMS_STRING_CSI_FLAGS, CL_AMS_STRING_H_STATE
+from amf.clAmsTypes import ClAmsMgmtHandleT, ClAmsMgmtCCBHandleT
 from common.saAis import SaNameT, SaVersionT, eSaAisErrorT, SaSelectionObjectT, eSaDispatchFlagsT
-from common.clCommon import ClHandleT, CL_TRUE, CL_FALSE
+from common.clCommon import ClHandleT, ClVersionT, CL_TRUE, CL_FALSE
+from common import clCommonErrors
 from log.clLogApi import clLogMsgWrite, CL_LOG_AREA_UNSPECIFIED, CL_LOG_CONTEXT_UNSPECIFIED, eClLogSeverityT
 from utils.clUtils import getCallerInfo
 from utils.libc import fd_set, getpid, FD_ZERO, FD_SET, select, errno
+from utils import clHandleApi
 from ioc.clIocApi import ClIocPortT, clIocLocalAddressGet
 from eo.clEoApi import clEoMyEoIocPortGet
+from osal.clOsalApi import eClOsalSchedulePolicyT, eClOsalThreadPriorityT, CL_OSAL_MIN_STACK_SIZE, clOsalTaskCreateDetached
+
+import dhaDemoOps_short
 
 CL_LOG_HANDLE_APP = ClHandleT.in_dll(clLib.libmw_so, "CL_LOG_HANDLE_APP")
 
@@ -150,10 +156,20 @@ def clCompAppAMFCSISet(invocation, compName, haState, csiDescriptor):
     clCompAppAMFPrintCSI(csiDescriptor, haState)
 
     if haState == eSaAmfHAStateT.SA_AMF_HA_ACTIVE:
+        dhaDemoOps_short.dhaInfoPrint("Starting dynamic HA demo.")
+        dhaDemoOps_short.dhaInfoPrint("It will create 2N SG : %sSG", dhaDemoOps_short.BASE_NAME)
+        rc = clDhaDemoStart()
+        if rc != clCommonErrors.CL_OK:
+            dhaDemoOps_short.dhaErrorPrint("Failed to start dynamic HA demo.")
+
         saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
     elif haState == eSaAmfHAStateT.SA_AMF_HA_STANDBY:
         saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
     elif haState == eSaAmfHAStateT.SA_AMF_HA_QUIESCED:
+        rc = clDhaDemoStop()
+        if rc != clCommonErrors.CL_OK:
+            dhaDemoOps_short.dhaErrorPrint("Failed to stop dynamic HA demo.")
+
         saAmfResponse(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
     elif haState == eSaAmfHAStateT.SA_AMF_HA_QUIESCING:
         saAmfCSIQuiescingComplete(amfHandle, invocation, eSaAisErrorT.SA_AIS_OK)
@@ -247,6 +263,154 @@ def clCompAppAMFPrintCSI(csiDescriptor, haState):
             "Active Component : [%s]",
             csiDescriptor.csiStateDescriptor.standbyDescriptor.activeCompName.__str__()
         )
+
+def clDhaDemoCreate(arg):
+    mgmtHandle = ClAmsMgmtHandleT(0)
+    ccbHandle = ClAmsMgmtCCBHandleT(clHandleApi.CL_HANDLE_INVALID_VALUE)
+    pBaseName = dhaDemoOps_short.BASE_NAME
+
+    version = ClVersionT()
+    version.releaseCode = ord('B')
+    version.majorVersion = 0x1
+    version.minorVersion = 0x1
+
+    rc = dhaDemoOps_short.dhaMgmtInit(mgmtHandle, version)
+    if rc != clCommonErrors.CL_OK: return None
+    rc = dhaDemoOps_short.dhaMgmtCcbInit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaSgCheck(mgmtHandle)
+    if rc == clCommonErrors.CL_OK:
+        dhaDemoOps_short.dhaInfoPrint("Not creating SG[%sSG], it already exist", pBaseName)
+        dhaDemoOps_short.dhaCleanUp(mgmtHandle, ccbHandle)
+        return None
+    
+    dhaDemoOps_short.dhaInfoPrint("Creating 2N SG [%sSG] and other entities(si, csi, su, comp, etc)", pBaseName)
+
+    rc = dhaDemoOps_short.dhaSgCreate(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaSiCreate(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaCsiCreate(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps_short.dhaSuCreate(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps_short.dhaCompCreate(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaCommit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaInfoPrint("Fill SG config")
+    rc = dhaDemoOps_short.dhaSgConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaInfoPrint("Fill SI config")
+    rc = dhaDemoOps_short.dhaSiConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaInfoPrint("Fill CSI config")
+    rc = dhaDemoOps_short.dhaCsiConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaInfoPrint("Fill SU config")
+    rc = dhaDemoOps_short.dhaSuConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaInfoPrint("Fill NODE config")
+    rc = dhaDemoOps_short.dhaNodeConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaInfoPrint("Fill COMP config")
+    rc = dhaDemoOps_short.dhaCompConfigFill(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaInfoPrint("Unlock AMS entities")
+    rc = dhaDemoOps_short.dhaEntitiesUnlock(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaCleanUp(mgmtHandle, ccbHandle)
+    return None
+
+_TaskRoutineT = ctypes.CFUNCTYPE(ctypes.c_void_p, ctypes.c_void_p)
+demoCreateRoutine = _TaskRoutineT(clDhaDemoCreate)
+def clDhaDemoStart():
+    rc = clOsalTaskCreateDetached(
+        "dhaDemoCreate",
+        eClOsalSchedulePolicyT.CL_OSAL_SCHED_OTHER,
+        eClOsalThreadPriorityT.CL_OSAL_THREAD_PRI_NOT_APPLICABLE,
+        CL_OSAL_MIN_STACK_SIZE,
+        demoCreateRoutine,
+        None
+    )
+    return rc
+
+def clDhaDemoDelete(arg):
+    mgmtHandle = ClAmsMgmtHandleT(0)
+    ccbHandle = ClAmsMgmtCCBHandleT(clHandleApi.CL_HANDLE_INVALID_VALUE)
+    pBaseName = dhaDemoOps_short.BASE_NAME
+
+    version = ClVersionT()
+    version.releaseCode = ord('B')
+    version.majorVersion = 0x1
+    version.minorVersion = 0x1
+
+    rc = dhaDemoOps_short.dhaMgmtInit(mgmtHandle, version)
+    if rc != clCommonErrors.CL_OK: return None
+    rc = dhaDemoOps_short.dhaMgmtCcbInit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaSgCheck(mgmtHandle)
+    if rc != clCommonErrors.CL_OK:
+        dhaDemoOps_short.dhaInfoPrint("Not deleting SG[%sSG], it doesn't exist", pBaseName)
+        dhaDemoOps_short.dhaCleanUp(mgmtHandle, ccbHandle)
+        return None
+    
+    dhaDemoOps_short.dhaInfoPrint("Deleting SG [%sSG] and other entities(si, csi, su, comp, etc)", pBaseName)
+
+    rc = dhaDemoOps_short.dhaEntitiesLockI(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps_short.dhaCompDelete(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    for idx in range(0, 2):
+        rc = dhaDemoOps_short.dhaSuDelete(mgmtHandle, ccbHandle, idx)
+        if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaCsiDelete(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaSiDelete(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaSgDelete(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    rc = dhaDemoOps_short.dhaCommit(mgmtHandle, ccbHandle)
+    if rc != clCommonErrors.CL_OK: return None
+
+    dhaDemoOps_short.dhaCleanUp(mgmtHandle, ccbHandle)
+    return None
+
+demoDeleteRoutine = _TaskRoutineT(clDhaDemoDelete)
+def clDhaDemoStop():
+    rc = clOsalTaskCreateDetached(
+        "dhaDemoDelete",
+        eClOsalSchedulePolicyT.CL_OSAL_SCHED_OTHER,
+        eClOsalThreadPriorityT.CL_OSAL_THREAD_PRI_NOT_APPLICABLE,
+        CL_OSAL_MIN_STACK_SIZE,
+        demoDeleteRoutine,
+        None
+    )
+    return rc
 
 if __name__ == "__main__":
     main()

@@ -642,9 +642,22 @@ class ClAmsCompConfigT(ctypes.Structure):
         ("instantiateCommand", clCommon.ClCharT * clCommon.CL_MAX_NAME_LENGTH)
     ]
 
-    def __del__(self):
-        if self.pSupportedCSITypes:
+    def __init__(self, *args, **kw):
+        self._c_owned = False
+        super().__init__(*args, **kw)
+
+    def _freeSpCsiTypes(self):
+        if self.pSupportedCSITypes and self._c_owned:    #valid ptr and not python-owned
             clHeapApi.clHeapFree(self.pSupportedCSITypes)
+
+    def __setattr__(self, name, value):
+        if name == "pSupportedCSITypes":
+            self._freeSpCsiTypes()
+            self._c_owned = False
+        return super().__setattr__(name, value)
+
+    def __del__(self):
+        self._freeSpCsiTypes()
 
 class ClAmsCompStatusT(ctypes.Structure):
     _fields_ = [

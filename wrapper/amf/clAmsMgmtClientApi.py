@@ -609,7 +609,7 @@ def clAmsMgmtEntityGetConfig(handle, entity, entityConfig):
         clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_COMP: clAmsEntities.ClAmsCompConfigT
     }
 
-    expectedType = typeClassLut[entity.type.value]
+    expectedType = typeClassLut[entity.type]
     if not isinstance(entityConfig, expectedType):
         return clCommonErrors.CL_ERR_INVALID_PARAMETER
 
@@ -617,6 +617,9 @@ def clAmsMgmtEntityGetConfig(handle, entity, entityConfig):
     rc = clLib.libmw_so.clAmsMgmtEntityGetConfig(handle, clUtils.byref(entity), clUtils.byref(pTemp))
     if pTemp:
         ctypes.memmove(ctypes.byref(entityConfig), pTemp, ctypes.sizeof(expectedType))
+        if expectedType == clAmsEntities.ClAmsCompConfigT:
+            if entityConfig.numSupportedCSITypes:
+                entityConfig._c_owned = True
         clHeapApi.clHeapFree(pTemp)
     return rc
 
@@ -629,7 +632,12 @@ def clAmsMgmtNodeGetConfig(handle, entName):
         ClAmsNodeConfigT*
     """
     clLib.libmw_so.clAmsMgmtNodeGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsNodeConfigT)
-    return clLib.libmw_so.clAmsMgmtNodeGetConfig(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtNodeGetConfig(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsNodeConfigT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsNodeConfigT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtServiceGroupGetConfig(handle, entName):
     """
@@ -640,7 +648,12 @@ def clAmsMgmtServiceGroupGetConfig(handle, entName):
         ClAmsSGConfigT*
     """
     clLib.libmw_so.clAmsMgmtServiceGroupGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsSGConfigT)
-    return clLib.libmw_so.clAmsMgmtServiceGroupGetConfig(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtServiceGroupGetConfig(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsSGConfigT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsSGConfigT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtServiceUnitGetConfig(handle, entName):
     """
@@ -651,7 +664,12 @@ def clAmsMgmtServiceUnitGetConfig(handle, entName):
         ClAmsSUConfigT*
     """
     clLib.libmw_so.clAmsMgmtServiceUnitGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsSUConfigT)
-    return clLib.libmw_so.clAmsMgmtServiceUnitGetConfig(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtServiceUnitGetConfig(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsSUConfigT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsSUConfigT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtServiceInstanceGetConfig(handle, entName):
     """
@@ -662,7 +680,12 @@ def clAmsMgmtServiceInstanceGetConfig(handle, entName):
         ClAmsSIConfigT*
     """
     clLib.libmw_so.clAmsMgmtServiceInstanceGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsSIConfigT)
-    return clLib.libmw_so.clAmsMgmtServiceInstanceGetConfig(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtServiceInstanceGetConfig(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsSIConfigT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsSIConfigT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtCompServiceInstanceGetConfig(handle, entName):
     """
@@ -673,7 +696,12 @@ def clAmsMgmtCompServiceInstanceGetConfig(handle, entName):
         ClAmsCSIConfigT*
     """
     clLib.libmw_so.clAmsMgmtCompServiceInstanceGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsCSIConfigT)
-    return clLib.libmw_so.clAmsMgmtCompServiceInstanceGetConfig(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtCompServiceInstanceGetConfig(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsCSIConfigT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsCSIConfigT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtCompGetConfig(handle, entName):
     """
@@ -684,7 +712,14 @@ def clAmsMgmtCompGetConfig(handle, entName):
         ClAmsCompConfigT*
     """
     clLib.libmw_so.clAmsMgmtCompGetConfig.restype = ctypes.POINTER(clAmsEntities.ClAmsCompConfigT)
-    return clLib.libmw_so.clAmsMgmtCompGetConfig(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtCompGetConfig(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsCompConfigT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsCompConfigT))
+        if rs.numSupportedCSITypes:
+            rs._c_owned = True
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtEntityGetStatus(handle, entity, entityStatus):
     """
@@ -695,10 +730,23 @@ def clAmsMgmtEntityGetStatus(handle, entity, entityStatus):
     return type:
         ClRcT
     """
+    typeClassLut = {
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_NODE: clAmsEntities.ClAmsNodeStatusT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_SG: clAmsEntities.ClAmsSGStatusT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_SU: clAmsEntities.ClAmsSUStatusT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_SI: clAmsEntities.ClAmsSIStatusT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_CSI: clAmsEntities.ClAmsSIStatusT,
+        clAmsEntities.eClAmsEntityTypeT.CL_AMS_ENTITY_TYPE_COMP: clAmsEntities.ClAmsCompStatusT
+    }
+
+    expectedType = typeClassLut[entity.type]
+    if not isinstance(entityStatus, expectedType):
+        return clCommonErrors.CL_ERR_INVALID_PARAMETER
+
     pTemp = ctypes.POINTER(clAmsEntities.ClAmsEntityStatusT)()
     rc = clLib.libmw_so.clAmsMgmtEntityGetStatus(handle, clUtils.byref(entity), clUtils.byref(pTemp))
     if pTemp:
-        ctypes.memmove(ctypes.byref(entityStatus), pTemp, ctypes.sizeof(clAmsEntities.ClAmsEntityStatusT))
+        ctypes.memmove(ctypes.byref(entityStatus), pTemp, ctypes.sizeof(expectedType))
         clHeapApi.clHeapFree(pTemp)
     return rc
 
@@ -711,7 +759,12 @@ def clAmsMgmtNodeGetStatus(handle, entName):
         ClAmsNodeStatusT*
     """
     clLib.libmw_so.clAmsMgmtNodeGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsNodeStatusT)
-    return clLib.libmw_so.clAmsMgmtNodeGetStatus(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtNodeGetStatus(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsNodeStatusT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsNodeStatusT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtServiceGroupGetStatus(handle, entName):
     """
@@ -722,7 +775,12 @@ def clAmsMgmtServiceGroupGetStatus(handle, entName):
         ClAmsSGStatusT*
     """
     clLib.libmw_so.clAmsMgmtServiceGroupGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsSGStatusT)
-    return clLib.libmw_so.clAmsMgmtServiceGroupGetStatus(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtServiceGroupGetStatus(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsSGStatusT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsSGStatusT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtServiceUnitGetStatus(handle, entName):
     """
@@ -733,7 +791,12 @@ def clAmsMgmtServiceUnitGetStatus(handle, entName):
         ClAmsSUStatusT*
     """
     clLib.libmw_so.clAmsMgmtServiceUnitGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsSUStatusT)
-    return clLib.libmw_so.clAmsMgmtServiceUnitGetStatus(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtServiceUnitGetStatus(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsSUStatusT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsSUStatusT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtServiceInstanceGetStatus(handle, entName):
     """
@@ -744,7 +807,12 @@ def clAmsMgmtServiceInstanceGetStatus(handle, entName):
         ClAmsSIStatusT*
     """
     clLib.libmw_so.clAmsMgmtServiceInstanceGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsSIStatusT)
-    return clLib.libmw_so.clAmsMgmtServiceInstanceGetStatus(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtServiceInstanceGetStatus(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsSIStatusT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsSIStatusT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtCompServiceInstanceGetStatus(handle, entName):
     """
@@ -755,7 +823,12 @@ def clAmsMgmtCompServiceInstanceGetStatus(handle, entName):
         ClAmsCSIStatusT*
     """
     clLib.libmw_so.clAmsMgmtCompServiceInstanceGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsCSIStatusT)
-    return clLib.libmw_so.clAmsMgmtCompServiceInstanceGetStatus(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtCompServiceInstanceGetStatus(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsCSIStatusT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsCSIStatusT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtCompGetStatus(handle, entName):
     """
@@ -766,7 +839,12 @@ def clAmsMgmtCompGetStatus(handle, entName):
         ClAmsCompStatusT*
     """
     clLib.libmw_so.clAmsMgmtCompGetStatus.restype = ctypes.POINTER(clAmsEntities.ClAmsCompStatusT)
-    return clLib.libmw_so.clAmsMgmtCompGetStatus(handle, clUtils.toCharP(entName))
+    temp = clLib.libmw_so.clAmsMgmtCompGetStatus(handle, clUtils.toCharP(entName))
+    rs = clAmsEntities.ClAmsCompStatusT()
+    if temp:
+        ctypes.memmove(ctypes.byref(rs), temp, ctypes.sizeof(clAmsEntities.ClAmsCompStatusT))
+        clHeapApi.clHeapFree(temp)
+    return rs
 
 def clAmsMgmtGetList(handle, listName, buffer):
     """
